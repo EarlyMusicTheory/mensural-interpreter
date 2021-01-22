@@ -1,0 +1,112 @@
+---
+layout: interpreter
+title: Interpreter
+---
+
+<div class="container-fluid">
+   <div class="row">
+        <div id="side" class="col-2 bg-light">
+            <h2>Element view</h2>
+            <p>In the future, I will show you information about MEI elements.</p>
+        </div>
+        <div class="col-10">
+            <div id="vrvOutput"></div>
+        </div>
+   </div>
+</div>
+
+<script  type="text/javascript">
+    var vrv = new verovio.toolkit();
+    var currentUrl = new URL(window.location.href);
+    var baseUrl = currentUrl.origin + currentUrl.pathname;
+    var currentParams = currentUrl.searchParams;
+    var meiUrl;
+    var zoom = 50;
+    var pageHeight = 2970;
+    var pageWidth = 2100;
+    var page = 1;
+    var svg;
+    var mei;
+
+    function fetchMEI(meiUrl) {
+        if(meiUrl)
+        {
+            fetch(meiUrl)
+            .then(function(response) {
+                return response.text();
+            })
+            .then(function(text) {
+                mei = text;
+                loadData(text);
+            });
+        }
+    }
+
+    function setOptions() {
+        pageHeight = $(document).height() * 100 / zoom ;
+        pageWidth = ($(window).width() - ($("#side").width() * 1.2) ) * 100 / zoom ;
+        options = {
+                    pageHeight: pageHeight,
+                    pageWidth: pageWidth,
+                    scale: zoom,
+                    adjustPageHeight: true
+                };
+        vrv.setOptions(options);
+    }
+
+    function loadData (data) {
+        setOptions();
+        vrv.loadData(data);
+        svg = vrv.renderToSVG(page, {});
+        $("#vrvPageN").html(page + "/" + vrv.getPageCount());
+        $("#vrvOutput").html(svg);
+    }
+    
+    function loadPage() {
+        $("#vrvPageN").html(page + "/" + vrv.getPageCount());
+
+        svg = vrv.renderToSVG(page, {});
+        $("#vrvOutput").html(svg);
+
+        adjust_page_height();
+    };
+
+    function nextPage() {
+        if (page >= vrv.getPageCount()) {
+            return;
+        }
+
+        page = page + 1;
+        loadPage();
+    };
+
+    function prevPage() {
+        if (page <= 1) {
+            return;
+        }
+
+        page = page - 1;
+        loadPage();
+    };
+    
+    $(document).ready(function(){
+        
+        meiUrl = currentParams.get("url");
+        fetchMEI(meiUrl);
+        
+
+        $("#load").click(function() {
+            let input = $("#url").val();
+            currentParams.set("url", input);
+            location.replace(`${baseUrl}?${currentParams}`);
+            return false;
+        });
+
+        $("#vrvForw").click(function() {
+            nextPage();
+        });
+        $("#vrvBack").click(function() {
+            prevPage();
+        });
+    });
+</script>
