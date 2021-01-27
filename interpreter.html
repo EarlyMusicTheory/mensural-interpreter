@@ -2,7 +2,42 @@
 layout: interpreter
 title: Interpreter
 ---
+<!-- Navigation -->
+<nav class="navbar navbar-dark bg-dark navbar-expand-md">
+    <a class="navbar-brand" href="#">EMT rocks!</a>
+    <div class="navbar-nav mr-auto">
+        <div class="dropdown col-4 mr-1">
+            <button class="btn btn-secondary dropdown-toggle" id="fileDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Load
+            </button>
+            <div class="dropdown-menu p-2 w-100" aria-labelledby="fileDropdown">
+                <label for="fileInput">Load local MEI file</label>
+                <form class="custom-file p-2" id="fileInput">
+                    <label class="custom-file-label" for="customFile">File</label>
+                    <input type="file" class="custom-file-input" id="customFile">
+                </form>
+                <button id="btnResetFile" class="btn btn-primary">
+                    Reset
+                </button>
+                <div class="dropdown-divider"></div>
+                <label for="urlInput">Load MEI from URI</label>
+                <div class="input-group mb-1" id="urlInput">
+                    <input id="url" class="form-control" type="url" placeholder="URL">
+                    <div class="input-group-append">
+                        <button id="load" type="submit" class="btn btn-outline-secondary">Load</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="btn-group ml-auto" role="group" aria-label="Scroll">
+        <button id="vrvBack" type="button" class="btn btn-secondary">&lt;&lt;</button>
+        <button id="vrvPageN" type="button" class="btn btn-light">0/0</button>
+        <button id="vrvForw" type="button" class="btn btn-secondary">&gt;&gt;</button>
+    </div>
+</nav>
 
+<!-- Content -->
 <div class="container-fluid">
    <div class="row">
         <div id="side" class="col-2 bg-light">
@@ -21,12 +56,14 @@ title: Interpreter
     var baseUrl = currentUrl.origin + currentUrl.pathname;
     var currentParams = currentUrl.searchParams;
     var meiUrl;
+    var meiFile;
     var zoom = 50;
     var pageHeight = 2970;
     var pageWidth = 2100;
     var page = 1;
     var svg;
     var mei;
+
 
     function fetchMEI(meiUrl) {
         if(meiUrl)
@@ -90,11 +127,37 @@ title: Interpreter
     };
     
     $(document).ready(function(){
-        
+
         meiUrl = currentParams.get("url");
-        fetchMEI(meiUrl);
+        if(meiUrl) 
+        {
+            fetchMEI(meiUrl);
+        }
         
 
+
+        // fancy file input animation
+        bsCustomFileInput.init()
+
+        $("#customFile").change(function() {
+            let meiBlob = this.files[0];
+
+            var reader = new FileReader();
+            reader.readAsText(meiBlob);
+
+            reader.onload = function(event) {
+                meiFile = event.target.result;
+                currentParams.set("url", null);
+                
+                loadData(event.target.result);
+            };    
+        });
+
+
+        $("#btnResetFile").click(function() {
+            $("#fileInput")[0].reset();
+        });
+        
         $("#load").click(function() {
             let input = $("#url").val();
             currentParams.set("url", input);
