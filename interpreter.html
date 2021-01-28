@@ -148,7 +148,7 @@ title: Interpreter
             reader.onload = function(event) {
                 meiFile = event.target.result;
                 currentParams.set("url", null);
-                
+                window.history.pushState({}, "Mensural interpreter", `${baseUrl}`);
                 loadData(event.target.result);
             };    
         });
