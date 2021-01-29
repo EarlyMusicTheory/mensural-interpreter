@@ -41,8 +41,8 @@ title: Interpreter
 <div class="container-fluid">
    <div class="row">
         <div id="side" class="col-2 bg-light">
-            <h2>Element view</h2>
-            <p>In the future, I will show you information about MEI elements.</p>
+            <h2>Note attributes</h2>
+            <ul id="elementInfo"></ul>
         </div>
         <div class="col-10">
             <div id="vrvOutput"></div>
@@ -62,7 +62,7 @@ title: Interpreter
     var pageWidth = 2100;
     var page = 1;
     var svg;
-    var mei;
+    //var mei;
 
 
     function fetchMEI(meiUrl) {
@@ -73,7 +73,7 @@ title: Interpreter
                 return response.text();
             })
             .then(function(text) {
-                mei = text;
+                meiFile = text;
                 loadData(text);
             });
         }
@@ -94,9 +94,8 @@ title: Interpreter
     function loadData (data) {
         setOptions();
         vrv.loadData(data);
-        svg = vrv.renderToSVG(page, {});
-        $("#vrvPageN").html(page + "/" + vrv.getPageCount());
-        $("#vrvOutput").html(svg);
+        loadPage();
+        bindInteractionEvents();
     }
     
     function loadPage() {
@@ -104,8 +103,9 @@ title: Interpreter
 
         svg = vrv.renderToSVG(page, {});
         $("#vrvOutput").html(svg);
-
-        adjust_page_height();
+        bindInteractionEvents();
+        //adjust_page_height();
+        
     };
 
     function nextPage() {
@@ -125,6 +125,34 @@ title: Interpreter
         page = page - 1;
         loadPage();
     };
+
+    function bindInteractionEvents() {
+        /* Super fancy music interaction */
+        // Highlight notes on mouseover
+        $(".note").mouseover(function() {
+            $(this).attr("fill", "#007bff");
+        });
+
+        // Click shows element information in sidebar
+        $(".note").click(function() {
+            let thisID = $(this).attr("id");
+            let thisElementAttrs = vrv.getElementAttr(thisID);
+
+            let elementInfo = $("<ul></ul>");
+
+            for (const [key, value] of Object.entries(thisElementAttrs)) {
+                let attr = $("<li></li>").text(`${key}: ${value}`);
+                $(elementInfo).append(attr);
+            }
+
+            $("#elementInfo").html(elementInfo);
+        });
+
+        // Remove highlighting on mouseout
+        $(".note").mouseout(function() {
+            $(this).attr("fill", "#000");
+        });
+    };
     
     $(document).ready(function(){
 
@@ -134,8 +162,6 @@ title: Interpreter
             fetchMEI(meiUrl);
         }
         
-
-
         // fancy file input animation
         bsCustomFileInput.init()
 
@@ -152,7 +178,6 @@ title: Interpreter
                 loadData(event.target.result);
             };    
         });
-
 
         $("#btnResetFile").click(function() {
             $("#fileInput")[0].reset();
@@ -171,5 +196,10 @@ title: Interpreter
         $("#vrvBack").click(function() {
             prevPage();
         });
+
+        $("#elementInfo").click(function() {
+            $(this).empty();
+        });
+
     });
 </script>
