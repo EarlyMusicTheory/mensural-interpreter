@@ -1,0 +1,9 @@
+menu:
+
+    - id: about
+      label: 'About'
+      url: '/about'
+
+    - id: interpreter
+      label: 'Interpreter'
+      url: '/interpreter'
