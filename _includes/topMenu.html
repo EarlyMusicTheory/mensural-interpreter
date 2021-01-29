@@ -1,12 +1,47 @@
-<nav class="navbar navbar-dark bg-dark">
-    <a class="navbar-brand" href="#">EMT rocks!</a>
-    <div class="btn-group" role="group" aria-label="Scroll">
+<nav class="navbar navbar-dark bg-dark navbar-expand-md">
+  <a class="navbar-brand" href="..">EMT rocks!</a>
+  <ul class="navbar-nav">
+    <li class="nav-item">
+      <a class="nav-link" href="../about">About</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="../interpreter">Interpreter</a>
+    </li>
+  </ul>
+  {% if page.title == "Interpreter" %}
+  <div class="navbar-nav mr-auto">
+      <div class="dropdown col-4 mr-1">
+          <button class="btn btn-secondary dropdown-toggle" id="fileDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Load
+          </button>
+          <div class="dropdown-menu p-2 w-100" aria-labelledby="fileDropdown">
+              <label for="fileInput">Load local MEI file</label>
+              <form class="custom-file p-2" id="fileInput">
+                  <label class="custom-file-label" for="customFile">File</label>
+                  <input type="file" class="custom-file-input" id="customFile">
+              </form>
+              <button id="btnResetFile" class="btn btn-primary">
+                  Reset
+              </button>
+              <div class="dropdown-divider"></div>
+              <label for="urlInput">Load MEI from URI</label>
+              <div class="input-group mb-1" id="urlInput">
+                  <input id="url" class="form-control" type="url" placeholder="URL">
+                  <div class="input-group-append">
+                      <button id="load" type="submit" class="btn btn-outline-secondary">Load</button>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+  <div class="btn-group mr-2" role="group" aria-label="Scroll">
+      <button id="vrvZoomIn" type="button" class="btn btn-secondary">In</button>
+      <button id="vrvZoomOut" type="button" class="btn btn-secondary">Out</button>
+  </div>
+  <div class="btn-group" role="group" aria-label="Scroll">
       <button id="vrvBack" type="button" class="btn btn-secondary">&lt;&lt;</button>
       <button id="vrvPageN" type="button" class="btn btn-light">0/0</button>
       <button id="vrvForw" type="button" class="btn btn-secondary">&gt;&gt;</button>
-    </div>
-    <form class="form-inline">
-        <input id="url" class="form-control mr-sm-2" type="url" placeholder="URL">
-        <button id="load" type="submit" class="btn btn-success mr-1">Load</button>
-      </form>
-  </nav>
+  </div>
+  {% endif %}
+</nav>
