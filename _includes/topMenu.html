@@ -3,7 +3,7 @@
   <ul class="navbar-nav">
       {% for entry in site.data.menu.menu %}
       <li class="nav-item">
-        <a class="nav-link" href="{{entry.url}}">{{entry.label}}</a>
+        <a class="nav-link" href="{{site.url}}{{entry.url}}">{{entry.label}}</a>
       </li>
       {% endfor %}
     </ul>

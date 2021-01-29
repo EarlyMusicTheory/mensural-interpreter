@@ -30,7 +30,7 @@ url: "https://earlymusictheory.github.io/mensural-interpreter/" # the base hostn
 
 # Build settings
 # theme: minima
-plugins:
+#plugins:
 #  - jekyll-feed
 
 # Exclude from processing.
