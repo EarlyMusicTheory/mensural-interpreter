@@ -4,7 +4,7 @@ var currentUrl = new URL(window.location.href);
 var baseUrl = currentUrl.origin + currentUrl.pathname;
 var currentParams = currentUrl.searchParams;
 var meiUrl;
-var meiFile;
+var meiFile = new MEIdoc();
 
 
 //var mei;
@@ -18,7 +18,7 @@ function fetchMEI(meiUrl) {
             return response.text();
         })
         .then(function(text) {
-            meiFile = text;
+            meiFile.text = text;
             vrvInterface.loadData(text);
         });
     }
@@ -33,7 +33,7 @@ $(document).ready(function(){
     }
     
     // fancy file input animation
-    bsCustomFileInput.init()
+    bsCustomFileInput.init()   
 
     $("#customFile").change(function() {
         let meiBlob = this.files[0];
@@ -42,7 +42,7 @@ $(document).ready(function(){
         reader.readAsText(meiBlob);
 
         reader.onload = function(event) {
-            meiFile = event.target.result;
+            meiFile.text = event.target.result;
             currentParams.set("url", null);
             window.history.pushState({}, "Mensural interpreter", `${baseUrl}`);
             vrvInterface.loadData(event.target.result);
