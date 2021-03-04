@@ -5,6 +5,7 @@ var baseUrl = currentUrl.origin + currentUrl.pathname;
 var currentParams = currentUrl.searchParams;
 var meiUrl;
 var meiFile = new MEIdoc();
+var sections;
 
 
 //var mei;
@@ -58,6 +59,13 @@ $(document).ready(function(){
         currentParams.set("url", input);
         location.replace(`${baseUrl}?${currentParams}`);
         return false;
+    });
+
+    $("#blockify").click(function() {
+        sections = blockifier.getBlocksFromSections(meiFile.doc);
+        if (sections.length > 0) {
+            window.alert("Number of section blocks: " + sections.length);
+        }
     });
 
     $("#vrvForw").click(function() {
