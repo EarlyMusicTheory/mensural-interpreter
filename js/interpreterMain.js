@@ -25,6 +25,33 @@ function fetchMEI(meiUrl) {
     }
 }
 
+function getSectionBlocks() {
+    sections = blockifier.getBlocksFromSections(meiFile.doc);
+    
+    if (sections.length > 0) {
+        $("#blockCount").text(sections.length);
+        $("#blockTableBody").empty();
+        for(let i = 0; i < sections.length; i++) {
+            let blockRow = $("<tr></tr>");
+            blockRow.append(`<td>${i}</td>`);
+            blockRow.append(`<td>${sections[i].mens ? makeXmlCode(sections[i].mens.outerHTML) : ''}</td>`);
+            blockRow.append(`<td>${sections[i].prop ? makeXmlCode(sections[i].prop.outerHTML) : ''}</td>`);
+            blockRow.append(`<td>${sections[i].prevPropMultiplier ? sections[i].prevPropMultiplier : ''}</td>`);
+            blockRow.append(`<td>${sections[i].events.length}</td>`);
+            $("#blockTableBody").append(blockRow);
+        }
+
+        $("#blocksInfo").modal('show');
+    }
+}
+
+function makeXmlCode(htmlString) {
+    let ltString = htmlString.replace(/</gm,"&lt;");
+    let gtString = ltString.replace(/>/gm, "&gt;");
+
+    return `<code>${gtString}</code>`
+}
+
 $(document).ready(function(){
 
     meiUrl = currentParams.get("url");
@@ -62,10 +89,7 @@ $(document).ready(function(){
     });
 
     $("#blockify").click(function() {
-        sections = blockifier.getBlocksFromSections(meiFile.doc);
-        if (sections.length > 0) {
-            window.alert("Number of section blocks: " + sections.length);
-        }
+        getSectionBlocks();
     });
 
     $("#vrvForw").click(function() {
