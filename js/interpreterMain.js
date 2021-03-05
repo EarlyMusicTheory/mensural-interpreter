@@ -7,10 +7,6 @@ var meiUrl;
 var meiFile = new MEIdoc();
 var sections;
 
-
-//var mei;
-
-
 function fetchMEI(meiUrl) {
     if(meiUrl)
     {
