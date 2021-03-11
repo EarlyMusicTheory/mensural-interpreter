@@ -21,8 +21,6 @@ function fetchMEI(meiUrl) {
 }
 
 function getSectionBlocks() {
-    meiFile.getBlocksFromSections();
-    
     if (meiFile.blocks.length > 0) {
         $("#blockCount").text(meiFile.blocks.length);
         $("#blockTableBody").empty();

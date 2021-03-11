@@ -155,8 +155,9 @@ var MEIdoc = (() => {
     class MEIdoc {
         constructor(meiText) {
             this.meidoc = meiText ? parser.parseFromString(meiText, "text/xml") : null;
-            this.sectionBlocks = [];
-            this.idDict = {};
+			this.idDict = {};
+            this.sectionBlocks;
+			if(this.doc) this.getBlocksFromSections();
         }
 
         get text() {
@@ -164,6 +165,7 @@ var MEIdoc = (() => {
         }
         set text(meiText) {
             this.meidoc = parser.parseFromString(meiText, "text/xml");
+			if (this.meidoc) this.getBlocksFromSections();
         }
 
         get doc() {
@@ -171,6 +173,7 @@ var MEIdoc = (() => {
         }
         set doc(meiDocTree) {
             this.meidoc = meiDocTree;
+			if(this.meidoc) this.getBlocksFromSections();
         }
 
         get blocks() {
