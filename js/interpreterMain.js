@@ -22,18 +22,18 @@ function fetchMEI(meiUrl) {
 }
 
 function getSectionBlocks() {
-    sections = blockifier.getBlocksFromSections(meiFile.doc);
+    meiFile.getBlocksFromSections();
     
-    if (sections.length > 0) {
-        $("#blockCount").text(sections.length);
+    if (meiFile.blocks.length > 0) {
+        $("#blockCount").text(meiFile.blocks.length);
         $("#blockTableBody").empty();
-        for(let i = 0; i < sections.length; i++) {
+        for(let i = 0; i < meiFile.blocks.length; i++) {
             let blockRow = $("<tr></tr>");
             blockRow.append(`<td>${i}</td>`);
-            blockRow.append(`<td>${sections[i].mens ? makeXmlCode(sections[i].mens.outerHTML) : ''}</td>`);
-            blockRow.append(`<td>${sections[i].prop ? makeXmlCode(sections[i].prop.outerHTML) : ''}</td>`);
-            blockRow.append(`<td>${sections[i].prevPropMultiplier ? sections[i].prevPropMultiplier : ''}</td>`);
-            blockRow.append(`<td>${sections[i].events.length}</td>`);
+            blockRow.append(`<td>${meiFile.blocks[i].mens ? makeXmlCode(meiFile.blocks[i].mens.outerHTML) : ''}</td>`);
+            blockRow.append(`<td>${meiFile.blocks[i].prop ? makeXmlCode(meiFile.blocks[i].prop.outerHTML) : ''}</td>`);
+            blockRow.append(`<td>${meiFile.blocks[i].prevPropMultiplier ? meiFile.blocks[i].prevPropMultiplier : ''}</td>`);
+            blockRow.append(`<td>${meiFile.blocks[i].events.length}</td>`);
             $("#blockTableBody").append(blockRow);
         }
 
