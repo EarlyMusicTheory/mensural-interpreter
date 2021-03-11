@@ -52,19 +52,20 @@ var beatIndependentDurations = (function() {
 	/**
 	 * @private
 	 * Colored notation is assumed to be simple duple and labelled accordingly
-	 * @param {Array} sectionBlocks Array of all the coherent areas of
-	 * mensurations in a section
+	 * @param {MEIdoc} meiDoc 
 	 */
-	function actOnColoration(sectionBlocks){
+	function actOnColoration(meiDoc){
+		var sectionBlocks = meiDoc.blocks;
 		for(var b=0; b<sectionBlocks.length; b++){
 			var mens = sectionBlocks[b].mens;
+			var propMultiplier = meiDoc.proportionMultiplier(b);
 			for(var e=0; e<sectionBlocks[b].events.length; e++){
 				var event = sectionBlocks[b].events[e];
-				if(event.tagName==='note' && event.getAttributeNS(null, 'coloration')){
+				if(event.tagName==='note' && event.getAttributeNS(null, 'colored')){
 					var augmentedDot = e+1<sectionBlocks[b].events.length
 							&& sectionBlocks[b].events[e+1].tagName==="dot"
 							&& sectionBlocks[b].events[e+1].getAttributeNS(null, 'form')==='aug';
-					writeDur(simpleMinims(event, mens) * 2/3, event, augmentedDot);
+					durIO.writeDur(mensUtils.simpleMinims(event, mens) * 2/3, event, augmentedDot, propMultiplier);
 					event.setAttributeNS(null, 'rule', 'coloration');
 				}
 			}
@@ -239,7 +240,7 @@ var beatIndependentDurations = (function() {
 		 */
 		beatIndependentDurations : function(meiDoc) {
 			labelRests(meiDoc);
-			//actOnColoration(sectionBlocks);
+			actOnColoration(meiDoc);
 			//actOnDots(sectionBlocks);
 			//allUnalterableImperfectLevels(sectionBlocks);
 			//simplestAlterations(sectionBlocks);
