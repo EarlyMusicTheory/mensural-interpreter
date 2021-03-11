@@ -35,12 +35,12 @@ var vrvInterface = (function () {
     function bindInteractionEvents() {
         /* Super fancy music interaction */
         // Highlight notes on mouseover
-        $(".note").mouseover(function() {
+        $(".note,.rest").mouseover(function() {
             $(this).attr("fill", "#007bff");
         });
     
         // Click shows element information in sidebar
-        $(".note").click(function() {
+        $(".note,.rest").click(function() {
             let thisID = $(this).attr("id");
             let thisElementAttrs = vrv.getElementAttr(thisID);
     
@@ -55,7 +55,7 @@ var vrvInterface = (function () {
         });
     
         // Remove highlighting on mouseout
-        $(".note").mouseout(function() {
+        $(".note,.rest").mouseout(function() {
             $(this).attr("fill", "#000");
         });
     }

@@ -130,6 +130,17 @@ var MEIdoc = (() => {
 		}
 		return ns[prefix] || null;
 	}
+
+    /**
+     * Given a proportion-specifying element, give its implied multiplier
+     * @param {DOMObject} el proportion element
+     * @returns {Number}
+     */
+    function propProportionMultiplier(el) {
+        var num = el.getAttributeNS(null, 'num') || 1;
+        var div = el.getAttributeNS(null, 'numbase') || 1;
+        return Number(num) / Number(div);
+    }
     
 
     /**
@@ -178,6 +189,9 @@ var MEIdoc = (() => {
         appendToIdDictionary(id, block) {
             this.idDict[id] = block;
         }
+        getBlockByEventId(eventId) {
+            return this.idDictionary[eventId];
+        }
         
         getBlocksFromSections() {
 			var sections = getAtomicSections(this.doc);
@@ -202,6 +216,25 @@ var MEIdoc = (() => {
 
 			this.blocks = sectionBlocks;
 		}
+
+        /**
+         * Given a block index number, finds the proportion of that block and returns the factor.
+         * @param {integer} blockIndex mei:note or mei:rest
+         * @returns {Number} 
+         */
+        proportionMultiplier(blockIndex){
+            let block = this.blocks[blockIndex];
+            // if(block.prop) console.log("so", blockProportionMultiplier(block));
+            // return blockProportionMultiplier(block);
+            if(block.prop){
+                if(block.prop.getAttributeNS(null, 'multiplier')){
+                    return Number(block.prop.getAttributeNS(null, 'multiplier'));
+                } else {
+                    return propProportionMultiplier(block.prop);
+                }
+            } else return 1;
+        }
+        
     }  
     return MEIdoc;
   })();

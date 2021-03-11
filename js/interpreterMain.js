@@ -5,7 +5,6 @@ var baseUrl = currentUrl.origin + currentUrl.pathname;
 var currentParams = currentUrl.searchParams;
 var meiUrl;
 var meiFile = new MEIdoc();
-var sections;
 
 function fetchMEI(meiUrl) {
     if(meiUrl)
@@ -86,6 +85,11 @@ $(document).ready(function(){
 
     $("#blockify").click(function() {
         getSectionBlocks();
+    });
+
+    $("#beatIndependent").click(function() {
+        beatIndependentDurations.beatIndependentDurations(meiFile);
+        vrvInterface.loadData(meiFile.text);
     });
 
     $("#vrvForw").click(function() {
