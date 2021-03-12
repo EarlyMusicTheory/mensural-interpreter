@@ -104,23 +104,24 @@ var beatIndependentDurations = (function() {
 	 * @private
 	 * Resolves durations for any note that is not regularly perfect and
 	 * that is not a direct part of a ternary note (so isn't alterable).
-	 * @param {Array} sectionBlocks Array of all the coherent areas of
-	 * mensurations in a section
+	 * @param {MEIdoc} meiDoc
 	 */
-	function allUnalterableImperfectLevels(sectionBlocks){
+	function allUnalterableImperfectLevels(meiDoc){
+		var sectionBlocks = meiDoc.blocks;
 		// Anything imperfect and with an imperfect next longer note is trivial
 		for(var b=0; b<sectionBlocks.length; b++){
 			var mens = sectionBlocks[b].mens;
-			var menssum = mensurSummary(mens);
+			var propMultiplier = meiDoc.proportionMultiplier(b);
+			var menssum = rhythmMensUtils.mensurSummary(mens);
 			var alterableLevels = [2, 2, 2].concat(menssum).concat([2]);
-			var firstPerf = firstPerfectLevel(mens);
+			var firstPerf = rhythmMensUtils.firstPerfectLevel(mens);
 			for(var e=0; e<sectionBlocks[b].events.length; e++){
 				var event = sectionBlocks[b].events[e];
 				if(event.tagName==='note' && !(event.getAttributeNS(null, 'dur.ges'))){
-					var level = noteInt(event);
+					var level = rhythmMensUtils.noteInt(event);
 					if(level < firstPerf && alterableLevels[level]===2){
 						// Assume that actOnDots has already been run on all dotted notes
-						writeDur(simpleMinims(event, mens), event);
+						durIO.writeDur(rhythmMensUtils.simpleMinims(event, mens), event, false, propMultiplier);
 					}
 				}
 			}
@@ -131,53 +132,54 @@ var beatIndependentDurations = (function() {
 	 * @private
 	 * Resolves any alterations that can be treated as simple local note
 	 * patterns
-	 * @param {Array} sectionBlocks Array of all the coherent areas of
-	 * mensurations in a section
+	 * Rule A.1 requires us to know the mensural position of the note,
+	 * so we can't resolve that yet, but we can rule out things that
+	 * won't work, and we can apply rule A.2:
+	 * An alterable note that is preceded by a larger note followed by
+	 * the equivalent of its own regular value and followed by a note
+	 * or rest of the perfect unit next larger is altered.
+	 * @param {MEIdoc} meiDoc 
 	 *
 	 */ 
-	function simplestAlterations(sectionBlocks){
-		// Rule A.1 requires us to know the mensural position of the note,
-		// so we can't resolve that yet, but we can rule out things that
-		// won't work, and we can apply rule A.2:
-		//   An alterable note that is preceded by a larger note followed by
-		//   the equivalent of its own regular value and followed by a note
-		//   or rest of the perfect unit next larger is altered.
+	function simplestAlterations(meiDoc){
+		var sectionBlocks = meiDoc.blocks;
 		for(var b=0; b<sectionBlocks.length; b++){
 			var events = sectionBlocks[b].events;
 			var mens = sectionBlocks[b].mens;
-			var menssum = mensurSummary(mens);
+			var propMultiplier = meiDoc.proportionMultiplier(b);
+			var menssum = rhythmMensUtils.mensurSummary(mens);
 			var alterableLevels = [2, 2, 2].concat(menssum).concat([2]);
 			var perfectLevels = [2, 2, 2, 2].concat(menssum);
 			for(var e=0; e<events.length; e++){
 				var event = events[e];
 				if(event.tagName==='note' && !(event.getAttributeNS(null, 'dur.ges'))){
-					var level = noteInt(event);
+					var level = rhythmMensUtils.noteInt(event);
 					if(alterableLevels[level]===3){
 						// The level is alterable.
 						// The next note must be the next level up
-						if(e<events.length-1 && noteInt(events[e+1])==level+1){
+						if(e<events.length-1 && rhythmMensUtils.noteInt(events[e+1])==level+1){
 							// These are the only things that can be altered all.
 							///For A.2 to be true, we need to count backwards by one
 							// unit (assuming we have all the necessary dur.ges values;
-							var target = simpleMinims(event, mens);
-							if((e==0 || noteInt(events[e-1])>level) && perfectLevels[level]===2){
+							var target = rhythmMensUtils.simpleMinims(event, mens);
+							if((e==0 || rhythmMensUtils.noteInt(events[e-1])>level) && perfectLevels[level]===2){
 								// highly unlikely to be an alteration (would require
 								// syncopation), not possible to be imperfected
 								var augmentedDot = e+1<sectionBlocks[b].events.length
 										&& sectionBlocks[b].events[e+1].tagName==="dot"
 										&& sectionBlocks[b].events[e+1].getAttributeNS(null, 'form')==='aug';
-								writeDur(simpleMinims(event, mens), event, augmentedDot);
+								durIO.writeDur(rhythmMensUtils.simpleMinims(event, mens), event, augmentedDot, propMultiplier);
 							}
-							for(i=e-1; i>=0; i--){
+							for(let i=e-1; i>=0; i--){
 								if(!events[i].getAttributeNS(null, 'dur.ges')){
 									break;
 								}
-								target = readDur(events[i]);
+								target = durIO.readDur(events[i]);
 								if(target===0){
-									if(i===0 || noteInt(events[i-1])>level
+									if(i===0 || rhythmMensUtils.noteInt(events[i-1])>level
 										|| (events[i-1].tagName=='dot' && events[i-1].getAttributeNS('form')!=='aug')){
 										// Yay, it's an alteration
-										writeDur(2 * simpleMinims(event, mens), event);
+										durIO.writeDur(2 * rhythmMensUtils.simpleMinims(event, mens), event, false, propMultiplier);
 										event.setAttributeNS(null, 'quality', 'a');
 										event.setAttributeNS(null, 'rule', 'A.2b');
 									}
@@ -192,7 +194,7 @@ var beatIndependentDurations = (function() {
 							var augmentedDot = e+1<sectionBlocks[b].events.length
 									&& sectionBlocks[b].events[e+1].tagName==="dot"
 									&& sectionBlocks[b].events[e+1].getAttributeNS(null, 'form')==='aug';
-							writeDur(simpleMinims(event, mens), event, augmentedDot);
+							durIO.writeDur(rhythmMensUtils.simpleMinims(event, mens), event, augmentedDot, propMultiplier);
 						}
 					}
 				}
@@ -206,21 +208,22 @@ var beatIndependentDurations = (function() {
 	 * level, the former cannot be imperfected. Such
 	 * notes can have duration labelled immediately.
 	 * @see leveleq
-	 * @param {Array} sectionBlocks Array of all the coherent areas of
-	 * mensurations in a section
+	 * @param {MEIdoc} meiDoc
 	 */
-	function anteSim(sectionBlocks){
+	function anteSim(meiDoc){
+		var sectionBlocks = meiDoc.blocks;
 		for(var b=0; b<sectionBlocks.length; b++){
 			var mens = sectionBlocks[b].mens;
+			var propMultiplier = meiDoc.proportionMultiplier(b);
 			for(var e=0; e<sectionBlocks[b].events.length; e++){
 				var event = sectionBlocks[b].events[e];
 				if(event.tagName==="note" && !event.getAttributeNS(null, 'dur.ges')
-					&& regularlyPerfect(event, mens)
+					&& rhythmMensUtils.regularlyPerfect(event, mens)
 					&& (e+1)<sectionBlocks[b].events.length
 					// && (sectionBlocks[b].events[e+1].tagName==='note')// Surely note or rest?
 					&& (sectionBlocks[b].events[e+1].tagName==='note' || sectionBlocks[b].events[e+1].tagName==='rest')
-					&& leveleq(sectionBlocks[b].events[e+1], event)){
-					writeDur(simpleMinims(event, mens), event);
+					&& durIO.leveleq(sectionBlocks[b].events[e+1], event)){
+					durIO.writeDur(rhythmMensUtils.simpleMinims(event, mens), event, false, propMultiplier);
 					event.setAttributeNS(null, 'rule', 'I.2.b.antesim');
 				}
 			}
@@ -243,9 +246,9 @@ var beatIndependentDurations = (function() {
 			labelRests(meiDoc);
 			actOnColoration(meiDoc);
 			actOnDots(meiDoc);
-			//allUnalterableImperfectLevels(sectionBlocks);
-			//simplestAlterations(sectionBlocks);
-			//anteSim(sectionBlocks);
+			allUnalterableImperfectLevels(meiDoc);
+			simplestAlterations(meiDoc);
+			anteSim(meiDoc);
 		}
 	}
 
