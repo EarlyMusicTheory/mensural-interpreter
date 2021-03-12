@@ -36,7 +36,7 @@ var durIO = (function() {
                 }
                 // This is for Verovio. Needs fixing.
                 // fraction needs reduction!
-                var defaultLength = simpleRhythms.dupleMinimCountFromElement(el);
+                var defaultLength = rhythmMensUtils.dupleMinimCountFromElement(el);
                 if(defaultLength){
                     if(Math.floor(num)!= num){
                         // FIXME: use lcd
@@ -72,7 +72,7 @@ var durIO = (function() {
          */
         writeSimpleImperfection : function (el, mens, rule) {
             //	el.setAttributeNS(null, 'dur.ges', (2 * simpleMinims(el, mens) / 3) + 'b');
-            writeDur((2 * simpleMinims(el, mens) / 3), el, false);
+            this.writeDur((2 * simpleMinims(el, mens) / 3), el, false);
         //	el.setAttributeNS(null, 'num', 2);
         //	el.setAttributeNS(null, 'numbase', 3);
             el.setAttributeNS(null, 'dur.quality', 'imperfectio');
@@ -90,10 +90,10 @@ var durIO = (function() {
          * (written to element as @rule)
          */
         writeImperfection : function (el, reduceBy, mens, rule) {
-            var defaultDur = simpleMinims(el, mens);
+            var defaultDur = rhythmMensUtils.simpleMinims(el, mens);
             var factor = gcd(defaultDur, reduceBy);
             var finalDur = defaultDur - reduceBy
-            writeDur(finalDur, el, false);
+            this.writeDur(finalDur, el, false);
             //	el.setAttributeNS(null, 'num', finalDur / factor);
             //	el.setAttributeNS(null, 'numbase', defaultDur / factor);
             el.setAttributeNS(null, 'dur.quality', 'imperfectio');
@@ -111,7 +111,7 @@ var durIO = (function() {
          */
         writeAlteration : function (el, mens, rule) {
             //	el.setAttributeNS(null, 'dur.ges', (2 * simpleMinims(el, mens)) + 'b');
-            writeDur((2 * simpleMinims(el, mens)), el, false);
+            this.writeDur((2 * rhythmMensUtils.simpleMinims(el, mens)), el, false);
         //	el.setAttributeNS(null, 'num', 2);
         //	el.setAttributeNS(null, 'numbase', 1);
             el.setAttributeNS(null, 'dur.quality', 'alteratio');
