@@ -10,7 +10,9 @@ var vrvInterface = (function () {
     var page = 1;
     var svg;
 
-    var elsToSelect = ".note,.rest";
+    const elsToSelect = ".note,.rest";
+    const blue = "#007bff";
+    const red = "#dc3545";
 
     function setOptions() {
         pageHeight = $(document).height() * 100 / zoom ;
@@ -52,21 +54,33 @@ var vrvInterface = (function () {
         });
     }
 
+    /**
+     * Select element for showing details
+     * @param {DOMObject} eventEl 
+     */
     function selectEvent(eventEl) {
-        $(eventEl).attr("fill", "#007bff");
+        $(eventEl).attr("fill", blue);
     }
 
+    /**
+     * Deselect element
+     * @param {DOMObject} eventEl 
+     */
     function deselectEvent(eventEl) {
-        if($(eventEl).attr("fill")!=="#dc3545")
+        if($(eventEl).attr("fill")!==red)
         {
             $(eventEl).removeAttr("fill");
         }
     }
 
+    /**
+     * Shows event details of chosen element
+     * @param {DOMObject} eventEl 
+     */
     function showDetails(eventEl) {
         hideDetails();
-        $(eventEl).attr("fill", "#dc3545");
-        
+        $(eventEl).attr("fill", red);
+
         let thisID = $(eventEl).attr("id");
         let thisElementAttrs = vrv.getElementAttr(thisID);
 
@@ -80,8 +94,12 @@ var vrvInterface = (function () {
         $("#elementInfo").html(elementInfo);
     }
 
+    /**
+     * Remove details of the currently shown event
+     */
     function hideDetails() {
-        $("[fill='#dc3545']").removeAttr("fill");
+        const killRed = "[fill='" + red + "']";
+        $(killRed).removeAttr("fill");
         $("#elementInfo").empty();
     }
 
