@@ -10,6 +10,8 @@ var vrvInterface = (function () {
     var page = 1;
     var svg;
 
+    var elsToSelect = ".note,.rest";
+
     function setOptions() {
         pageHeight = $(document).height() * 100 / zoom ;
         pageWidth = ($(window).width() - ($("#side").width() * 1.2) ) * 100 / zoom ;
@@ -35,29 +37,52 @@ var vrvInterface = (function () {
     function bindInteractionEvents() {
         /* Super fancy music interaction */
         // Highlight notes on mouseover
-        $(".note,.rest").mouseover(function() {
-            $(this).attr("fill", "#007bff");
+        $(elsToSelect).mouseover(function() {
+            selectEvent(this);
         });
     
         // Click shows element information in sidebar
-        $(".note,.rest").click(function() {
-            let thisID = $(this).attr("id");
-            let thisElementAttrs = vrv.getElementAttr(thisID);
-    
-            let elementInfo = $("<ul></ul>");
-    
-            for (const [key, value] of Object.entries(thisElementAttrs)) {
-                let attr = $("<li></li>").text(`${key}: ${value}`);
-                $(elementInfo).append(attr);
-            }
-    
-            $("#elementInfo").html(elementInfo);
+        $(elsToSelect).click(function() {
+            showDetails(this);
         });
     
         // Remove highlighting on mouseout
-        $(".note,.rest").mouseout(function() {
-            $(this).attr("fill", "#000");
+        $(elsToSelect).mouseout(function() {
+            deselectEvent(this);
         });
+    }
+
+    function selectEvent(eventEl) {
+        $(eventEl).attr("fill", "#007bff");
+    }
+
+    function deselectEvent(eventEl) {
+        if($(eventEl).attr("fill")!=="#dc3545")
+        {
+            $(eventEl).removeAttr("fill");
+        }
+    }
+
+    function showDetails(eventEl) {
+        hideDetails();
+        $(eventEl).attr("fill", "#dc3545");
+        
+        let thisID = $(eventEl).attr("id");
+        let thisElementAttrs = vrv.getElementAttr(thisID);
+
+        let elementInfo = $("<ul></ul>");
+
+        for (const [key, value] of Object.entries(thisElementAttrs)) {
+            let attr = $("<li></li>").text(`${key}: ${value}`);
+            $(elementInfo).append(attr);
+        }
+
+        $("#elementInfo").html(elementInfo);
+    }
+
+    function hideDetails() {
+        $("[fill='#dc3545']").removeAttr("fill");
+        $("#elementInfo").empty();
     }
 
     /* public */
