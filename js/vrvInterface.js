@@ -1,5 +1,7 @@
 "use strict";
 
+
+
 var vrvInterface = (function () {
     /** private */
     const vrv = new verovio.toolkit();
@@ -13,6 +15,10 @@ var vrvInterface = (function () {
     const elsToSelect = ".note,.rest";
     const blue = "#007bff";
     const red = "#dc3545";
+
+    var keyUpInProgress = false;
+    var shownEvent = null;
+    var eventsBinded = false;
 
     function setOptions() {
         pageHeight = $(document).height() * 100 / zoom ;
@@ -31,7 +37,10 @@ var vrvInterface = (function () {
     
         svg = vrv.renderToSVG(page, {});
         $("#vrvOutput").html(svg);
-        bindInteractionEvents();
+        if(eventsBinded===false)
+        {
+            bindInteractionEvents();
+        }
         //adjust_page_height();
         
     }
@@ -52,6 +61,25 @@ var vrvInterface = (function () {
         $(elsToSelect).mouseout(function() {
             deselectEvent(this);
         });
+
+        // Add arrow left and right bindings to switch events
+        $(window).keyup(function(event) {
+            if (keyUpInProgress===false && shownEvent) {
+                keyUpInProgress = true;
+                // right
+                if(event.keyCode===39) {
+                    var nextEl = $(shownEvent).next();
+                    showDetails(nextEl);
+                }
+                // left
+                if(event.keyCode===37) {
+                    var prevEl = $(shownEvent).prev();
+                    showDetails(prevEl);
+                }
+                keyUpInProgress = false;
+            }
+        });
+        eventsBinded = true;
     }
 
     /**
@@ -92,6 +120,7 @@ var vrvInterface = (function () {
         }
 
         $("#elementInfo").html(elementInfo);
+        shownEvent = eventEl;
     }
 
     /**
@@ -100,6 +129,7 @@ var vrvInterface = (function () {
     function hideDetails() {
         const killRed = "[fill='" + red + "']";
         $(killRed).removeAttr("fill");
+        shownEvent = null;
         $("#elementInfo").empty();
     }
 
@@ -109,7 +139,10 @@ var vrvInterface = (function () {
             setOptions();
             vrv.loadData(data);
             loadPage();
-            bindInteractionEvents();
+            if(eventsBinded===false)
+            {
+                bindInteractionEvents();
+            }
         },
 
         nextPage : function () {
