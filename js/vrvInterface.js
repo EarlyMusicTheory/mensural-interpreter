@@ -1,7 +1,5 @@
 "use strict";
 
-
-
 var vrvInterface = (function () {
     /** private */
     const vrv = new verovio.toolkit();
@@ -17,8 +15,11 @@ var vrvInterface = (function () {
     const red = "#dc3545";
 
     var keyUpInProgress = false;
-    var shownEvent = null;
     var eventsBinded = false;
+    var shownEvent = null;
+    var prevEvent = null;
+    var nextEvent = null;
+    
 
     function setOptions() {
         pageHeight = $(document).height() * 100 / zoom ;
@@ -37,16 +38,14 @@ var vrvInterface = (function () {
     
         svg = vrv.renderToSVG(page, {});
         $("#vrvOutput").html(svg);
-        if(eventsBinded===false)
-        {
-            bindInteractionEvents();
-        }
-        //adjust_page_height();
+        bindInteractionEvents();
         
     }
 
     function bindInteractionEvents() {
         /* Super fancy music interaction */
+        // Undbind all events just for safety
+        $(elsToSelect).off();
         // Highlight notes on mouseover
         $(elsToSelect).mouseover(function() {
             selectEvent(this);
@@ -63,18 +62,18 @@ var vrvInterface = (function () {
         });
 
         // Add arrow left and right bindings to switch events
+        // but first, unbind key events to avoid double jumps
+        $(window).off("keyup");
         $(window).keyup(function(event) {
             if (keyUpInProgress===false && shownEvent) {
                 keyUpInProgress = true;
-                // right
+                // right arrow
                 if(event.keyCode===39) {
-                    var nextEl = $(shownEvent).next();
-                    showDetails(nextEl);
+                    showDetails(nextEvent);
                 }
-                // left
+                // left arrow
                 if(event.keyCode===37) {
-                    var prevEl = $(shownEvent).prev();
-                    showDetails(prevEl);
+                    showDetails(prevEvent);
                 }
                 keyUpInProgress = false;
             }
@@ -121,6 +120,8 @@ var vrvInterface = (function () {
 
         $("#elementInfo").html(elementInfo);
         shownEvent = eventEl;
+        nextEvent = $(eventEl).next();
+        prevEvent = $(eventEl).prev();
     }
 
     /**
@@ -130,19 +131,18 @@ var vrvInterface = (function () {
         const killRed = "[fill='" + red + "']";
         $(killRed).removeAttr("fill");
         shownEvent = null;
+        nextEvent = null;
+        prevEvent = null;
         $("#elementInfo").empty();
     }
 
     /* public */
     return {
         loadData : function (data) {
+            eventsBinded = false;
             setOptions();
             vrv.loadData(data);
             loadPage();
-            if(eventsBinded===false)
-            {
-                bindInteractionEvents();
-            }
         },
 
         nextPage : function () {
