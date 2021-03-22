@@ -163,6 +163,24 @@
             } else {
                 return false;
             }
+        },
+
+        /**
+         * Given the output of {@link mensurSummary}, return an array of minim
+         * counts for each level.
+         * @param {Array} mensurSummary Mensural structure (2 for
+         * duple/imperfect and 3 for triple/perfect for each level)
+         * @param {Integer} [maxLevel=4] Stopping point
+         * @return {Array}
+         */
+        minimStructures : (mensurSummary, maxLevel) => {
+            var counts = [];
+            var minims = 1;
+            for(var i=0; i < (maxLevel ? maxLevel : 4); i++){
+                minims = minims*(mensurSummary[i] ? mensurSummary[i] : 2);
+                counts.push(minims);
+            }
+            return counts;
         }
      }
  })();

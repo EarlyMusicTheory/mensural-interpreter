@@ -5,6 +5,8 @@ var baseUrl = currentUrl.origin + currentUrl.pathname;
 var currentParams = currentUrl.searchParams;
 var meiUrl;
 var meiFile = new MEIdoc();
+var basicAnalysisDone = false;
+var complexAnalysisDone = false;
 
 function fetchMEI(meiUrl) {
     if(meiUrl)
@@ -16,6 +18,8 @@ function fetchMEI(meiUrl) {
         .then(function(text) {
             meiFile.text = text;
             vrvInterface.loadData(text);
+            basicAnalysisDone = false;
+            complexAnalysisDone = false;
         });
     }
 }
@@ -67,6 +71,8 @@ $(document).ready(function(){
             currentParams.set("url", null);
             window.history.pushState({}, "Mensural interpreter", `${baseUrl}`);
             vrvInterface.loadData(event.target.result);
+            basicAnalysisDone = false;
+            complexAnalysisDone = false;
         };    
     });
 
@@ -86,8 +92,27 @@ $(document).ready(function(){
     });
 
     $("#beatIndependent").click(function() {
-        beatIndependentDurations.beatIndependentDurations(meiFile);
-        vrvInterface.loadData(meiFile.text);
+        if (basicAnalysisDone===false)
+        {
+            beatIndependentDurations.beatIndependentDurations(meiFile);
+            basicAnalysisDone = true;
+            vrvInterface.loadData(meiFile.text);
+        }
+    });
+
+    $("#complexBeatAnalysis").click(function() {
+        if(basicAnalysisDone===false)
+        {
+            beatIndependentDurations.beatIndependentDurations(meiFile);
+            basicAnalysisDone = true;
+        }
+
+        if(basicAnalysisDone===true && complexAnalysisDone===false)
+        {
+            complexBeats.complexAnalysis(meiFile);
+            vrvInterface.loadData(meiFile.text);
+            complexAnalysisDone = true;
+        }
     });
 
     $("#vrvForw").click(function() {
