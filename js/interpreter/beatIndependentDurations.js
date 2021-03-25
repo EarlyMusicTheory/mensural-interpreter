@@ -42,7 +42,7 @@ var beatIndependentDurations = (function() {
 					var augmentedDot = e+1<sectionBlocks[b].events.length
 							&& sectionBlocks[b].events[e+1].tagName==="dot"
 							&& sectionBlocks[b].events[e+1].getAttributeNS(null, 'form')==='aug';
-					durIO.writeDur(rhythmMensUtils.simpleMinims(event, mens, 0), event, augmentedDot, propMultiplier);
+					durIO.writeDur(rm.simpleMinims(event, mens, 0), event, augmentedDot, propMultiplier);
 					event.setAttributeNS(null, 'rule', 'rest');
 				}
 			}
@@ -65,7 +65,7 @@ var beatIndependentDurations = (function() {
 					var augmentedDot = e+1<sectionBlocks[b].events.length
 							&& sectionBlocks[b].events[e+1].tagName==="dot"
 							&& sectionBlocks[b].events[e+1].getAttributeNS(null, 'form')==='aug';
-					durIO.writeDur(rhythmMensUtils.simpleMinims(event, mens) * 2/3, event, augmentedDot, propMultiplier);
+					durIO.writeDur(rm.simpleMinims(event, mens) * 2/3, event, augmentedDot, propMultiplier);
 					event.setAttributeNS(null, 'rule', 'coloration');
 				}
 			}
@@ -84,15 +84,15 @@ var beatIndependentDurations = (function() {
 			var propMultiplier = meiDoc.proportionMultiplier(b);
 			for(var e=0; e<sectionBlocks[b].events.length; e++){
 				var event = sectionBlocks[b].events[e];
-				if(rhythmMensUtils.augDot(event) && e){
+				if(rm.augDot(event) && e){
 					var prev = sectionBlocks[b].events[e-1];
 					if(e && !prev.getAttributeNS(null, 'dur.ges'))
-						if(rhythmMensUtils.notePerfectAsWhole(prev, mens)){
-							durIO.writeDur(rhythmMensUtils.simpleMinims(prev, mens), prev, propMultiplier);
+						if(rm.notePerfectAsWhole(prev, mens)){
+							durIO.writeDur(rm.simpleMinims(prev, mens), prev, propMultiplier);
 							prev.setAttributeNS(null, 'quality', 'p');
 							prev.setAttributeNS(null, 'rule', 'I.2.a.PerfDot');
 						} else {
-							durIO.writeDur(rhythmMensUtils.simpleMinims(prev, mens), prev, true, propMultiplier);
+							durIO.writeDur(rm.simpleMinims(prev, mens), prev, true, propMultiplier);
 							prev.setAttributeNS(null, 'rule', 'simpleDot');
 						}
 				}
@@ -112,16 +112,16 @@ var beatIndependentDurations = (function() {
 		for(var b=0; b<sectionBlocks.length; b++){
 			var mens = sectionBlocks[b].mens;
 			var propMultiplier = meiDoc.proportionMultiplier(b);
-			var menssum = rhythmMensUtils.mensurSummary(mens);
+			var menssum = rm.mensurSummary(mens);
 			var alterableLevels = [2, 2, 2].concat(menssum).concat([2]);
-			var firstPerf = rhythmMensUtils.firstPerfectLevel(mens);
+			var firstPerf = rm.firstPerfectLevel(mens);
 			for(var e=0; e<sectionBlocks[b].events.length; e++){
 				var event = sectionBlocks[b].events[e];
 				if(event.tagName==='note' && !(event.getAttributeNS(null, 'dur.ges'))){
-					var level = rhythmMensUtils.noteInt(event);
+					var level = rm.noteInt(event);
 					if(level < firstPerf && alterableLevels[level]===2){
 						// Assume that actOnDots has already been run on all dotted notes
-						durIO.writeDur(rhythmMensUtils.simpleMinims(event, mens), event, false, propMultiplier);
+						durIO.writeDur(rm.simpleMinims(event, mens), event, false, propMultiplier);
 					}
 				}
 			}
@@ -147,28 +147,28 @@ var beatIndependentDurations = (function() {
 			var events = sectionBlocks[b].events;
 			var mens = sectionBlocks[b].mens;
 			var propMultiplier = meiDoc.proportionMultiplier(b);
-			var menssum = rhythmMensUtils.mensurSummary(mens);
+			var menssum = rm.mensurSummary(mens);
 			var alterableLevels = [2, 2, 2].concat(menssum).concat([2]);
 			var perfectLevels = [2, 2, 2, 2].concat(menssum);
 			for(var e=0; e<events.length; e++){
 				var event = events[e];
 				if(event.tagName==='note' && !(event.getAttributeNS(null, 'dur.ges'))){
-					var level = rhythmMensUtils.noteInt(event);
+					var level = rm.noteInt(event);
 					if(alterableLevels[level]===3){
 						// The level is alterable.
 						// The next note must be the next level up
-						if(e<events.length-1 && rhythmMensUtils.noteInt(events[e+1])==level+1){
+						if(e<events.length-1 && rm.noteInt(events[e+1])==level+1){
 							// These are the only things that can be altered all.
 							///For A.2 to be true, we need to count backwards by one
 							// unit (assuming we have all the necessary dur.ges values;
-							var target = rhythmMensUtils.simpleMinims(event, mens);
-							if((e==0 || rhythmMensUtils.noteInt(events[e-1])>level) && perfectLevels[level]===2){
+							var target = rm.simpleMinims(event, mens);
+							if((e==0 || rm.noteInt(events[e-1])>level) && perfectLevels[level]===2){
 								// highly unlikely to be an alteration (would require
 								// syncopation), not possible to be imperfected
 								var augmentedDot = e+1<sectionBlocks[b].events.length
 										&& sectionBlocks[b].events[e+1].tagName==="dot"
 										&& sectionBlocks[b].events[e+1].getAttributeNS(null, 'form')==='aug';
-								durIO.writeDur(rhythmMensUtils.simpleMinims(event, mens), event, augmentedDot, propMultiplier);
+								durIO.writeDur(rm.simpleMinims(event, mens), event, augmentedDot, propMultiplier);
 							}
 							for(let i=e-1; i>=0; i--){
 								if(!events[i].getAttributeNS(null, 'dur.ges')){
@@ -176,10 +176,10 @@ var beatIndependentDurations = (function() {
 								}
 								target = durIO.readDur(events[i]);
 								if(target===0){
-									if(i===0 || rhythmMensUtils.noteInt(events[i-1])>level
+									if(i===0 || rm.noteInt(events[i-1])>level
 										|| (events[i-1].tagName=='dot' && events[i-1].getAttributeNS('form')!=='aug')){
 										// Yay, it's an alteration
-										durIO.writeDur(2 * rhythmMensUtils.simpleMinims(event, mens), event, false, propMultiplier);
+										durIO.writeDur(2 * rm.simpleMinims(event, mens), event, false, propMultiplier);
 										event.setAttributeNS(null, 'quality', 'a');
 										event.setAttributeNS(null, 'rule', 'A.2b');
 									}
@@ -194,7 +194,7 @@ var beatIndependentDurations = (function() {
 							var augmentedDot = e+1<sectionBlocks[b].events.length
 									&& sectionBlocks[b].events[e+1].tagName==="dot"
 									&& sectionBlocks[b].events[e+1].getAttributeNS(null, 'form')==='aug';
-							durIO.writeDur(rhythmMensUtils.simpleMinims(event, mens), event, augmentedDot, propMultiplier);
+							durIO.writeDur(rm.simpleMinims(event, mens), event, augmentedDot, propMultiplier);
 						}
 					}
 				}
@@ -218,12 +218,12 @@ var beatIndependentDurations = (function() {
 			for(var e=0; e<sectionBlocks[b].events.length; e++){
 				var event = sectionBlocks[b].events[e];
 				if(event.tagName==="note" && !event.getAttributeNS(null, 'dur.ges')
-					&& rhythmMensUtils.regularlyPerfect(event, mens)
+					&& rm.regularlyPerfect(event, mens)
 					&& (e+1)<sectionBlocks[b].events.length
 					// && (sectionBlocks[b].events[e+1].tagName==='note')// Surely note or rest?
 					&& (sectionBlocks[b].events[e+1].tagName==='note' || sectionBlocks[b].events[e+1].tagName==='rest')
 					&& durIO.leveleq(sectionBlocks[b].events[e+1], event)){
-					durIO.writeDur(rhythmMensUtils.simpleMinims(event, mens), event, false, propMultiplier);
+					durIO.writeDur(rm.simpleMinims(event, mens), event, false, propMultiplier);
 					event.setAttributeNS(null, 'rule', 'I.2.b.antesim');
 				}
 			}

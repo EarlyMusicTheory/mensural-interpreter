@@ -5,10 +5,10 @@
  "use strict";
 
  /** 
-  * @module interpreter/utils/rhythmMensUtils
+  * @module interpreter/utils/rm
   */
  
- var rhythmMensUtils = (function() {
+ var rm = (function() {
     /** @private */ 
 
     /**
@@ -181,6 +181,41 @@
                 counts.push(minims);
             }
             return counts;
+        },
+
+        /**
+         * Return true if event is a dot of division. Assumes that this is
+         * indicated using @mei:form!=aug. In the longer term, this might be
+         * the place to put more sophisticated reasoning in (or it might be
+         * better as a pre-processing step).
+         * @param {DOMObject} event Probably an mei:dot
+         * @returns {Boolean} 
+         */
+        divisionDot : (event) => {
+        return event.tagName==='dot' && event.getAttributeNS(null, 'form')!=='aug';
+        },
+        
+        /**
+         * True if the supplied element is a note contained in a ternary unit
+         * @param {DOMObject} el
+         * @param {DOMObject} mensur
+         * @returns {Boolean} 
+         */
+        isAlterable : (el, mensur) => {
+            var m = this.mensurSummary(mensur);
+            var durPos = this.noteInt(el) - 3;
+            if(durPos<0 || durPos>3 || (m[durPos]===2 || m[durPos]===false) || el.tagName==="rest"){
+                return false;
+            } else return true;
+        },
+
+        /**
+         * Return true if event is a note or rest
+         * @param {DOMObject} event Event from MEI
+         * @returns {Boolean} 
+         */
+        noteOrRest : (event) => {
+            return event.tagName==='rest' || event.tagName==='note';
         }
      }
  })();

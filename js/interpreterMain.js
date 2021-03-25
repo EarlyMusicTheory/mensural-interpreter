@@ -110,6 +110,7 @@ $(document).ready(function(){
         if(basicAnalysisDone===true && complexAnalysisDone===false)
         {
             complexBeats.complexAnalysis(meiFile);
+            post.run(meiFile);
             vrvInterface.loadData(meiFile.text);
             complexAnalysisDone = true;
         }

@@ -7,6 +7,21 @@
  */
 
 var durIO = (function() {
+    /** private */
+    /**
+     * Find highest common factor (for tidy @num/@numbase use). May be
+     * less useful, depending how these attributes actually work.
+     * @param {Integer} a
+     * @param {Integer} a
+     * @return {Integer}
+     */
+    function gcd(a,b) {
+        // Find the highest common factor (for tidy num/numbase values)
+        // This is recursive, so prob unwise in the general case, but fine here
+        // Taken from rosettaCode
+    return b ? gcd(b, a % b) : Math.abs(a);
+    }
+
     return {
         /** public */
 
@@ -36,7 +51,7 @@ var durIO = (function() {
                 }
                 // This is for Verovio. Needs fixing.
                 // fraction needs reduction!
-                var defaultLength = rhythmMensUtils.dupleMinimCountFromElement(el);
+                var defaultLength = rm.dupleMinimCountFromElement(el);
                 if(defaultLength){
                     if(Math.floor(num)!= num){
                         // FIXME: use lcd
@@ -72,7 +87,7 @@ var durIO = (function() {
          */
         writeSimpleImperfection : function (el, mens, rule) {
             //	el.setAttributeNS(null, 'dur.ges', (2 * simpleMinims(el, mens) / 3) + 'b');
-            this.writeDur((2 * simpleMinims(el, mens) / 3), el, false);
+            this.writeDur((2 * rm.simpleMinims(el, mens) / 3), el, false);
         //	el.setAttributeNS(null, 'num', 2);
         //	el.setAttributeNS(null, 'numbase', 3);
             el.setAttributeNS(null, 'dur.quality', 'imperfectio');
@@ -90,7 +105,7 @@ var durIO = (function() {
          * (written to element as @rule)
          */
         writeImperfection : function (el, reduceBy, mens, rule) {
-            var defaultDur = rhythmMensUtils.simpleMinims(el, mens);
+            var defaultDur = rm.simpleMinims(el, mens);
             var factor = gcd(defaultDur, reduceBy);
             var finalDur = defaultDur - reduceBy
             this.writeDur(finalDur, el, false);
@@ -111,7 +126,7 @@ var durIO = (function() {
          */
         writeAlteration : function (el, mens, rule) {
             //	el.setAttributeNS(null, 'dur.ges', (2 * simpleMinims(el, mens)) + 'b');
-            this.writeDur((2 * rhythmMensUtils.simpleMinims(el, mens)), el, false);
+            this.writeDur((2 * rm.simpleMinims(el, mens)), el, false);
         //	el.setAttributeNS(null, 'num', 2);
         //	el.setAttributeNS(null, 'numbase', 1);
             el.setAttributeNS(null, 'dur.quality', 'alteratio');
@@ -128,6 +143,38 @@ var durIO = (function() {
         readDur : function (el) {
             var str = el.getAttributeNS(null, 'dur.intermediate');
             return str ? Number(str.substring(0, str.length-1)) : false;
+        },
+
+        /**
+         * Get exact, estimated and minimum durations for a window, naively
+         * calculated. The returned object has attibutes for definite,
+         * bareMinimum (including possible extremes of imperfection),
+         * approximateMinimum (less extreme) and approximation ('most likely')
+         * 
+         */
+         windowDuration : (events, mens) => {
+            var duration = {definite: 0, bareMinimum: 0, approximateMinimum: 0, approximation: 0};
+            var definite = true;
+            for(var i=0; i<events.length; i++){
+                var event = events[i];
+                if(event.tagName==="note"||event.tagName==="rest"){
+                    if(event.getAttributeNS(null, 'dur.intermediate')) {
+                        var durString = event.getAttributeNS(null, 'dur.intermediate');
+                        var dur = new Number(durString.substring(0, durString.length-1));
+                        if(definite) duration.definite += dur;
+                        duration.bareMinimum += dur;
+                        duration.approximateMinimum += dur;
+                        duration.approximation += dur;
+                    } else {
+                        definite = false;
+                        duration.definite = false;
+                        var mins = rm.simpleMinims(event, mens);
+                        duration.approximateMinimum += mins / 3;
+                        duration.approximation += mins;
+                    }
+                }
+            }
+            return duration;
         }
     
     };
