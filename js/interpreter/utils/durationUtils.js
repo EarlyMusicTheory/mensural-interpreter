@@ -42,7 +42,8 @@ var durIO = (function() {
                     // looks like num and numbase, in Verovio at least, excludes dots,
                     // and duration calculations exclude separate elemnt dots
                     //		num *= 1.5;
-                    el.setAttributeNS(null, 'dots', 1);
+                    // @dot attribute is not used in MEI mensural
+                    //el.setAttributeNS(null, 'dots', 1);
                     el.setAttributeNS(null, 'dur.intermediate', (num*1.5)+'b');
                     el.setAttributeNS(null, 'dur.ges', (scaledNum*1.5)+'b');
                 } else {

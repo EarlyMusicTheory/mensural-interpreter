@@ -52,6 +52,7 @@ var beatIndependentDurations = (function() {
 	/**
 	 * @private
 	 * Colored notation is assumed to be simple duple and labelled accordingly
+	 * @todo Take minor color into account?
 	 * @param {MEIdoc} meiDoc 
 	 */
 	function actOnColoration(meiDoc){
@@ -74,7 +75,8 @@ var beatIndependentDurations = (function() {
 
 	/**
 	 * @private
-	 * Simple processing of dots of augmentation (other dots ignored
+	 * Simple processing of dots of augmentation (other dots ignored)
+	 * @todo create a writePerfection() function?
 	 * @param {MEIdoc} meiDoc 
 	 */
 	function actOnDots(meiDoc){
@@ -89,7 +91,9 @@ var beatIndependentDurations = (function() {
 					if(e && !prev.getAttributeNS(null, 'dur.ges'))
 						if(rm.notePerfectAsWhole(prev, mens)){
 							durIO.writeDur(rm.simpleMinims(prev, mens), prev, propMultiplier);
-							prev.setAttributeNS(null, 'quality', 'p');
+							prev.setAttributeNS(null, 'dur.quality', 'perfecta');
+							prev.setAttributeNS(null, 'num', '2');
+							prev.setAttributeNS(null, 'numbase', '3');
 							prev.setAttributeNS(null, 'rule', 'I.2.a.PerfDot');
 						} else {
 							durIO.writeDur(rm.simpleMinims(prev, mens), prev, true, propMultiplier);
