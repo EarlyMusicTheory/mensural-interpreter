@@ -58,7 +58,7 @@ var alterate = (function() {
          * @param {DOMObject} mens mei:mensur
          * @returns {DOMObject} This function returns the modified event (why?)
          */
-        firstBeatAlteration : (event, index, events, mens) => {
+        firstBeatAlteration : function (event, index, events, mens) {
             return checkForGeneralAlteration(event, index, events, mens);
         },
 
@@ -71,7 +71,7 @@ var alterate = (function() {
          * @param {DOMObject} mens mei:mensur
          * @returns {DOMObject} This function returns the modified event (why?)
          */
-        secondBeatAlteration : (event, index, events, mens) => {
+        secondBeatAlteration : function (event, index, events, mens) {
             // second beat is special...
             event.setAttributeNS(null, 'rule', 'A.1');
             event.setAttributeNS(null, 'quality', 'a');
@@ -89,7 +89,7 @@ var alterate = (function() {
          * @param {DOMObject} mens mei:mensur
          * @returns {DOMObject} This function returns the modified event (why?)
          */
-        thirdBeatAlteration : (event, index, events, mens) => {
+        thirdBeatAlteration : function (event, index, events, mens) {
             return checkForGeneralAlteration(event, index, events, mens);
         },
 
@@ -104,7 +104,7 @@ var alterate = (function() {
          * @returns {DOMObject} This function returns the altered event (why?)
          * @returns {DOMObject} Returns the event (unmodified at the moment)
          */
-        midBeatAlteration : (event, index, events, mens) => {
+        midBeatAlteration : function (event, index, events, mens) {
             return event;
         }
     }

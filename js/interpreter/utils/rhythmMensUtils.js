@@ -173,7 +173,7 @@
          * @param {Integer} [maxLevel=4] Stopping point
          * @return {Array}
          */
-        minimStructures : (mensurSummary, maxLevel) => {
+        minimStructures : function (mensurSummary, maxLevel) {
             var counts = [];
             var minims = 1;
             for(var i=0; i < (maxLevel ? maxLevel : 4); i++){
@@ -191,7 +191,7 @@
          * @param {DOMObject} event Probably an mei:dot
          * @returns {Boolean} 
          */
-        divisionDot : (event) => {
+        divisionDot : function (event) {
         return event.tagName==='dot' && event.getAttributeNS(null, 'form')!=='aug';
         },
         
@@ -201,7 +201,7 @@
          * @param {DOMObject} mensur
          * @returns {Boolean} 
          */
-        isAlterable : (el, mensur) => {
+        isAlterable : function (el, mensur) {
             var m = this.mensurSummary(mensur);
             var durPos = this.noteInt(el) - 3;
             if(durPos<0 || durPos>3 || (m[durPos]===2 || m[durPos]===false) || el.tagName==="rest"){
@@ -214,7 +214,7 @@
          * @param {DOMObject} event Event from MEI
          * @returns {Boolean} 
          */
-        noteOrRest : (event) => {
+        noteOrRest : function (event) {
             return event.tagName==='rest' || event.tagName==='note';
         }
      }

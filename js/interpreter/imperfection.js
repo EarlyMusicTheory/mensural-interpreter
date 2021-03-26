@@ -202,7 +202,7 @@ var imperfect = (function() {
          * @param {DOMObject} mens mei:mensur
          * @returns {DOMObject} This function returns the modified event (why?)
          */
-        firstBeatImperfection : (event, index, events, mens) => {
+        firstBeatImperfection : function (event, index, events, mens) {
             var level = rm.noteInt(event);
             var nextMarker = indexOfNextSameOrLongerOrDot(level, index, events);
             var rightWindow = nextMarker ? events.slice(index+1, nextMarker) : events.slice(index+1);
@@ -244,7 +244,7 @@ var imperfect = (function() {
          * @param {DOMObject} mens mei:mensur
          * @returns {DOMObject} This function returns the modified event (why?)
          */
-        secondBeatImperfection : (event, index, events, mens) => {
+        secondBeatImperfection : function (event, index, events, mens) {
             // Let's pretend this is easy, and apply I.8 as if we *knew* that
             // something earlier can imperfect this
             durIO.writeSimpleImperfection(event, mens, 'I.8');
@@ -260,7 +260,7 @@ var imperfect = (function() {
          * @param {DOMObject} mens mei:mensur
          * @returns {DOMObject} This function returns the modified event (why?)
          */
-        thirdBeatImperfection : (event, index, events, mens) => {
+        thirdBeatImperfection : function (event, index, events, mens) {
             // More complex
             var imperfectionPossibilities = imperfectingLevels(event, mens);
             var nextDotPos = indexOfNextDot(index, events);
@@ -291,7 +291,7 @@ var imperfect = (function() {
          * @returns {DOMObject} This function returns the altered event (why?)
          * @returns {DOMObject} Returns the event (unmodified at the moment)
          */
-        midBeatImperfection : (event, index, events, mens) => {
+        midBeatImperfection : function (event, index, events, mens) {
             // More complex
             return event;
         }
