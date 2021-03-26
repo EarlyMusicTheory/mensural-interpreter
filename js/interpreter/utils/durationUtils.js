@@ -51,7 +51,7 @@ var durIO = (function() {
                 }
                 // This is for Verovio. Needs fixing.
                 // fraction needs reduction!
-                var defaultLength = rm.dupleMinimCountFromElement(el);
+                /*var defaultLength = rm.dupleMinimCountFromElement(el);
                 if(defaultLength){
                     if(Math.floor(num)!= num){
                         // FIXME: use lcd
@@ -60,7 +60,7 @@ var durIO = (function() {
                     }
                     el.setAttributeNS(null, 'num', defaultLength);
                     el.setAttributeNS(null, 'numbase', num);
-                }
+                }*/
         },
     
         /**
@@ -88,8 +88,8 @@ var durIO = (function() {
         writeSimpleImperfection : function (el, mens, rule) {
             //	el.setAttributeNS(null, 'dur.ges', (2 * simpleMinims(el, mens) / 3) + 'b');
             this.writeDur((2 * rm.simpleMinims(el, mens) / 3), el, false);
-        //	el.setAttributeNS(null, 'num', 2);
-        //	el.setAttributeNS(null, 'numbase', 3);
+            el.setAttributeNS(null, 'num', "3");
+            el.setAttributeNS(null, 'numbase', "2");
             el.setAttributeNS(null, 'dur.quality', 'imperfecta');
             //el.setAttributeNS(null, 'quality', 'i');
             el.setAttributeNS(null, 'rule', rule);
@@ -109,6 +109,8 @@ var durIO = (function() {
             var factor = gcd(defaultDur, reduceBy);
             var finalDur = defaultDur - reduceBy
             this.writeDur(finalDur, el, false);
+            el.setAttributeNS(null, 'num', "3");
+            el.setAttributeNS(null, 'numbase', "2");
             //	el.setAttributeNS(null, 'num', finalDur / factor);
             //	el.setAttributeNS(null, 'numbase', defaultDur / factor);
             el.setAttributeNS(null, 'dur.quality', 'imperfecta');
@@ -127,8 +129,8 @@ var durIO = (function() {
         writeAlteration : function (el, mens, rule) {
             //	el.setAttributeNS(null, 'dur.ges', (2 * simpleMinims(el, mens)) + 'b');
             this.writeDur((2 * rm.simpleMinims(el, mens)), el, false);
-        //	el.setAttributeNS(null, 'num', 2);
-        //	el.setAttributeNS(null, 'numbase', 1);
+            el.setAttributeNS(null, 'num', "1");
+            el.setAttributeNS(null, 'numbase', "2");
             el.setAttributeNS(null, 'dur.quality', 'altera');
             //el.setAttributeNS(null, 'quality', 'a');
             el.setAttributeNS(null, 'rule', rule);
