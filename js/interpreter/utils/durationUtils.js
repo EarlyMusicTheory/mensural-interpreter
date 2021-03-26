@@ -90,8 +90,8 @@ var durIO = (function() {
             this.writeDur((2 * rm.simpleMinims(el, mens) / 3), el, false);
         //	el.setAttributeNS(null, 'num', 2);
         //	el.setAttributeNS(null, 'numbase', 3);
-            el.setAttributeNS(null, 'dur.quality', 'imperfectio');
-            el.setAttributeNS(null, 'quality', 'i');
+            el.setAttributeNS(null, 'dur.quality', 'imperfecta');
+            //el.setAttributeNS(null, 'quality', 'i');
             el.setAttributeNS(null, 'rule', rule);
         },
         
@@ -111,8 +111,8 @@ var durIO = (function() {
             this.writeDur(finalDur, el, false);
             //	el.setAttributeNS(null, 'num', finalDur / factor);
             //	el.setAttributeNS(null, 'numbase', defaultDur / factor);
-            el.setAttributeNS(null, 'dur.quality', 'imperfectio');
-            el.setAttributeNS(null, 'quality', 'i');
+            el.setAttributeNS(null, 'dur.quality', 'imperfecta');
+            //el.setAttributeNS(null, 'quality', 'i');
             el.setAttributeNS(null, 'rule', rule);	
         },
         
@@ -129,8 +129,8 @@ var durIO = (function() {
             this.writeDur((2 * rm.simpleMinims(el, mens)), el, false);
         //	el.setAttributeNS(null, 'num', 2);
         //	el.setAttributeNS(null, 'numbase', 1);
-            el.setAttributeNS(null, 'dur.quality', 'alteratio');
-            el.setAttributeNS(null, 'quality', 'a');
+            el.setAttributeNS(null, 'dur.quality', 'altera');
+            //el.setAttributeNS(null, 'quality', 'a');
             el.setAttributeNS(null, 'rule', rule);
         },
         
@@ -152,7 +152,7 @@ var durIO = (function() {
          * approximateMinimum (less extreme) and approximation ('most likely')
          * 
          */
-         windowDuration : (events, mens) => {
+         windowDuration : function (events, mens) {
             var duration = {definite: 0, bareMinimum: 0, approximateMinimum: 0, approximation: 0};
             var definite = true;
             for(var i=0; i<events.length; i++){
