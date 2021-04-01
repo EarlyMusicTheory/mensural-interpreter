@@ -88,7 +88,10 @@ var MEIdoc = (() => {
 				case 'proport':
 					if(foo.length){
 						foo = [];
-						block = {mens:block.mens, prop:next, events: foo};
+						block = {mens:block.mens, 
+								prop:next, 
+								events: foo, 
+								prevPropMultiplier: propProportionMultiplier(next)};
 						blocks.push(block);
 					} else {
 						block.prop = next;
@@ -154,27 +157,33 @@ var MEIdoc = (() => {
      */
     class MEIdoc {
         constructor(meiText) {
-            this.meidoc = meiText ? parser.parseFromString(meiText, "text/xml") : null;
+            this.meiDoc = meiText ? parser.parseFromString(meiText, "text/xml") : null;
 			this.idDict = {};
             this.sectionBlocks;
+			this.meiBlob = this.meiDoc ? new Blob([this.text], {type: 'text/xml'}) : null;
 			if(this.doc) this.getBlocksFromSections();
         }
 
         get text() {
-            return this.meidoc ? serializer.serializeToString(this.meidoc) : null;
+            return this.doc ? serializer.serializeToString(this.doc) : null;
         }
         set text(meiText) {
-            this.meidoc = parser.parseFromString(meiText, "text/xml");
-			if (this.meidoc) this.getBlocksFromSections();
+            this.doc = parser.parseFromString(meiText, "text/xml");
+			if (this.doc) this.getBlocksFromSections();
         }
 
         get doc() {
-            return this.meidoc ? this.meidoc : null;
+            return this.meiDoc ? this.meiDoc : null;
         }
         set doc(meiDocTree) {
-            this.meidoc = meiDocTree;
-			if(this.meidoc) this.getBlocksFromSections();
+            this.meiDoc = meiDocTree;
+			if(this.meiDoc) this.getBlocksFromSections();
+			if(this.meiDoc) this.meiBlob = new Blob([this.text], {type: 'text/xml'});
         }
+
+		get blob() {
+			return this.meiBlob;
+		}
 
         get blocks() {
             return this.sectionBlocks;
@@ -237,6 +246,18 @@ var MEIdoc = (() => {
                 }
             } else return 1;
         }
+
+		/**
+		 * Preprocesses MEI file as a matter or normalization
+		 * * merge adjacent <mensur> and <proport> into <mensur> (to keep them together and avoid Verovio strangeness?)
+		 * * put first <clef> and <keySig> into <staffDef>
+		 * * delete empty <dir>
+		 * * delete empty <verse>
+		 * * delete note/@lig if it is identical to ligature/@form
+		 */
+		preprocess(){
+
+		}
         
     }  
     return MEIdoc;

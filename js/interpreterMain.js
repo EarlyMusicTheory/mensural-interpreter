@@ -42,6 +42,11 @@ function getSectionBlocks() {
     }
 }
 
+function loadData() {
+    vrvInterface.loadData(meiFile.text);
+    $("#download").attr({"href": URL.createObjectURL(meiFile.blob), "download": "meiFile"});
+}
+
 function makeXmlCode(htmlString) {
     let ltString = htmlString.replace(/</gm,"&lt;");
     let gtString = ltString.replace(/>/gm, "&gt;");
@@ -70,7 +75,7 @@ $(document).ready(function(){
             meiFile.text = event.target.result;
             currentParams.set("url", null);
             window.history.pushState({}, "Mensural interpreter", `${baseUrl}`);
-            vrvInterface.loadData(event.target.result);
+            loadData();
             basicAnalysisDone = false;
             complexAnalysisDone = false;
         };    
@@ -96,7 +101,7 @@ $(document).ready(function(){
         {
             beatIndependentDurations.beatIndependentDurations(meiFile);
             basicAnalysisDone = true;
-            vrvInterface.loadData(meiFile.text);
+            loadData();
         }
     });
 
@@ -111,7 +116,7 @@ $(document).ready(function(){
         {
             complexBeats.complexAnalysis(meiFile);
             post.run(meiFile);
-            vrvInterface.loadData(meiFile.text);
+            loadData();
             complexAnalysisDone = true;
         }
     });
