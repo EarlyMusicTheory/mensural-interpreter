@@ -184,6 +184,9 @@ var MEIdoc = (() => {
 		get blob() {
 			return this.meiBlob;
 		}
+		renewBlob() {
+			this.meiBlob = new Blob([this.text], {type: 'text/xml'});
+		}
 
         get blocks() {
             return this.sectionBlocks;
