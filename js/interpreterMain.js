@@ -75,6 +75,7 @@ $(document).ready(function(){
             meiFile.text = event.target.result;
             currentParams.set("url", null);
             window.history.pushState({}, "Mensural interpreter", `${baseUrl}`);
+            $("#elementInfo").empty();
             loadData();
             basicAnalysisDone = false;
             complexAnalysisDone = false;
@@ -83,12 +84,14 @@ $(document).ready(function(){
 
     $("#btnResetFile").click(function() {
         $("#fileInput")[0].reset();
+        $("#elementInfo").empty();
     });
     
     $("#load").click(function() {
         let input = $("#url").val();
         currentParams.set("url", input);
         location.replace(`${baseUrl}?${currentParams}`);
+        $("#elementInfo").empty();
         return false;
     });
 
