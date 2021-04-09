@@ -109,16 +109,28 @@ var vrvInterface = (function () {
         $(eventEl).attr("fill", red);
 
         let thisID = $(eventEl).attr("id");
-        let thisElementAttrs = vrv.getElementAttr(thisID);
-
-        let elementInfo = $("<ul></ul>");
-
-        for (const [key, value] of Object.entries(thisElementAttrs)) {
-            let attr = $("<li></li>").text(`${key}: ${value}`);
-            $(elementInfo).append(attr);
+        let currentElement = meiFile.eventDict[thisID];
+        let attributes = {};
+        for (let attr of currentElement.attributes)
+        {
+            attributes[attr.nodeName] = attr.value;
         }
 
+
+        let elementInfo = $("<dl id='attList' class='row'></dl>");
+        for (let attr in attributes)
+        {
+            let dt = $("<dt class='col-4 text-truncate'></dt>").text(attr);
+            let dd = $("<dd class='col-8'></dd>").text(attributes[attr]);
+            $(elementInfo).append(dt);
+            $(elementInfo).append(dd);
+        }
+        
+        let elCode = makeXmlCode(currentElement.outerHTML);
+        //$(elementInfo).after($(elCode).html());
+
         $("#elementInfo").html(elementInfo);
+        $("#attList").after(elCode);
         shownEvent = eventEl;
         nextEvent = $(eventEl).next();
         prevEvent = $(eventEl).prev();

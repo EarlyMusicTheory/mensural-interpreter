@@ -150,8 +150,9 @@ var MEIdoc = (() => {
      * @class
      * @member {string} text
      * @member {DOMObject} doc
+	 * @member {Blob} blob
      * @member {Array} blocks
-     * @member {Object.<string,Object>} idDictionary
+     * @member {Object.<string,Object>} idDictionary return block by event id
      * @method appendToIdDictionary
      * @method getBlocksFromSections
      */
@@ -159,8 +160,10 @@ var MEIdoc = (() => {
         constructor(meiText) {
             this.meiDoc = meiText ? parser.parseFromString(meiText, "text/xml") : null;
 			this.idDict = {};
+			this.eventIdDict = {};
             this.sectionBlocks;
 			this.meiBlob = this.meiDoc ? new Blob([this.text], {type: 'text/xml'}) : null;
+			if(this.doc) this.initEventDict();
 			if(this.doc) this.getBlocksFromSections();
         }
 
@@ -179,6 +182,7 @@ var MEIdoc = (() => {
             this.meiDoc = meiDocTree;
 			if(this.meiDoc) this.getBlocksFromSections();
 			if(this.meiDoc) this.meiBlob = new Blob([this.text], {type: 'text/xml'});
+			if(this.meiDoc) this.initEventDict();
         }
 
 		get blob() {
@@ -207,6 +211,18 @@ var MEIdoc = (() => {
         getBlockByEventId(eventId) {
             return this.idDictionary[eventId];
         }
+
+		get eventDict () {
+			return this.eventIdDict;
+		}
+		initEventDict()  {
+			var bucket = this.doc.getElementsByTagName('*');
+			for (let element of bucket)
+			{
+				let id = element.getAttribute("xml:id");
+				if (id != null) this.eventIdDict[id] = element;
+			}
+		}
         
         getBlocksFromSections() {
 			var sections = getAtomicSections(this.doc);
