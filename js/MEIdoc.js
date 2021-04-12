@@ -280,7 +280,7 @@ var MEIdoc = (() => {
 			/** put first clef and keySig into staffDef */
 			for(let staff of this.doc.getElementsByTagName("staff") )
 			{
-				tidyClefKeySig(staff);
+				tidyClefKeySig(staff, this.doc);
 				redundantLigForm(staff);
 			}
 
@@ -293,17 +293,17 @@ var MEIdoc = (() => {
 	 * If a staff starts with clef and keySig, move it to the staffDef
 	 * @param {DOMElement} staffElement 
 	 */
-	function tidyClefKeySig(staffElement)
+	function tidyClefKeySig(staffElement, doc)
 	{
 		let staffNum = staffElement.getAttribute("n");
-		let staffDef = meiFile.doc.evaluate("//mei:staffDef[@n="+staffNum+"]", staffElement, nsResolver).iterateNext();
-		if(meiFile.doc.evaluate('count(./mei:layer/mei:clef/preceding-sibling::mei:note)', staffElement, nsResolver).numberValue === 0)
+		let staffDef = doc.evaluate("//mei:staffDef[@n="+staffNum+"]", staffElement, nsResolver).iterateNext();
+		if(doc.evaluate('count(./mei:layer/mei:clef/preceding-sibling::mei:note)', staffElement, nsResolver).numberValue === 0)
 		{
 			let firstClef = staffElement.getElementsByTagName("clef")[0];
 			staffDef.appendChild(firstClef);
 		}
 		
-		if(meiFile.doc.evaluate('count(./mei:layer/mei:clef/preceding-sibling::mei:note)', staffElement, nsResolver).numberValue === 0)
+		if(doc.evaluate('count(./mei:layer/mei:clef/preceding-sibling::mei:note)', staffElement, nsResolver).numberValue === 0)
 		{
 			let firstKeySig = staffElement.getElementsByTagName("keySig")[0];
 			staffDef.appendChild(firstKeySig);
