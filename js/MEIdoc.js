@@ -180,6 +180,7 @@ var MEIdoc = (() => {
         }
         set doc(meiDocTree) {
             this.meiDoc = meiDocTree;
+			this.preprocess();
 			if(this.meiDoc) this.getBlocksFromSections();
 			if(this.meiDoc) this.meiBlob = new Blob([this.text], {type: 'text/xml'});
 			if(this.meiDoc) this.initEventDict();
@@ -269,16 +270,66 @@ var MEIdoc = (() => {
 		/**
 		 * Preprocesses MEI file as a matter or normalization
 		 * * merge adjacent <mensur> and <proport> into <mensur> (to keep them together and avoid Verovio strangeness?)
+		 * 	 @todo adjust blockification
 		 * * put first <clef> and <keySig> into <staffDef>
-		 * * delete empty <dir>
-		 * * delete empty <verse>
+		 * * @todo maybe: delete empty <dir>
+		 * * @todo maybe: delete empty <verse>
 		 * * delete note/@lig if it is identical to ligature/@form
 		 */
 		preprocess(){
+			/** put first clef and keySig into staffDef */
+			for(let staff of this.doc.getElementsByTagName("staff") )
+			{
+				tidyClefKeySig(staff);
+				redundantLigForm(staff);
+			}
 
 		}
         
     }  
+
+	// preprocessing functions
+	/**
+	 * If a staff starts with clef and keySig, move it to the staffDef
+	 * @param {DOMElement} staffElement 
+	 */
+	function tidyClefKeySig(staffElement)
+	{
+		let staffNum = staffElement.getAttribute("n");
+		let staffDef = meiFile.doc.evaluate("//mei:staffDef[@n="+staffNum+"]", staffElement, nsResolver).iterateNext();
+		if(meiFile.doc.evaluate('count(./mei:layer/mei:clef/preceding-sibling::mei:note)', staffElement, nsResolver).numberValue === 0)
+		{
+			let firstClef = staffElement.getElementsByTagName("clef")[0];
+			staffDef.appendChild(firstClef);
+		}
+		
+		if(meiFile.doc.evaluate('count(./mei:layer/mei:clef/preceding-sibling::mei:note)', staffElement, nsResolver).numberValue === 0)
+		{
+			let firstKeySig = staffElement.getElementsByTagName("keySig")[0];
+			staffDef.appendChild(firstKeySig);
+		}
+	}
+
+	/**
+	 * Should remove redundant ligature form and note lig attributes.
+	 * Since Verovio is still messing with those, it might be better to delete them for now.
+	 * @todo Remove just redundant visual attributes when Verovio rendering is properly done
+	 * @param {DOMElement} staffElement 
+	 */
+	function redundantLigForm(staffElement)
+	{
+		let ligatures = staffElement.getElementsByTagName("ligature");
+		for (let ligature of ligatures)
+		{
+			ligature.removeAttribute("form");
+
+			for (let note of ligature.getElementsByTagName("note"))
+			{
+				note.removeAttribute("lig");
+			}
+		}
+	}
+
     return MEIdoc;
   })();
 
