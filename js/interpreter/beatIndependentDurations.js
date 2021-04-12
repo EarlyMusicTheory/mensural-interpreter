@@ -98,6 +98,8 @@ var beatIndependentDurations = (function() {
 						} else {
 							durIO.writeDur(rm.simpleMinims(prev, mens), prev, true, propMultiplier);
 							prev.setAttributeNS(null, 'rule', 'simpleDot');
+							prev.setAttributeNS(null, 'num', '2');
+							prev.setAttributeNS(null, 'numbase', '3');
 						}
 				}
 			}
