@@ -69,14 +69,21 @@ var MEIdoc = (() => {
 			var next = bucket[pointer];
 		}
 		var foo = [];
-		var block = {mens: prevMens, events: foo, prevPropMultiplier: 1};
+		var partNum = section.parentElement.getAttribute("n");
+		var block = {part: partNum, mens: prevMens, events: foo, prevPropMultiplier: 1};
 		var blocks = [block];
 		while(next){
 			switch(next.tagName){
 				case 'mensur':
 					if(foo.length){
 						foo = [];
-						block = {mens:next, events: foo};
+						let num = next.getAttribute("num");
+						let numbase = next.getAttribute("numbase");
+						let propMultiplier = (num && numbase) ? propProportionMultiplier(next) : 1;
+						block = {part: partNum,
+								mens:next, 
+								prevPropMultiplier: propMultiplier,
+								events: foo};
 						blocks.push(block);
 					} else {
 						block.mens = next;
@@ -88,7 +95,8 @@ var MEIdoc = (() => {
 				case 'proport':
 					if(foo.length){
 						foo = [];
-						block = {mens:block.mens, 
+						block = {part: partNum,
+								mens:block.mens, 
 								prop:next, 
 								events: foo, 
 								prevPropMultiplier: propProportionMultiplier(next)};
@@ -282,6 +290,7 @@ var MEIdoc = (() => {
 			{
 				tidyClefKeySig(staff, this.doc);
 				redundantLigForm(staff);
+				mergeAdjacentMensProp(staff);
 			}
 
 		}
@@ -326,6 +335,26 @@ var MEIdoc = (() => {
 			for (let note of ligature.getElementsByTagName("note"))
 			{
 				note.removeAttribute("lig");
+			}
+		}
+	}
+
+	/**
+	 * Adjacent <mensur> <proport> elements get merged into one <mensur> element
+	 * (avoids misplacments in rendering)
+	 * @param {DOMElement} staffElement 
+	 */
+	function mergeAdjacentMensProp(staffElement)
+	{
+		let mensuration = staffElement.getElementsByTagName("mensur");
+		for (let mens of mensuration)
+		{
+			if (mens.nextElementSibling.tagName==="proport")
+			{
+				let prop = mens.nextElementSibling;
+				mens.setAttribute("num",prop.getAttribute("num"));
+				mens.setAttribute("numbase",prop.getAttribute("numbase"));
+				prop.remove();
 			}
 		}
 	}

@@ -31,6 +31,7 @@ function getSectionBlocks() {
         for(let i = 0; i < meiFile.blocks.length; i++) {
             let blockRow = $("<tr></tr>");
             blockRow.append(`<td>${i}</td>`);
+            blockRow.append(`<td>${meiFile.blocks[i].part}</td>`);
             blockRow.append(`<td>${meiFile.blocks[i].mens ? makeXmlCode(meiFile.blocks[i].mens.outerHTML) : ''}</td>`);
             blockRow.append(`<td>${meiFile.blocks[i].prop ? makeXmlCode(meiFile.blocks[i].prop.outerHTML) : ''}</td>`);
             blockRow.append(`<td>${meiFile.blocks[i].prevPropMultiplier ? meiFile.blocks[i].prevPropMultiplier : ''}</td>`);
