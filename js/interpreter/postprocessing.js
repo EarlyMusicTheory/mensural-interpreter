@@ -17,13 +17,22 @@ var post = (function() {
             {
                 var event = blocks[b].events[e];
                 var previousSibling = event.previousElementSibling;
-                if (event.getAttributeNS(null, "onTheBreveBeat")
-                    && previousSibling 
-                    && (previousSibling.tagName==="note"||previousSibling.tagName==="rest"||previousSibling.tagName==="dot"))
+                if (event.getAttributeNS(null, "onTheBreveBeat") && previousSibling) 
                 {
                     let line = meiDoc.doc.createElementNS(meiNS, "barLine");
-                    line.setAttributeNS(null, "form", "dotted");
-                    event.parentElement.insertBefore(line, event);
+                    
+                        
+                    if (previousSibling.tagName==="note"||previousSibling.tagName==="rest"||previousSibling.tagName==="dot")
+                    {
+                        line.setAttributeNS(null, "form", "dotted");
+                        event.parentElement.insertBefore(line, event);
+                    }
+                    else if ((previousSibling.tagName==="mensur"||previousSibling.tagName==="proport")
+                        && previousSibling.previousElementSibling!==null)
+                    {
+                        line.setAttributeNS(null, "form", "single");
+                        previousSibling.parentElement.insertBefore(line, previousSibling);
+                    }
                 }
             }
         }
