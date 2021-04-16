@@ -44,7 +44,7 @@ function getSectionBlocks() {
 
 function loadData() {
     vrvInterface.loadData(meiFile.text);
-    $("#download").attr({"href": URL.createObjectURL(meiFile.blob), "download": "meiFile"});
+    $("#download").attr("href", URL.createObjectURL(meiFile.blob));
 }
 
 function makeXmlCode(htmlString) {
