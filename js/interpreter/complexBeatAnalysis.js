@@ -15,10 +15,18 @@ var complexBeats = (function() {
         var nextStart = 0;
         var prevDur = false;
         var prevBeatStructure = false;
+        var prevPartNum = sectionBlocks[0].part;
         for(var b=0; b<sectionBlocks.length; b++){
             var blockFrom = 0;
             // not used anyway var blockStart = (nextStart || nextStart===0) ? nextStart : false;
             var mens = sectionBlocks[b].mens;
+            let partNum = sectionBlocks[b].part;
+            // startsAt should be resetted at the beginning of a new part
+            if (prevPartNum!==partNum)
+            {
+                nextStart = 0;
+                prevPartNum = partNum;
+            }
             for(var e=0; e<sectionBlocks[b].events.length; e++){
                 var event = sectionBlocks[b].events[e];
                 if(event.tagName==='rest' || event.tagName==='note'){
