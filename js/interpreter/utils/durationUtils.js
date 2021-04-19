@@ -31,37 +31,22 @@ var durIO = (function() {
          * @param  {Integer} num Core duration in minims
          * @param {DOMElement} el mei:note
          * @param {Boolean} dot Is there a dot of augmentation?
-         * @param {Number} propMultiplier proportion multiplier of current block
+         * 
          */
-        writeDur : function (num, el, dot, propMultiplier) {
-            /*	if(dot) el.setAttributeNS(null, 'dur.ges', (1.5*num)+'b');
-                    else el.setAttributeNS(null, 'dur.ges', num+'b');*/
-                var scaledNum = num * propMultiplier;
-                /** @todo Achtung, Funktion noch nicht vorhanden!!! */
-                if(dot) {
-                    // looks like num and numbase, in Verovio at least, excludes dots,
-                    // and duration calculations exclude separate elemnt dots
-                    //		num *= 1.5;
-                    // @dot attribute is not used in MEI mensural
-                    //el.setAttributeNS(null, 'dots', 1);
-                    el.setAttributeNS(null, 'dur.intermediate', (num*1.5)+'b');
-                    el.setAttributeNS(null, 'dur.ges', (scaledNum*1.5)+'b');
-                } else {
-                    el.setAttributeNS(null, 'dur.ges', scaledNum+'b');
-                    el.setAttributeNS(null, 'dur.intermediate', num+'b');
-                }
-                // This is for Verovio. Needs fixing.
-                // fraction needs reduction!
-                /*var defaultLength = rm.dupleMinimCountFromElement(el);
-                if(defaultLength){
-                    if(Math.floor(num)!= num){
-                        // FIXME: use lcd
-                        num *= 12;
-                        defaultLength *= 12;
-                    }
-                    el.setAttributeNS(null, 'num', defaultLength);
-                    el.setAttributeNS(null, 'numbase', num);
-                }*/
+        writeDur : function (num, el, dot) {
+            if(dot) {
+                num = num*1.5;
+            }
+            el.setAttributeNS(null, 'dur.intermediate', num+'b');
+        },
+
+        writeDurGes : function (el, propMultiplier) {
+            var dur = this.readDur(el);
+            var scaledDur = dur * propMultiplier;
+            if(dur)
+            {
+                el.setAttributeNS(null, "dur.ges", scaledDur + 'b');
+            }
         },
     
         /**
@@ -145,6 +130,11 @@ var durIO = (function() {
          */
         readDur : function (el) {
             var str = el.getAttributeNS(null, 'dur.intermediate');
+            return str ? Number(str.substring(0, str.length-1)) : false;
+        },
+
+        readDurGes : function (el) {
+            var str = el.getAttributeNS(null, 'dur.ges');
             return str ? Number(str.substring(0, str.length-1)) : false;
         },
 
