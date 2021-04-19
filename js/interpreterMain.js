@@ -36,6 +36,8 @@ function getSectionBlocks() {
             blockRow.append(`<td>${meiFile.blocks[i].prop ? makeXmlCode(meiFile.blocks[i].prop.outerHTML) : ''}</td>`);
             blockRow.append(`<td>${meiFile.blocks[i].prevPropMultiplier ? meiFile.blocks[i].prevPropMultiplier : ''}</td>`);
             blockRow.append(`<td>${meiFile.blocks[i].events.length}</td>`);
+            blockRow.append(`<td>${meiFile.blocks[i].dur}</td>`);
+            blockRow.append(`<td>${meiFile.blocks[i].totaldur}</td>`);
             $("#blockTableBody").append(blockRow);
         }
 
@@ -104,6 +106,7 @@ $(document).ready(function(){
         if (basicAnalysisDone===false)
         {
             beatIndependentDurations.beatIndependentDurations(meiFile);
+            complexBeats.addStartTimes(meiFile);
             meiFile.renewBlob();
             basicAnalysisDone = true;
             loadData();
@@ -114,6 +117,7 @@ $(document).ready(function(){
         if(basicAnalysisDone===false)
         {
             beatIndependentDurations.beatIndependentDurations(meiFile);
+            complexBeats.addStartTimes(meiFile);
             basicAnalysisDone = true;
         }
 

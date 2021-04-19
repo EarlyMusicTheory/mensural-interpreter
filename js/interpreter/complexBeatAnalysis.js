@@ -13,13 +13,8 @@ var complexBeats = (function() {
      */
     function addAllStartTimes(sectionBlocks){
         var nextStart = 0;
-        var prevDur = false;
-        var prevBeatStructure = false;
         var prevPartNum = sectionBlocks[0].part;
         for(var b=0; b<sectionBlocks.length; b++){
-            var blockFrom = 0;
-            // not used anyway var blockStart = (nextStart || nextStart===0) ? nextStart : false;
-            var mens = sectionBlocks[b].mens;
             let partNum = sectionBlocks[b].part;
             // startsAt should be resetted at the beginning of a new part
             if (prevPartNum!==partNum)
@@ -27,29 +22,12 @@ var complexBeats = (function() {
                 nextStart = 0;
                 prevPartNum = partNum;
             }
-            for(var e=0; e<sectionBlocks[b].events.length; e++){
-                var event = sectionBlocks[b].events[e];
-                if(event.tagName==='rest' || event.tagName==='note'){
-                    if(nextStart || nextStart===0) event.setAttributeNS(null, 'startsAt', nextStart);
-                    var beatStructure = beatUnitStructure(blockFrom, mens);
-                    event.setAttributeNS(null, 'beatPos', beatStructure.join(', '));
-                    if(beatStructure[0]===0 && beatStructure[1]===0 && beatStructure[2]===0){
-                        event.setAttributeNS(null, 'onTheBreveBeat', beatStructure[3]);
-                    } else if(!(beatStructure[5]===prevBeatStructure[5]
-                                            && beatStructure[4]===prevBeatStructure[4]
-                                            && beatStructure[3]===prevBeatStructure[3])){
-                        event.setAttributeNS(null, 'crossedABreveBeat', breveDifference(beatStructure, prevBeatStructure, mens));
-                    }
-                    prevBeatStructure = beatStructure;
-                    event.setAttributeNS(null, 'mensurBlockStartsAt', blockFrom);
-                    var dur = durIO.readDur(event);
-                    if(dur){
-                        prevDur = dur;
-                        if(nextStart || nextStart==0) nextStart +=prevDur;
-                        blockFrom += prevDur;
-                    } else break;
-                }
-            }
+            addStartTimesForBlock(sectionBlocks[b], nextStart);
+            addBreveBoundariesForBlock(sectionBlocks[b]);
+            let lastEvent = sectionBlocks[b].events[sectionBlocks[b].events.length-1];
+            let lastDur = durIO.readDur(lastEvent);
+            let lastStartsAt = Number(lastEvent.getAttribute("startsAt"));
+            nextStart = lastStartsAt + lastDur;
         }
     }
 
@@ -110,7 +88,16 @@ var complexBeats = (function() {
         // Now we know many durations and starting points, but not all,
         // iterate through, looking for more context-dependent resolutions.
         var unresolved = 0;
+        var nextStart = 0;
+        var prevPartNum = sectionBlocks[0].part;
         for(var b=0; b<sectionBlocks.length; b++){
+            let partNum = sectionBlocks[b].part;
+            // startsAt should be resetted at the beginning of a new part
+            if (prevPartNum!==partNum)
+            {
+                nextStart = 0;
+                prevPartNum = partNum;
+            }
             var events = sectionBlocks[b].events;
             var mens = sectionBlocks[b].mens;
             var menssum = rm.mensurSummary(mens);
@@ -165,7 +152,7 @@ var complexBeats = (function() {
                         //
                         if(event.getAttributeNS(null, 'dur.ges')) {
                             // We've got a new duration, so need to update start times
-                            addStartTimesForBlock(sectionBlocks[b]);
+                            addStartTimesForBlock(sectionBlocks[b], nextStart);
                         }
                     } else {
                         // We may be able to do *something*
@@ -190,6 +177,13 @@ var complexBeats = (function() {
                     }
                 }
             }
+            //if nothing within a block has been resolved, update start times
+            // to make sure that preceding blocks get resolved properly
+            addStartTimesForBlock(sectionBlocks[b], nextStart);
+            let lastEvent = sectionBlocks[b].events[sectionBlocks[b].events.length-1];
+            let lastDur = durIO.readDur(lastEvent);
+            let lastStartsAt = Number(lastEvent.getAttribute("startsAt"));
+            nextStart = lastStartsAt + lastDur;
             addBreveBoundariesForBlock(sectionBlocks[b]);
         }
         return unresolved;
@@ -200,21 +194,28 @@ var complexBeats = (function() {
      * (i.e. where the start and duration of the previous note is known).
      * @param {Object} block Object with attributes for events and
      * mensuration sign
+     * @param {Number} startsAtValue manually set starting position
+     * @returns {Number} last starting position
      */
-    function addStartTimesForBlock(block){
+    function addStartTimesForBlock(block, startsAtValue){
         var blockFrom = 0;
         var mens = block.mens;
         var events = block.events;
+        // this extra step can be used to do some stuff
+        var startsAt = startsAtValue; 
         for(var e=0; e<events.length; e++){
             var event = events[e];
-            if(event.tagName==='rest' || event.tagName==='note'){
+            if(rm.noteOrRest(event)){
                 event.setAttributeNS(null, 'mensurBlockStartsAt', blockFrom);
+                event.setAttributeNS(null, 'startsAt', startsAt);
                 var dur = durIO.readDur(event);
                 if(dur){
                     blockFrom += dur;
-                } else return;
+                    startsAt += dur;
+                }
             }
         }
+        //return startsAt;
     }
 
     /**
@@ -250,14 +251,32 @@ var complexBeats = (function() {
         }
     }
 
+    function updateBlocks(sectionBlocks)
+    {
+        // update block info
+        for (let block of sectionBlocks)
+        {
+            let evLength = block.events.length;
+            let lastEvent = block.events[evLength-1];
+            let lastDur = durIO.readDur(lastEvent);
+            block.dur = Number(lastEvent.getAttributeNS(null, "mensurBlockStartsAt")) + lastDur;
+            block.totaldur = Number(lastEvent.getAttributeNS(null, "startsAt")) + lastDur;
+        }
+    }
 
     return {
         /** @public */
-        complexAnalysis : (meiDoc) => {
-            var sectionBlocks = meiDoc.blocks;
 
+        addStartTimes : function(meiDoc) {
+            var sectionBlocks = meiDoc.blocks;
             // add start times as far as possible
             addAllStartTimes(sectionBlocks);
+
+            updateBlocks(sectionBlocks);
+        },
+
+        complexAnalysis : function(meiDoc) {
+            var sectionBlocks = meiDoc.blocks;
 
             // run complex imperfection / alteration analysis
             var remaining = 100000000;
@@ -269,6 +288,9 @@ var complexBeats = (function() {
                 remaining=nextRemaining;
                 nextRemaining = afterTheEasyBits(sectionBlocks);
             }
+
+            updateBlocks(sectionBlocks);
+
             console.log(remaining);
         }
     }
