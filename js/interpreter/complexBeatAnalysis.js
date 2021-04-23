@@ -215,7 +215,6 @@ var complexBeats = (function() {
                 }
             }
         }
-        //return startsAt;
     }
 
     /**
@@ -288,6 +287,8 @@ var complexBeats = (function() {
                 remaining=nextRemaining;
                 nextRemaining = afterTheEasyBits(sectionBlocks);
             }
+
+            durIO.addDurGes(sectionBlocks);
 
             updateBlocks(sectionBlocks);
 

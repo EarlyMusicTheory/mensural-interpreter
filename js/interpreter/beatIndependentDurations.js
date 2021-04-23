@@ -241,18 +241,7 @@ var basic = (function() {
 			anteSim(sectionBlocks);
 
 			// write dur.ges
-			for (let block of sectionBlocks)
-			{
-				let propMultiplier = block.prevPropMultiplier;
-				let events = block.events;
-				for (let event of events)
-				{
-					if(rm.noteOrRest(event))
-					{
-						durIO.writeDurGes(event, propMultiplier);
-					}
-				}
-			}
+			durIO.addDurGes(sectionBlocks);
 		}
 	}
 
