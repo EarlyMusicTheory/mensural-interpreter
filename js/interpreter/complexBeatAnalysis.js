@@ -64,15 +64,15 @@ var complexBeats = (function() {
      * @return {Number} Number of breve beats separating the notes
      */
     function breveDifference(struct2, struct1, mens){
-        var minims = rm.minimStructures(rm.mensurSummary(mens));
+        var minimStruct = rm.minimStructures(rm.mensurSummary(mens));
         // var breves = 0; <-- not used anyway
-        // var minims = 0; <-- makes no sense, it's already there
-        var MiB = minims[3];
+        var minims = 0;
+        var MiB = minimStruct[1];
         for(var i=3; i<struct2.length; i++){
             if(struct1[i]>struct2[i]){
-                minims += minims[i]*(struct1[i] - struct2[i]) - minims[i+1];
+                minims += minimStruct[i-2]*(struct1[i] - struct2[i]) - minimStruct[i-1];
             } else if (struct2[i]>struct1[i]){
-                minims += minims[i]*(struct2[i] - struct1[i]);
+                minims += minimStruct[i-2]*(struct2[i] - struct1[i]);
             }
         }
         return minims/MiB;
