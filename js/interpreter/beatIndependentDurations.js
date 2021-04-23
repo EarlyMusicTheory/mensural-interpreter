@@ -11,21 +11,9 @@
  * * allUnalterableImperfectLevels
  * * simplestAlterations
  * * anteSim
- * 
- *  Uses: 
- *  * writeDur
- *  * readDur
- *  * augDot
- *  * notePerfectAsWhole
- *  * mensurSummary
- *  * firstPerfectLevel
- *  * simpleMinims
- *  * noteInt
- *  * regularlyPerfect
- *  * leveleq
  */
 
-var beatIndependentDurations = (function() {
+var basic = (function() {
 	/**
 	 * Since rests can't be altered or imperfected, all rests can be
 	 * resolved immediately

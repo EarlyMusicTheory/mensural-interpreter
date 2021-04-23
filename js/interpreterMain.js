@@ -105,7 +105,7 @@ $(document).ready(function(){
     $("#beatIndependent").click(function() {
         if (basicAnalysisDone===false)
         {
-            beatIndependentDurations.beatIndependentDurations(meiFile);
+            basic.beatIndependentDurations(meiFile);
             complexBeats.addStartTimes(meiFile);
             meiFile.renewBlob();
             basicAnalysisDone = true;
@@ -116,7 +116,7 @@ $(document).ready(function(){
     $("#complexBeatAnalysis").click(function() {
         if(basicAnalysisDone===false)
         {
-            beatIndependentDurations.beatIndependentDurations(meiFile);
+            basic.beatIndependentDurations(meiFile);
             complexBeats.addStartTimes(meiFile);
             basicAnalysisDone = true;
         }
