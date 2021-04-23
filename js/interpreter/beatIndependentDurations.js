@@ -73,15 +73,16 @@ var basic = (function() {
 				var event = sectionBlocks[b].events[e];
 				if(rm.augDot(event) && e){
 					var prev = sectionBlocks[b].events[e-1];
-					if(e && !prev.getAttributeNS(null, 'dur.ges'))
+					if(e && !prev.getAttributeNS(null, 'dur.intermediate'))
+						var baseDur = rm.simpleMinims(prev, mens);
 						if(rm.notePerfectAsWhole(prev, mens)){
-							durIO.writeDur(rm.simpleMinims(prev, mens), prev);
+							durIO.writeDur(baseDur, prev);
 							prev.setAttributeNS(null, 'dur.quality', 'perfecta');
 							prev.setAttributeNS(null, 'num', '2');
 							prev.setAttributeNS(null, 'numbase', '3');
 							prev.setAttributeNS(null, 'rule', 'I.2.a.PerfDot');
 						} else {
-							durIO.writeDur(rm.simpleMinims(prev, mens), prev, true);
+							durIO.writeDur(baseDur, prev, true);
 							prev.setAttributeNS(null, 'rule', 'simpleDot');
 							prev.setAttributeNS(null, 'num', '2');
 							prev.setAttributeNS(null, 'numbase', '3');
@@ -107,7 +108,7 @@ var basic = (function() {
 			var firstPerf = rm.firstPerfectLevel(mens);
 			for(var e=0; e<sectionBlocks[b].events.length; e++){
 				var event = sectionBlocks[b].events[e];
-				if(event.tagName==='note' && !(event.getAttributeNS(null, 'dur.ges'))){
+				if(event.tagName==='note' && !(event.getAttributeNS(null, 'dur.intermediate'))){
 					var level = rm.noteInt(event);
 					if(level < firstPerf && alterableLevels[level]===2){
 						// Assume that actOnDots has already been run on all dotted notes
@@ -141,7 +142,7 @@ var basic = (function() {
 			var perfectLevels = [2, 2, 2, 2].concat(menssum);
 			for(var e=0; e<events.length; e++){
 				var event = events[e];
-				if(event.tagName==='note' && !(event.getAttributeNS(null, 'dur.ges'))){
+				if(event.tagName==='note' && !(event.getAttributeNS(null, 'dur.intermediate'))){
 					var level = rm.noteInt(event);
 					if(alterableLevels[level]===3){
 						// The level is alterable.
@@ -160,7 +161,7 @@ var basic = (function() {
 								durIO.writeDur(rm.simpleMinims(event, mens), event, augmentedDot);
 							}
 							for(let i=e-1; i>=0; i--){
-								if(!events[i].getAttributeNS(null, 'dur.ges')){
+								if(!events[i].getAttributeNS(null, 'dur.intermediate')){
 									break;
 								}
 								target = durIO.readDur(events[i]);
@@ -205,7 +206,7 @@ var basic = (function() {
 			var mens = sectionBlocks[b].mens;
 			for(var e=0; e<sectionBlocks[b].events.length; e++){
 				var event = sectionBlocks[b].events[e];
-				if(event.tagName==="note" && !event.getAttributeNS(null, 'dur.ges')
+				if(event.tagName==="note" && !event.getAttributeNS(null, 'dur.intermediate')
 					&& rm.regularlyPerfect(event, mens)
 					&& (e+1)<sectionBlocks[b].events.length
 					// && (sectionBlocks[b].events[e+1].tagName==='note')// Surely note or rest?
