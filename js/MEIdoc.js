@@ -170,8 +170,8 @@ var MEIdoc = (() => {
 			this.idDict = {};
 			this.eventIdDict = {};
             this.sectionBlocks;
-			this.meiBlob = this.meiDoc ? new Blob([this.text], {type: 'text/xml'}) : null;
 			if(this.doc) this.initEventDict();
+			this.meiBlob = this.meiDoc ? new Blob([this.text], {type: 'text/xml'}) : null;
 			if(this.doc) this.getBlocksFromSections();
         }
 
@@ -190,8 +190,8 @@ var MEIdoc = (() => {
             this.meiDoc = meiDocTree;
 			this.preprocess();
 			if(this.meiDoc) this.getBlocksFromSections();
-			if(this.meiDoc) this.meiBlob = new Blob([this.text], {type: 'text/xml'});
 			if(this.meiDoc) this.initEventDict();
+			if(this.meiDoc) this.meiBlob = new Blob([this.text], {type: 'text/xml'});
         }
 
 		get blob() {
@@ -228,8 +228,18 @@ var MEIdoc = (() => {
 			var bucket = this.doc.getElementsByTagName('*');
 			for (let element of bucket)
 			{
-				let id = element.getAttribute("xml:id");
-				if (id != null) this.eventIdDict[id] = element;
+				let id;
+				if(element.getAttribute("xml:id"))
+				{
+					id = element.getAttribute("xml:id");
+				}
+				else
+				{
+					element.setAttribute("xml:id", "ID" + uuidv4());
+					id = element.getAttribute("xml:id");
+				}
+				
+				this.eventIdDict[id] = element;
 			}
 		}
         
