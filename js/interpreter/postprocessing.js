@@ -17,7 +17,7 @@ var post = (function() {
             {
                 var event = blocks[b].events[e];
                 var previousSibling = event.previousElementSibling;
-                if (event.getAttributeNS(null, "onTheBreveBeat") && previousSibling) 
+                if (Number.parseInt(event.getAttributeNS(null, "onTheBreveBeat"), 10) === 0 && previousSibling) 
                 {
                     let line = meiDoc.doc.createElementNS(meiNS, "barLine");
                     
