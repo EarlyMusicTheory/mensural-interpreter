@@ -32,16 +32,18 @@ var alterate = (function() {
                 durIO.writeAlteration(event, mens, 'A.2');
             } else {
                 if(event.getAttributeNS(null, 'mensurBlockStartsAt')==="20") console.log("x", leftWindow, durations);
-                event.setAttributeNS(null, 'rule', 'A.xxx');
-    //			event.setAttributeNS(null, 'dur.ges', simpleMinims(event, mens)+'b');
-                durIO.writeDur(rm.simpleMinims(event, mens), event, false);
+                //event.setAttributeNS(null, 'rule', 'A.xxx');
+                //event.setAttributeNS(null, 'dur.ges', simpleMinims(event, mens)+'b');
+                //durIO.writeDur(rm.simpleMinims(event, mens), event, false);
+                durIO.writeAlteration(event, mens, 'A.xxx');
             }
         } else if(durations.bareMinimum > defaultLength){
             // not altered
             if(event.getAttributeNS(null, 'mensurBlockStartsAt')==="20") console.log("z", durations);
-            event.setAttributeNS(null, 'rule', 'A.xxz');
-    //		event.setAttributeNS(null, 'dur.ges', simpleMinims(event, mens)+'b');			
-            durIO.writeDur(rm.simpleMinims(event, mens), event, false);
+            //event.setAttributeNS(null, 'rule', 'A.xxz');
+            //event.setAttributeNS(null, 'dur.ges', simpleMinims(event, mens)+'b');			
+            //durIO.writeDur(rm.simpleMinims(event, mens), event, false);
+            durIO.writeAlteration(event, mens, 'A.xxz');
         }
         return event;
     }
@@ -73,10 +75,11 @@ var alterate = (function() {
          */
         secondBeatAlteration : function (event, index, events, mens) {
             // second beat is special...
-            event.setAttributeNS(null, 'rule', 'A.1');
-            event.setAttributeNS(null, 'quality', 'a');
-            durIO.writeDur(2*rm.simpleMinims(event, mens), event, false);
-        //	event.setAttributeNS(null, 'dur.ges', simpleMinims(event, mens)*2+'b');
+            //event.setAttributeNS(null, 'rule', 'A.1');
+            //event.setAttributeNS(null, 'quality', 'a');
+            //durIO.writeDur(2*rm.simpleMinims(event, mens), event, false);
+            //event.setAttributeNS(null, 'dur.ges', simpleMinims(event, mens)*2+'b');
+            durIO.writeAlteration(event, mens, 'A.1');
             return event;
         },
 
