@@ -186,6 +186,32 @@ var imperfect = (function() {
         return false;
     }
 
+    /**
+     * Returns true if a duration (in minims) is 3, 6 or 9 times the
+     * length of any of a list of candidate values, otherwise returns
+     * false. This is for durations of windows of notes, to see whether
+     * they represent a coherent block of whole mensural units (which is
+     * likely to imply that they fall on the beat and that they don't
+     * imperfect their neighbours).
+     * @param {Integer} minimCount
+     * @param {Array} possibleDivisors
+     * @returns {} 
+     */
+    function solidBlock(minimCount, possibleDivisors){
+        // If a block of notes looks like it is made up of a small number of
+        // whole, coherent mensural units, it probably is. Given its
+        // notational length, check for 3, 6, or 9 of the possible perfect
+        // units.
+        if(minimCount % 3 !== 0) return false;
+        for(var i=possibleDivisors.length-1; i>=0; i--){
+            var units = minimCount / possibleDivisors[i];
+            if(units == 3 || units==6 || units==9){
+                return possibleDivisors[i];
+            }
+        }
+        return false;
+    }
+
 
     return{
         /** public */
