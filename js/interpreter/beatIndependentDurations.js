@@ -21,16 +21,20 @@ var basic = (function() {
      * mensurations in a section
 	 */
 	function labelRests(sectionBlocks){
-		for(var b=0; b<sectionBlocks.length; b++){
+		for(var b=0; b<sectionBlocks.length; b++)
+		{
 			var mens = sectionBlocks[b].mens;
-			for(var e=0; e<sectionBlocks[b].events.length; e++){
+			for(var e=0; e<sectionBlocks[b].events.length; e++)
+			{
 				var event = sectionBlocks[b].events[e];
-				if(event.tagName==='rest'){
+				if(event.tagName==='rest')
+				{
 					var augmentedDot = e+1<sectionBlocks[b].events.length
 							&& sectionBlocks[b].events[e+1].tagName==="dot"
 							&& sectionBlocks[b].events[e+1].getAttributeNS(null, 'form')==='aug';
-					durIO.writeDur(rm.simpleMinims(event, mens, 0), event, augmentedDot);
-					event.setAttributeNS(null, 'rule', 'rest');
+					//durIO.writeDur(rm.simpleMinims(event, mens, 0), event, augmentedDot);
+					//event.setAttributeNS(null, 'rule', 'rest');
+					durIO.writeDurWithRule(event, mens, 'rest', augmentedDot);
 				}
 			}
 		}
@@ -44,16 +48,20 @@ var basic = (function() {
      * mensurations in a section
 	 */
 	function actOnColoration(sectionBlocks){
-		for(var b=0; b<sectionBlocks.length; b++){
+		for(var b=0; b<sectionBlocks.length; b++)
+		{
 			var mens = sectionBlocks[b].mens;
-			for(var e=0; e<sectionBlocks[b].events.length; e++){
+			for(var e=0; e<sectionBlocks[b].events.length; e++)
+			{
 				var event = sectionBlocks[b].events[e];
-				if(event.tagName==='note' && event.getAttributeNS(null, 'colored')){
+				if(event.tagName==='note' && event.getAttributeNS(null, 'colored'))
+				{
 					var augmentedDot = e+1<sectionBlocks[b].events.length
 							&& sectionBlocks[b].events[e+1].tagName==="dot"
 							&& sectionBlocks[b].events[e+1].getAttributeNS(null, 'form')==='aug';
-					durIO.writeDur(rm.simpleMinims(event, mens) * 2/3, event, augmentedDot);
-					event.setAttributeNS(null, 'rule', 'coloration');
+					//durIO.writeDur(rm.simpleMinims(event, mens) * 2/3, event, augmentedDot);
+					//event.setAttributeNS(null, 'rule', 'coloration');
+					durIO.writeDurWithRule(event, mens, 'coloration', augmentedDot, 2/3);
 				}
 			}
 		}
@@ -110,9 +118,11 @@ var basic = (function() {
 				var event = sectionBlocks[b].events[e];
 				if(event.tagName==='note' && !(event.getAttributeNS(null, 'dur.intermediate'))){
 					var level = rm.noteInt(event);
-					if(level < firstPerf && alterableLevels[level]===2){
+					if(level < firstPerf && alterableLevels[level]===2)
+					{
 						// Assume that actOnDots has already been run on all dotted notes
-						durIO.writeDur(rm.simpleMinims(event, mens), event, false);
+						durIO.writeDurWithRule(event, mens, 'unalterableImperfect');
+						//durIO.writeDur(rm.simpleMinims(event, mens), event, false);
 					}
 				}
 			}
@@ -169,9 +179,10 @@ var basic = (function() {
 									if(i===0 || rm.noteInt(events[i-1])>level
 										|| (events[i-1].tagName=='dot' && events[i-1].getAttributeNS('form')!=='aug')){
 										// Yay, it's an alteration
-										durIO.writeDur(2 * rm.simpleMinims(event, mens), event, false);
-										event.setAttributeNS(null, 'quality', 'a');
-										event.setAttributeNS(null, 'rule', 'A.2b');
+										durIO.writeAlteration(event, mens, "A.2b");
+										//durIO.writeDur(2 * rm.simpleMinims(event, mens), event, false);
+										//event.setAttributeNS(null, 'quality', 'a');
+										//event.setAttributeNS(null, 'rule', 'A.2b');
 									}
 									break;
 								} else if(target<0){
@@ -209,11 +220,12 @@ var basic = (function() {
 				if(event.tagName==="note" && !event.getAttributeNS(null, 'dur.intermediate')
 					&& rm.regularlyPerfect(event, mens)
 					&& (e+1)<sectionBlocks[b].events.length
-					// && (sectionBlocks[b].events[e+1].tagName==='note')// Surely note or rest?
-					&& (sectionBlocks[b].events[e+1].tagName==='note' || sectionBlocks[b].events[e+1].tagName==='rest')
-					&& durIO.leveleq(sectionBlocks[b].events[e+1], event)){
-					durIO.writeDur(rm.simpleMinims(event, mens), event, false);
-					event.setAttributeNS(null, 'rule', 'I.2.b.antesim');
+					&& rm.noteOrRest(sectionBlocks[b].events[e+1])
+					&& durIO.leveleq(sectionBlocks[b].events[e+1], event))
+				{
+					//durIO.writeDur(rm.simpleMinims(event, mens), event, false);
+					//event.setAttributeNS(null, 'rule', 'I.2.b.antesim');
+					durIO.writeDurWithRule(event, mens, 'I.2.b.antesim');
 				}
 			}
 		}
@@ -241,7 +253,7 @@ var basic = (function() {
 			simplestAlterations(sectionBlocks);
 			anteSim(sectionBlocks);
 
-			// write dur.ges
+			// write dur.ges => dur.intermediate * propMultiplier
 			durIO.addDurGes(sectionBlocks);
 		}
 	}

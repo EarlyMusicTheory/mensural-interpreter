@@ -61,6 +61,20 @@ var durIO = (function() {
         },
         
         /**
+         * Write duration and a rule, without modification
+         * e.g. for ante sim
+         * @param {DOMElement} el 
+         * @param {DOMElement} mens
+         * @param {string} rule 
+         * @param {Boolean} dot is there a dot of augmentation? default false
+         * @param {Number} modifier duration modifier
+         */
+        writeDurWithRule : function (el, mens, rule, dot = false, modifier = 1) {
+            this.writeDur(rm.simpleMinims(el, mens) * modifier, el, dot);
+            el.setAttributeNS(null, 'rule', rule);
+        },
+        
+        /**
          * Write duration information for a note that we've decided should be
          * the simplest form of imperfection (subtract a third). For other
          * imperfection, use {@link writeImperfection}
