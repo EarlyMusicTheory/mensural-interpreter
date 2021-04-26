@@ -26,6 +26,7 @@ var MEIdoc = (() => {
 	}
 
 	/**
+	 * @private
 	 * Return true if x (an XML DOM object, normally MEI) contains *no*
 	 * mei:sections. this needs to be set as a DOM document object.
 	 * @param {DOMObject} x - the part of the tree.  
@@ -40,6 +41,7 @@ var MEIdoc = (() => {
 	}
 
 	/**
+	 * @private
 	 * Return all layers for a section
 	 * @param {DOMObject} section 
 	 * @return {Array} Array of mei:layer elements 
@@ -50,6 +52,7 @@ var MEIdoc = (() => {
 	}
 
 	/**
+	 * @private
 	 * Creates an array of mensurally coherent blocks, each an object with
 	 * mensuration and events attributes.
 	 * @param {DOMObject} section The section to process
@@ -131,18 +134,20 @@ var MEIdoc = (() => {
 	}
 
 	/** 
+	 * @private
 	 * Name space manager function. Takes a prefix and returns the URL for
 	 * that name space. In this case, though, pretty much hard-wired.
 	 * @param {String} prefix The namespace prefix to retrieve as a URL
 	 */
 	function nsResolver(prefix){
 		var ns = {
-		mei: "http://www.music-encoding.org/ns/mei"
+		'mei': "http://www.music-encoding.org/ns/mei"
 		}
 		return ns[prefix] || null;
 	}
 
     /**
+	 * @private
      * Given a proportion-specifying element, give its implied multiplier
      * @param {DOMObject} el proportion element
      * @returns {Number}
@@ -299,6 +304,7 @@ var MEIdoc = (() => {
 			for(let staff of this.doc.getElementsByTagName("staff") )
 			{
 				tidyClefKeySig(staff, this.doc);
+				getMensFromStaffDef(staff, this.doc);
 				redundantLigForm(staff);
 				mergeAdjacentMensProp(staff);
 			}
@@ -315,17 +321,57 @@ var MEIdoc = (() => {
 	function tidyClefKeySig(staffElement, doc)
 	{
 		let staffNum = staffElement.getAttribute("n");
-		let staffDef = doc.evaluate("//mei:staffDef[@n="+staffNum+"]", staffElement, nsResolver).iterateNext();
-		if(doc.evaluate('count(./mei:layer/mei:clef/preceding-sibling::mei:note)', staffElement, nsResolver).numberValue === 0)
+		let staffDef = doc.evaluate("//mei:staffDef[@n='"+staffNum+"']", doc.childNodes[0], nsResolver).iterateNext();
+		if(doc.evaluate('./mei:layer/mei:clef', staffElement, nsResolver, 3).booleanValue &&
+			doc.evaluate('count(./mei:layer/mei:clef/preceding-sibling::mei:note)', staffElement, nsResolver).numberValue === 0)
 		{
 			let firstClef = staffElement.getElementsByTagName("clef")[0];
 			staffDef.appendChild(firstClef);
 		}
 		
-		if(doc.evaluate('count(./mei:layer/mei:clef/preceding-sibling::mei:note)', staffElement, nsResolver).numberValue === 0)
+		if(doc.evaluate('./mei:layer/mei:keySig', staffElement, nsResolver, 3).booleanValue &&
+			doc.evaluate('count(./mei:layer/mei:keySig/preceding-sibling::mei:note)', staffElement, nsResolver).numberValue === 0)
 		{
 			let firstKeySig = staffElement.getElementsByTagName("keySig")[0];
 			staffDef.appendChild(firstKeySig);
+		}
+	}
+
+	/**
+	 * Get the mensuration info from staffDef and put it into the layer
+	 * @param {DOMElement} staffElement 
+	 */
+	function getMensFromStaffDef(staffElement, doc)
+	{
+		let staffNum = staffElement.getAttribute("n");
+		let staffDef = doc.evaluate("//mei:staffDef[@n='"+staffNum+"']", doc.childNodes[0], nsResolver).iterateNext();
+		let mensAttrStartList = ["mensur.", "poport.", "tempus", "prolatio", "modusminor", "modusmaior"];
+
+		if(!doc.evaluate('./mei:layer/mei:mensur', staffElement, nsResolver, 3).booleanValue)
+		{
+			let layer = staffElement.getElementsByTagName("layer")[0];
+			let mensur = doc.createElementNS(nsResolver("mei"), "mensur");
+
+			let staffDefAttrs = staffDef.attributes;
+
+			// because attributes get removed, start iterating from back to front
+			for (let a = staffDefAttrs.length-1; a >= 0; a--)
+			{
+				let attr = staffDefAttrs[a];
+				for (let listItem of mensAttrStartList)
+				{
+					if (attr.name.startsWith(listItem))
+					{
+						// "mensur." and "proport." needs to be removed within <mensur>
+						// let's do some regex to cut everything to the dot
+						let attrName = attr.name.replace(/^[\w+]*\./,'');
+						mensur.setAttribute(attrName, attr.value);
+						staffDef.removeAttribute(attr.name);
+					}
+				}
+			}
+
+			layer.insertBefore(mensur, layer.childNodes[0]);
 		}
 	}
 
