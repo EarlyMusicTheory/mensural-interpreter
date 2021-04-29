@@ -110,19 +110,21 @@ var durIO = (function() {
          * @param {DOMElement} mens mei:mensur
          * @param {String} rule Reference for rule used to decide this
          * (written to element as @rule)
+         * @param {Boolean} defaultMinims add default minims?
          */
-        writeImperfection : function (el, reduceBy, mens, rule) {
+        writeImperfection : function (el, reduceBy, mens, rule, defaultMinims = false) {
             var defaultDur = rm.simpleMinims(el, mens);
             var factor = gcd(defaultDur, reduceBy);
             var finalDur = defaultDur - reduceBy;
             this.writeDur(finalDur, el, false);
-            el.setAttributeNS(null, 'num', "3");
-            el.setAttributeNS(null, 'numbase', "2");
-            //	el.setAttributeNS(null, 'num', finalDur / factor);
-            //	el.setAttributeNS(null, 'numbase', defaultDur / factor);
+            el.setAttributeNS(null, 'num', finalDur / factor);
+            el.setAttributeNS(null, 'numbase', defaultDur / factor);
             el.setAttributeNS(null, 'dur.quality', 'imperfecta');
-            //el.setAttributeNS(null, 'quality', 'i');
             el.setAttributeNS(null, 'rule', rule);	
+            if (defaultMinims === true)
+            {
+                el.setAttributeNS(null, 'defaultminims', rm.simpleMinims(el, mens));
+            }
         },
         
         /**
@@ -143,11 +145,25 @@ var durIO = (function() {
             el.setAttributeNS(null, 'rule', rule);
         },
 
-        writePerfection : function (el, mens, rule) {
+        /**
+         * Writes perfection, if note is regularly perfect, no num/numbase will be added
+         * @param {DOMElement} el 
+         * @param {DOMElement} mens 
+         * @param {String} rule 
+         * @param {Boolean} defaultMinims
+         */
+        writePerfection : function (el, mens, rule, defaultMinims = false) {
             durIO.writeDur(rm.simpleMinims(el, mens), el);
             el.setAttributeNS(null, 'dur.quality', 'perfecta');
-            el.setAttributeNS(null, 'num', '2');
-            el.setAttributeNS(null, 'numbase', '3');
+            if(!rm.regularlyPerfect(el, mens))
+            {
+                el.setAttributeNS(null, 'num', '2');
+                el.setAttributeNS(null, 'numbase', '3');
+            }
+            if (defaultMinims === true)
+            {
+                el.setAttributeNS(null, 'defaultminims', rm.simpleMinims(el, mens));
+            }
             el.setAttributeNS(null, 'rule', rule);
         },
         
@@ -197,6 +213,15 @@ var durIO = (function() {
                 }
             }
             return duration;
+        },
+
+        /**
+         * Writes a comment during interpretation to an element
+         * @param {DOMElement} el 
+         * @param {String} comment 
+         */
+        writeComment : function (el, comment) {
+            el.setAttributeNS(null, 'comment', comment);
         },
 
         addDurGes : function (sectionBlocks) {

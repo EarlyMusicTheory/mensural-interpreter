@@ -32,22 +32,24 @@ var imperfect = (function() {
                     return true;
                 } else if (imperfectingUnits===2){
                     if(rm.isAlterable(window[window.length-1], mens)){
-                        event.setAttributeNS(null, 'rule', 'I.5');
-                        event.setAttributeNS(null, 'quality', 'p');
+                        durIO.writePerfection(event, mens, 'I.5');
+                        //event.setAttributeNS(null, 'rule', 'I.5');
+                        //event.setAttributeNS(null, 'quality', 'p');
                         //event.setAttributeNS(null, 'dur.ges', simpleMinims(event, mens)+'b');
-                        durIO.writeDur(rm.simpleMinims(event, mens), event, false);
-                        event.setAttributeNS(null, 'comment', 'trusting in alteration');
+                        //durIO.writeDur(rm.simpleMinims(event, mens), event, false);
+                        durIO.writeComment(event, 'trusting in alteration');
                     } else {
                         durIO.writeImperfection(event, nextToTry, mens, 'I.5-add');
-                        event.setAttributeNS(null, 'comment', 'Alteration is impossible');
+                        durIO.writeComment(event, 'Alteration is impossible');
                     }
                     ///WTF!!!!!?!
                     return false;
                 } else if (imperfectingUnits===3 || imperfectingUnits===6 || imperfectingUnits===9){
-                    event.setAttributeNS(null, 'rule', 'I.6');
-                    event.setAttributeNS(null, 'quality', 'p');
+                    durIO.writePerfection(event, mens, 'I.6');
+                    //event.setAttributeNS(null, 'rule', 'I.6');
+                    //event.setAttributeNS(null, 'quality', 'p');
                     //event.setAttributeNS(null, 'dur.ges', simpleMinims(event, mens)+'b');
-                    durIO.writeDur(rm.simpleMinims(event, mens), event, false);
+                    //durIO.writeDur(rm.simpleMinims(event, mens), event, false);
                     return false;
                 } else if (imperfectingUnits>3){
                     durIO.writeImperfection(event, nextToTry, mens, 'I.4b');
@@ -56,31 +58,33 @@ var imperfect = (function() {
             }
         } else if (solidBlock(duration.approximation, imperfectionPossibilities)){
             // Obvious blocks of perfect units aren't going to be altered
-            event.setAttributeNS(null, 'rule', 'I.5-literalunits');
-            event.setAttributeNS(null, 'quality', 'p');
-            event.setAttributeNS(null, 'defaultminims', rm.simpleMinims(event, mens));
-            durIO.writeDur(rm.simpleMinims(event, mens), event);
+            durIO.writePerfection(event, mens, 'I.5-literalunits', true);
+            //event.setAttributeNS(null, 'rule', 'I.5-literalunits');
+            //event.setAttributeNS(null, 'quality', 'p');
+            //event.setAttributeNS(null, 'defaultminims', rm.simpleMinims(event, mens));
+            //durIO.writeDur(rm.simpleMinims(event, mens), event);
             return true;
         } else if(duration.approximation/rm.simpleMinims(event, mens, -1) === 2 && rm.mensurSummary(mens)[level-4]===3
                             && rm.noteInt(window[window.length-1])===level-1 && rm.isAlterable(window[window.length-1], mens)){
             // This is a window with the equivalent of two units, one of which is alterable
             // The last note of the window will be altered
-            event.setAttributeNS(null, 'rule', 'I.6-literalunits');
-            event.setAttributeNS(null, 'quality', 'p');
-            event.setAttributeNS(null, 'defaultminims', rm.simpleMinims(event, mens));
-            durIO.writeDur(rm.simpleMinims(event, mens), event);
-            event.setAttributeNS(null, 'comment', 'trusting in alteration');		
+            durIO.writePerfection(event, mens, 'I.6-literalunits', true);
+            //event.setAttributeNS(null, 'rule', 'I.6-literalunits');
+            //event.setAttributeNS(null, 'quality', 'p');
+            //event.setAttributeNS(null, 'defaultminims', rm.simpleMinims(event, mens));
+            //durIO.writeDur(rm.simpleMinims(event, mens), event);
+            durIO.writeComment(event, 'trusting in alteration');		
         } else if(duration.bareMinimum > 3 * imperfectionPossibilities[imperfectionPossibilities.length-1]){
             var imperfector = imperfectionPossibilities[imperfectionPossibilities.length-1];
-            durIO.writeImperfection(event, imperfector, mens, 'I.4bi');
-            event.setAttributeNS(null, 'defaultminims', rm.simpleMinims(event, mens));
-            event.setAttributeNS(null, 'imperfectedBy', imperfector);
+            durIO.writeImperfection(event, imperfector, mens, 'I.4bi', true);
+            //event.setAttributeNS(null, 'defaultminims', rm.simpleMinims(event, mens));
+            //event.setAttributeNS(null, 'imperfectedBy', imperfector);
             return true;		
         } else if(duration.approximateMinimum > 3 * imperfectionPossibilities[imperfectionPossibilities.length-1]){
             var imperfector = imperfectionPossibilities[imperfectionPossibilities.length-1];
-            writeImperfection(event, imperfector, mens, 'I.4bii');
-            event.setAttributeNS(null, 'defaultminims', rm.simpleMinims(event, mens));
-            event.setAttributeNS(null, 'imperfectedBy', imperfector);
+            durIO.writeImperfection(event, imperfector, mens, 'I.4bii', false);
+            //event.setAttributeNS(null, 'defaultminims', rm.simpleMinims(event, mens));
+            //event.setAttributeNS(null, 'imperfectedBy', imperfector);
             return true;		
         } else {
             console.log('failed to resolve', event, mens, duration);
@@ -235,9 +239,10 @@ var imperfect = (function() {
             var menssum = rm.mensurSummary(mens);
             if(rightWindow.length==0){
                 // I.3 => perfect
-                durIO.writeDur(rm.simpleMinims(event, mens), event);
-                event.setAttributeNS(null, 'quality', 'p');
-                event.setAttributeNS(null, 'rule', 'I.3-726');
+                durIO.writePerfection(event, mens, 'I.3');
+                //durIO.writeDur(rm.simpleMinims(event, mens), event);
+                //event.setAttributeNS(null, 'quality', 'p');
+                //event.setAttributeNS(null, 'rule', 'I.3-726');
                 return event;
             } else if (index<events.length-2
                                  && (rm.divisionDot(events[index+2])
