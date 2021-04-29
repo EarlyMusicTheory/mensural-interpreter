@@ -1,5 +1,8 @@
 <nav class="navbar navbar-dark bg-dark navbar-expand-md">
-  <a class="navbar-brand" href="{{site.url}}">EMT rocks!</a>
+  <a class="navbar-brand" href="{{site.url}}">
+    <img src="{{site.url}}/img/EMT-logo.png" width="30" height="30" class="d-inline-block align-top" alt="EMT" loading="lazy">
+    EMT rocks!
+  </a>
   <ul class="navbar-nav">
       {% for entry in site.data.menu.menu %}
       <li class="nav-item">
