@@ -67,11 +67,18 @@ var durIO = (function() {
          * @param {DOMElement} mens
          * @param {string} rule 
          * @param {Boolean} dot is there a dot of augmentation? default false
-         * @param {Number} modifier duration modifier
+         * @param {Number} modNum numerator of duration modifier
+         * @param {Number} modDenom denominator of duration modifier
          */
-        writeDurWithRule : function (el, mens, rule, dot = false, modifier = 1) {
+        writeDurWithRule : function (el, mens, rule, dot = false, modNum = 1, modDenom = 1) {
+            let modifier = modNum / modDenom;
             this.writeDur(rm.simpleMinims(el, mens) * modifier, el, dot);
             el.setAttributeNS(null, 'rule', rule);
+            if (modNum !== 1 || modDenom !== 1)
+            {
+                el.setAttributeNS(null, 'num', modDenom);
+				el.setAttributeNS(null, 'numbase', modNum);
+            }
         },
         
         /**
@@ -107,7 +114,7 @@ var durIO = (function() {
         writeImperfection : function (el, reduceBy, mens, rule) {
             var defaultDur = rm.simpleMinims(el, mens);
             var factor = gcd(defaultDur, reduceBy);
-            var finalDur = defaultDur - reduceBy
+            var finalDur = defaultDur - reduceBy;
             this.writeDur(finalDur, el, false);
             el.setAttributeNS(null, 'num', "3");
             el.setAttributeNS(null, 'numbase', "2");
@@ -133,6 +140,14 @@ var durIO = (function() {
             el.setAttributeNS(null, 'numbase', "2");
             el.setAttributeNS(null, 'dur.quality', 'altera');
             //el.setAttributeNS(null, 'quality', 'a');
+            el.setAttributeNS(null, 'rule', rule);
+        },
+
+        writePerfection : function (el, mens, rule) {
+            durIO.writeDur(rm.simpleMinims(el, mens), el);
+            el.setAttributeNS(null, 'dur.quality', 'perfecta');
+            el.setAttributeNS(null, 'num', '2');
+            el.setAttributeNS(null, 'numbase', '3');
             el.setAttributeNS(null, 'rule', rule);
         },
         

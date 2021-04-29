@@ -61,7 +61,7 @@ var basic = (function() {
 							&& sectionBlocks[b].events[e+1].getAttributeNS(null, 'form')==='aug';
 					//durIO.writeDur(rm.simpleMinims(event, mens) * 2/3, event, augmentedDot);
 					//event.setAttributeNS(null, 'rule', 'coloration');
-					durIO.writeDurWithRule(event, mens, 'coloration', augmentedDot, 2/3);
+					durIO.writeDurWithRule(event, mens, 'coloration', augmentedDot, 2, 3);
 				}
 			}
 		}
@@ -82,18 +82,10 @@ var basic = (function() {
 				if(rm.augDot(event) && e){
 					var prev = sectionBlocks[b].events[e-1];
 					if(e && !prev.getAttributeNS(null, 'dur.intermediate'))
-						var baseDur = rm.simpleMinims(prev, mens);
 						if(rm.notePerfectAsWhole(prev, mens)){
-							durIO.writeDur(baseDur, prev);
-							prev.setAttributeNS(null, 'dur.quality', 'perfecta');
-							prev.setAttributeNS(null, 'num', '2');
-							prev.setAttributeNS(null, 'numbase', '3');
-							prev.setAttributeNS(null, 'rule', 'I.2.a.PerfDot');
+							durIO.writePerfection(prev, mens,'I.2.a.PerfDot');
 						} else {
-							durIO.writeDur(baseDur, prev, true);
-							prev.setAttributeNS(null, 'rule', 'simpleDot');
-							prev.setAttributeNS(null, 'num', '2');
-							prev.setAttributeNS(null, 'numbase', '3');
+							durIO.writeDurWithRule(prev, mens, 'simpleDot', true, 3, 2);
 						}
 				}
 			}
@@ -168,7 +160,7 @@ var basic = (function() {
 								var augmentedDot = e+1<sectionBlocks[b].events.length
 										&& sectionBlocks[b].events[e+1].tagName==="dot"
 										&& sectionBlocks[b].events[e+1].getAttributeNS(null, 'form')==='aug';
-								durIO.writeDur(rm.simpleMinims(event, mens), event, augmentedDot);
+								durIO.writeDurWithRule(event, mens, 'noSimpleAlteration', augmentedDot);
 							}
 							for(let i=e-1; i>=0; i--){
 								if(!events[i].getAttributeNS(null, 'dur.intermediate')){
@@ -195,7 +187,7 @@ var basic = (function() {
 							var augmentedDot = e+1<sectionBlocks[b].events.length
 									&& sectionBlocks[b].events[e+1].tagName==="dot"
 									&& sectionBlocks[b].events[e+1].getAttributeNS(null, 'form')==='aug';
-							durIO.writeDur(rm.simpleMinims(event, mens), event, augmentedDot);
+							durIO.writeDurWithRule(event, mens, 'noSimpleAlteration2', augmentedDot);
 						}
 					}
 				}
