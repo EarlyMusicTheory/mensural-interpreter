@@ -185,7 +185,7 @@ var vrvInterface = (function () {
                 return;
             }
             zoom = zoom / 2;
-            applyZoom();
+            this.applyZoom();
         },   
         
         zoomIn : function () {
@@ -193,7 +193,7 @@ var vrvInterface = (function () {
                 return;
             }
             zoom = zoom * 2;
-            applyZoom();
+            this.applyZoom();
         }
         
     }
