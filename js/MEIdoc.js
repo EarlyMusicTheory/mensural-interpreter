@@ -305,7 +305,7 @@ var MEIdoc = (() => {
 			{
 				tidyClefKeySig(staff, this.doc);
 				getMensFromStaffDef(staff, this.doc);
-				redundantLigForm(staff);
+				removeLig(staff);
 				mergeAdjacentMensProp(staff);
 			}
 
@@ -377,20 +377,29 @@ var MEIdoc = (() => {
 
 	/**
 	 * Should remove redundant ligature form and note lig attributes.
-	 * Since Verovio is still messing with those, it might be better to delete them for now.
+	 * For now, ligatures will be removed completely for better alignment
 	 * @todo Remove just redundant visual attributes when Verovio rendering is properly done
 	 * @param {DOMElement} staffElement 
 	 */
-	function redundantLigForm(staffElement)
+	function removeLig(staffElement)
 	{
-		let ligatures = staffElement.getElementsByTagName("ligature");
-		for (let ligature of ligatures)
+		let layers = staffElement.getElementsByTagName("layer");
+		for (let layer of layers)
 		{
-			ligature.removeAttribute("form");
-
-			for (let note of ligature.getElementsByTagName("note"))
+			let ligatures = layer.getElementsByTagName("ligature");
+			for (let i = ligatures.length -1; i >= 0; i--)
 			{
-				note.removeAttribute("lig");
+				let ligature = ligatures[i];
+				for (let event of ligature.children)
+				{
+					// we create a copy to loop properly
+					// counting backwards would cause more trouble 
+					// when getting the order of the notes right
+					let copyEvent = event.cloneNode(true);
+					if(copyEvent.getAttribute("lig")) copyEvent.removeAttribute("lig");
+					layer.insertBefore(copyEvent,ligature);
+				}
+				ligature.remove();
 			}
 		}
 	}
