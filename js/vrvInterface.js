@@ -111,29 +111,32 @@ var vrvInterface = (function () {
         let thisID = $(eventEl).attr("id");
         let currentElement = meiFile.eventDict[thisID];
         let attributes = {};
-        for (let attr of currentElement.attributes)
+        if (currentElement)
         {
-            attributes[attr.nodeName] = attr.value;
+            for (let attr of currentElement.attributes)
+            {
+                attributes[attr.nodeName] = attr.value;
+            }
+            
+
+            let elementInfo = $("<dl id='attList' class='row'></dl>");
+            for (let attr in attributes)
+            {
+                let dt = $("<dt class='col-4 text-truncate'></dt>").text(attr);
+                let dd = $("<dd class='col-8'></dd>").text(attributes[attr]);
+                $(elementInfo).append(dt);
+                $(elementInfo).append(dd);
+            }
+            
+            let elCode = makeXmlCode(currentElement.outerHTML);
+            //$(elementInfo).after($(elCode).html());
+
+            $("#elementInfo").html(elementInfo);
+            $("#attList").after(elCode);
+            shownEvent = eventEl;
+            nextEvent = $(eventEl).next();
+            prevEvent = $(eventEl).prev();
         }
-
-
-        let elementInfo = $("<dl id='attList' class='row'></dl>");
-        for (let attr in attributes)
-        {
-            let dt = $("<dt class='col-4 text-truncate'></dt>").text(attr);
-            let dd = $("<dd class='col-8'></dd>").text(attributes[attr]);
-            $(elementInfo).append(dt);
-            $(elementInfo).append(dd);
-        }
-        
-        let elCode = makeXmlCode(currentElement.outerHTML);
-        //$(elementInfo).after($(elCode).html());
-
-        $("#elementInfo").html(elementInfo);
-        $("#attList").after(elCode);
-        shownEvent = eventEl;
-        nextEvent = $(eventEl).next();
-        prevEvent = $(eventEl).prev();
     }
 
     /**
