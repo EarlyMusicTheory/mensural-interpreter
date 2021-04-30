@@ -17,7 +17,7 @@ function fetchMEI(meiUrl) {
         })
         .then(function(text) {
             meiFile.text = text;
-            vrvInterface.loadData(text);
+            loadData();
             basicAnalysisDone = false;
             complexAnalysisDone = false;
         });
