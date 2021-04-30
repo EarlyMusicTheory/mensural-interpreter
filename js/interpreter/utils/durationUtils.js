@@ -12,14 +12,41 @@ var durIO = (function() {
      * Find highest common factor (for tidy @num/@numbase use). May be
      * less useful, depending how these attributes actually work.
      * @param {Integer} a
-     * @param {Integer} a
+     * @param {Integer} b
      * @return {Integer}
      */
     function gcd(a,b) {
         // Find the highest common factor (for tidy num/numbase values)
         // This is recursive, so prob unwise in the general case, but fine here
         // Taken from rosettaCode
-    return b ? gcd(b, a % b) : Math.abs(a);
+        return b ? gcd(b, a % b) : Math.abs(a);
+    }
+
+    /**
+     * Calculate the number of breves between two times, specified as
+     * the number of mensural units into the current section (so [subminims,
+     * minims, semibreves, breves, longs, maximas])
+     * @param {Array} struct2 Timepoint
+     * @param {Array} struct2 Timepoint
+     * @param {Array} minimStruct beat structure in minims
+     * @return {Number} Number of breve beats separating the notes
+     */
+    function breveDifference(struct2, struct1, minimStruct){
+        // var breves = 0; <-- not used anyway
+        var minims = 0;
+        var MiB = minimStruct[1];
+        for(var i=3; i<struct2.length; i++)
+        {
+            if(struct1[i]>struct2[i])
+            {
+                minims += minimStruct[i-2]*(struct1[i] - struct2[i]) - minimStruct[i-1];
+            } 
+            else if (struct2[i]>struct1[i])
+            {
+                minims += minimStruct[i-2]*(struct2[i] - struct1[i]);
+            }
+        }
+        return minims/MiB;
     }
 
     return {
@@ -47,17 +74,6 @@ var durIO = (function() {
             {
                 el.setAttributeNS(null, "dur.ges", scaledDur + 'b');
             }
-        },
-    
-        /**
-         * True if e1 and e2 are notes or rests at the same mensural level
-         * (e.g. minima or semibrevis)
-         * @param {DOMObject} e1 mei:note or mei:rest
-         * @param {DOMObject} e2 mei:note or mei:rest
-         * @returns {Boolean} 
-         */
-        leveleq : function (e1, e2) {
-            return e1.getAttributeNS(null, 'dur')===e2.getAttributeNS(null, 'dur');
         },
         
         /**
@@ -174,12 +190,12 @@ var durIO = (function() {
          * @return {Integer}
          */
         readDur : function (el) {
-            var str = el.getAttributeNS(null, 'dur.intermediate');
+            var str = el ? el.getAttributeNS(null, 'dur.intermediate') : null;
             return str ? Number(str.substring(0, str.length-1)) : false;
         },
 
         readDurGes : function (el) {
-            var str = el.getAttributeNS(null, 'dur.ges');
+            var str = el ? el.getAttributeNS(null, 'dur.ges') : null;
             return str ? Number(str.substring(0, str.length-1)) : false;
         },
 
@@ -195,10 +211,9 @@ var durIO = (function() {
             var definite = true;
             for(var i=0; i<events.length; i++){
                 var event = events[i];
-                if(event.tagName==="note"||event.tagName==="rest"){
-                    if(event.getAttributeNS(null, 'dur.intermediate')) {
-                        var durString = event.getAttributeNS(null, 'dur.intermediate');
-                        var dur = new Number(durString.substring(0, durString.length-1));
+                if(rm.noteOrRest(event)){
+                    if(this.readDur(event)) {
+                        var dur = this.readDur(event);
                         if(definite) duration.definite += dur;
                         duration.bareMinimum += dur;
                         duration.approximateMinimum += dur;
@@ -223,8 +238,49 @@ var durIO = (function() {
         writeComment : function (el, comment) {
             el.setAttributeNS(null, 'comment', comment);
         },
+        
+        /**
+         * Sets the starting position of an event for a block and the whole part
+         * @param {DOMElement} el 
+         * @param {Number} blockFrom start of event in block
+         * @param {Number} startsAt start of event per part
+         */
+        setStartsAt : function (el, blockFrom, startsAt) {
+            el.setAttributeNS(null, 'mensurBlockStartsAt', blockFrom);
+            el.setAttributeNS(null, 'startsAt', startsAt);
+        },
 
-        addDurGes : function (sectionBlocks) {
+        readStartsAt : function (el) {
+            var startsAt = el ? el.getAttribute("startsAt"): null;
+            return startsAt ? Number(startsAt) : false;
+        },
+
+        readBlockFrom : function (el) {
+            var blockFrom = el ? el.getAttribute("mensurBlockStartsAt"): null;
+            return blockFrom ? Number(blockFrom) : false;
+        },
+        
+        setBeatPos : function (el, blockPos, mens) {
+            var beatStructure = rm.beatUnitStructure(blockPos, mens);
+            el.setAttributeNS(null, 'beatPos', beatStructure.join(', '));
+
+            return beatStructure;
+        },
+
+        setBreveBoundaries : function (el, prevBeatStructure, beatStructure, minimStruct) {
+            if(beatStructure[0]===0 && beatStructure[1]===0 && beatStructure[2]===0)
+            {
+                el.setAttributeNS(null, 'onTheBreveBeat', beatStructure[3]);
+            } 
+            else if(!(beatStructure[5]===prevBeatStructure[5]
+                    && beatStructure[4]===prevBeatStructure[4]
+                    && beatStructure[3]===prevBeatStructure[3]))
+            {
+                el.setAttributeNS(null, 'crossedABreveBeat', breveDifference(beatStructure, prevBeatStructure, minimStruct));
+            }
+        },
+
+        setDurGesPerBlock : function (sectionBlocks) {
             // write dur.ges
             for (let block of sectionBlocks)
             {

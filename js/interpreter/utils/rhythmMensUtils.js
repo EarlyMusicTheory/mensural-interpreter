@@ -102,6 +102,18 @@
         },
 
         /**
+         * Return true if event is a dot of division. Assumes that this is
+         * indicated using @mei:form!=aug. In the longer term, this might be
+         * the place to put more sophisticated reasoning in (or it might be
+         * better as a pre-processing step).
+         * @param {DOMObject} event Probably an mei:dot
+         * @returns {Boolean} 
+         */
+        divisionDot : function (event) {
+        return event.tagName==='dot' && event.getAttributeNS(null, 'form')!=='aug';
+        },
+
+        /**
          * Is note perfect as a whole, i.e. is it divisible into 3 direct
          * parts (for example, a breve is regularly perfect in perfect tempus,
          * minor prolation and in imperfect tempus, major prolation, but only
@@ -111,7 +123,7 @@
          * @returns {} 
          */
         notePerfectAsWhole : function (note, mens){
-            if(note.tagName==='note'){
+            if(this.isNote(note)){
                 var level = this.noteInt(note);
                 var msum = this.mensurSummary(mens);
                 return ([false, false, false, false].concat(msum))[level] === 3;
@@ -182,18 +194,6 @@
             }
             return counts;
         },
-
-        /**
-         * Return true if event is a dot of division. Assumes that this is
-         * indicated using @mei:form!=aug. In the longer term, this might be
-         * the place to put more sophisticated reasoning in (or it might be
-         * better as a pre-processing step).
-         * @param {DOMObject} event Probably an mei:dot
-         * @returns {Boolean} 
-         */
-        divisionDot : function (event) {
-        return event.tagName==='dot' && event.getAttributeNS(null, 'form')!=='aug';
-        },
         
         /**
          * True if the supplied element is a note contained in a ternary unit
@@ -216,6 +216,63 @@
          */
         noteOrRest : function (event) {
             return event.tagName==='rest' || event.tagName==='note';
+        },
+
+        /**
+         * Return true if event is a note
+         * @param {DOMObject} event Event from MEI
+         * @returns {Boolean} 
+         */
+         isNote : function (event) {
+            return event.tagName==='note';
+        },
+
+        /**
+         * Return true if event is a rest
+         * @param {DOMObject} event Event from MEI
+         * @returns {Boolean} 
+         */
+         isRest : function (event) {
+            return event.tagName==='rest';
+        },
+
+        isColored : function (event) {
+            return event.getAttributeNS(null, 'colored')==="true";
+        },
+           
+        /**
+         * True if e1 and e2 are notes or rests at the same mensural level
+         * (e.g. minima or semibrevis)
+         * @param {DOMObject} e1 mei:note or mei:rest
+         * @param {DOMObject} e2 mei:note or mei:rest
+         * @returns {Boolean} 
+         */
+         leveleq : function (e1, e2) {
+            return e1.getAttributeNS(null, 'dur')===e2.getAttributeNS(null, 'dur');
+        },
+
+        /**
+         * Return an array of an event's position with respect to all mensural
+         * levels.
+         * @param {Number} startMinims Minim steps since the start of the
+         * counting period
+         * @parm {DOMObject} mens mei:mensur
+         */
+        beatUnitStructure : function (startMinims, mens){
+            var rem = startMinims;
+            var levels = this.minimStructures(this.mensurSummary(mens));
+            var units = [0, 0, 0, 0, 0, 0];
+            var leveln = levels.length
+            for(var i=0; i<leveln; i++){
+                var minims = levels[leveln-1-i];
+                var beats = Math.floor(rem / minims);
+                rem = rem % minims;
+                units[5-i] = beats;
+            }
+            units[1] = Math.floor(rem);
+            units[0] = rem%1;
+            return units;
         }
+
      }
  })();

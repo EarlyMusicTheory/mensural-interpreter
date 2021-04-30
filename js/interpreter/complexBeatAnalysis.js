@@ -26,56 +26,9 @@ var complexBeats = (function() {
             addBreveBoundariesForBlock(sectionBlocks[b]);
             let lastEvent = sectionBlocks[b].events[sectionBlocks[b].events.length-1];
             let lastDur = durIO.readDur(lastEvent);
-            let lastStartsAt = Number(lastEvent.getAttribute("startsAt"));
+            let lastStartsAt = durIO.readStartsAt(lastEvent);
             nextStart = lastStartsAt + lastDur;
         }
-    }
-
-    /**
-     * Return an array of an event's position with respect to all mensural
-     * levels.
-     * @param {Number} startMinims Minim steps since the start of the
-     * counting period
-     * @parm {DOMObject} mens mei:mensur
-     */
-    function beatUnitStructure(startMinims, mens){
-        var rem = startMinims;
-        var levels = rm.minimStructures(rm.mensurSummary(mens));
-        var units = [0, 0, 0, 0, 0, 0];
-        var leveln = levels.length
-        for(var i=0; i<leveln; i++){
-            var minims = levels[leveln-1-i];
-            var beats = Math.floor(rem / minims);
-            rem = rem % minims;
-            units[5-i] = beats;
-        }
-        units[1] = Math.floor(rem);
-        units[0] = rem%1;
-        return units;
-    }
-
-    /**
-     * Calculate the number of breves between two times, specified as
-     * the number of mensural units into the current section (so [subminims,
-     * minims, semibreves, breves, longs, maximas])
-     * @param {Array} struct2 Timepoint
-     * @param {Array} struct2 Timepoint
-     * @param {DOMObject} mens mei:mens element
-     * @return {Number} Number of breve beats separating the notes
-     */
-    function breveDifference(struct2, struct1, mens){
-        var minimStruct = rm.minimStructures(rm.mensurSummary(mens));
-        // var breves = 0; <-- not used anyway
-        var minims = 0;
-        var MiB = minimStruct[1];
-        for(var i=3; i<struct2.length; i++){
-            if(struct1[i]>struct2[i]){
-                minims += minimStruct[i-2]*(struct1[i] - struct2[i]) - minimStruct[i-1];
-            } else if (struct2[i]>struct1[i]){
-                minims += minimStruct[i-2]*(struct2[i] - struct1[i]);
-            }
-        }
-        return minims/MiB;
     }
 
     /**
@@ -105,13 +58,13 @@ var complexBeats = (function() {
             var firstPerfect = rm.firstPerfectLevel(mens);
             for(var e=0; e<events.length; e++){
                 var event = events[e];
-                if(event.tagName==='note' && !event.getAttributeNS(null, 'dur.ges')){
+                if(rm.isNote(event) && !durIO.readDur(event)){
                     // duration needs to be resolved
-                    if(event.getAttributeNS(null, 'mensurBlockStartsAt')){
+                    if(durIO.readBlockFrom(event)!==false){
                         // Most cases that are resolvable need beat numbers
                         var level = rm.noteInt(event);
-                        var blockFrom = Number(event.getAttributeNS(null, 'mensurBlockStartsAt'));
-                        var beatStructure = beatUnitStructure(blockFrom, mens);
+                        var blockFrom = durIO.readBlockFrom(event);
+                        var beatStructure = rm.beatUnitStructure(blockFrom, mens);
                         var beatOfUnit = beatStructure[level-3];
                         if(e && rm.divisionDot(events[e-1])){
                             // Division dot
@@ -133,7 +86,7 @@ var complexBeats = (function() {
                                     imperfect.midBeatImperfection(event, e, events, mens);
                             }
                         }
-                        if(!event.getAttributeNS(null, 'dur.ges') && rm.isAlterable(event, mens)) {
+                        if(!durIO.readDur(event) && rm.isAlterable(event, mens)) {
                             // Alterable? If not, why is this still here?
                             switch (beatStructure[level-2]) {
                                 case 0:
@@ -150,13 +103,13 @@ var complexBeats = (function() {
                             }
                         }
                         //
-                        if(event.getAttributeNS(null, 'dur.ges')) {
+                        if(durIO.readDur(event)) {
                             // We've got a new duration, so need to update start times
                             addStartTimesForBlock(sectionBlocks[b], nextStart);
                         }
                     } else {
                         // We may be able to do *something*
-                        if(events[e-1].tagname==='note' && rm.noteInt(events[e-1])>level){
+                        if(rm.isNote(events[e-1]) && rm.noteInt(events[e-1])>level){
                             // An note after a longer note is likely to
                             // start on the first beat of its unit. We can put
                             // exception logic in here, but for now
@@ -171,7 +124,7 @@ var complexBeats = (function() {
                             }
                         }
                     }
-                    if(!event.getAttributeNS(null, 'dur.ges')) {
+                    if(!durIO.readDur(event)) {
                         // We've got a new duration, so need to update start times
                         unresolved += 1;
                     }
@@ -182,7 +135,7 @@ var complexBeats = (function() {
             addStartTimesForBlock(sectionBlocks[b], nextStart);
             let lastEvent = sectionBlocks[b].events[sectionBlocks[b].events.length-1];
             let lastDur = durIO.readDur(lastEvent);
-            let lastStartsAt = Number(lastEvent.getAttribute("startsAt"));
+            let lastStartsAt = durIO.readStartsAt(lastEvent);
             nextStart = lastStartsAt + lastDur;
             addBreveBoundariesForBlock(sectionBlocks[b]);
         }
@@ -206,8 +159,7 @@ var complexBeats = (function() {
         for(var e=0; e<events.length; e++){
             var event = events[e];
             if(rm.noteOrRest(event)){
-                event.setAttributeNS(null, 'mensurBlockStartsAt', blockFrom);
-                event.setAttributeNS(null, 'startsAt', startsAt);
+                durIO.setStartsAt(event, blockFrom, startsAt);
                 var dur = durIO.readDur(event);
                 if(dur){
                     blockFrom += dur;
@@ -231,17 +183,11 @@ var complexBeats = (function() {
         for(var e=0; e<events.length; e++){
             var event = events[e];
             if(rm.noteOrRest(event)){
-                var tpos = event.getAttributeNS(null, 'mensurBlockStartsAt');
-                if(tpos){
-                    var beatStructure = beatUnitStructure(tpos, mens);
-                    event.setAttributeNS(null, 'beatPos', beatStructure.join(', '));
-                    if(beatStructure[0]===0 && beatStructure[1]===0 && beatStructure[2]===0){
-                        event.setAttributeNS(null, 'onTheBreveBeat', beatStructure[3]);
-                    } else if(!(beatStructure[5]===prevBeatStructure[5]
-                                            && beatStructure[4]===prevBeatStructure[4]
-                                            && beatStructure[3]===prevBeatStructure[3])){
-                        event.setAttributeNS(null, 'crossedABreveBeat', breveDifference(beatStructure, prevBeatStructure, mens));
-                    }
+                var tpos = durIO.readBlockFrom(event);
+                if(tpos!==false){
+                    var beatStructure = durIO.setBeatPos(event, tpos, mens);
+                    var minimStruct = rm.minimStructures(rm.mensurSummary(mens));
+                    durIO.setBreveBoundaries(event, prevBeatStructure, beatStructure, minimStruct);
                     prevBeatStructure = beatStructure;
                 } else {
                     return;
@@ -258,8 +204,8 @@ var complexBeats = (function() {
             let evLength = block.events.length;
             let lastEvent = block.events[evLength-1];
             let lastDur = durIO.readDur(lastEvent);
-            block.dur = Number(lastEvent.getAttributeNS(null, "mensurBlockStartsAt")) + lastDur;
-            block.totaldur = Number(lastEvent.getAttributeNS(null, "startsAt")) + lastDur;
+            block.dur = durIO.readBlockFrom(lastEvent) + lastDur;
+            block.totaldur = durIO.readStartsAt(lastEvent) + lastDur;
         }
     }
 
@@ -288,7 +234,7 @@ var complexBeats = (function() {
                 nextRemaining = afterTheEasyBits(sectionBlocks);
             }
 
-            durIO.addDurGes(sectionBlocks);
+            durIO.setDurGesPerBlock(sectionBlocks);
 
             updateBlocks(sectionBlocks);
 
