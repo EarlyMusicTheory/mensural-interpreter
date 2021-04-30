@@ -1,0 +1,18 @@
+---
+layout: home
+title: Test
+---
+
+<div>
+    <h1>Test examples</h1>
+    <p>We provide a number of test examples:</p>
+    <ul>
+    {% for test in site.data.examples.examples[0].tests %}
+        <li>
+            <a href="{{site.url}}/interpreter?url={{site.data.examples.examples[0].url}}{{test.url}}">
+                {{test.label}}
+            </a>
+        </li>
+    {% endfor %}
+    </ul>
+</div>

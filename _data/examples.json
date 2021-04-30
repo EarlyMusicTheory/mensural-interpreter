@@ -1,0 +1,15 @@
+{
+  "examples":
+  [
+    {"id" : "test",
+    "url": "examples/tests/",
+    "tests":
+      [
+        {
+          "label": "Alteration",
+          "url": "AltExample.xml"
+        }
+      ]
+    }
+  ]
+}

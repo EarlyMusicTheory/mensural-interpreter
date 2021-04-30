@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="https://music-encoding.org/schema/4.0.1/mei-Mensural.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="https://music-encoding.org/schema/4.0.1/mei-Mensural.rng" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<mei meiversion="4.0.1" xmlns="http://www.music-encoding.org/ns/mei">
+    <meiHead meiversion="4.0.1">
+        <fileDesc>
+            <titleStmt>
+                <title>Example of 'alteration'</title>
+                <editor>Martha Thomae</editor>
+            </titleStmt>
+            <pubStmt>
+                <date>2019-11-15</date>
+                <publisher>Music Encoding Initiative</publisher>
+            </pubStmt>
+            <notesStmt>
+                <annot>The bottom staff, together with the dotted barlines, is used here to help visualizing the durational values of the notes in the upper staff.</annot>
+            </notesStmt>
+        </fileDesc>
+    </meiHead>
+    <music meiversion="4.0.1">
+        <body>
+            <mdiv>
+                <score>
+                    <scoreDef>
+                        <staffGrp>
+                            <staffDef n="1" label="voice" notationtype="mensural.white" lines="5" clef.shape="G" clef.line="2" 
+                                modusminor="3" tempus="3" prolatio="2" mensur.sign="O"/>
+                            <staffDef n="2" label="reference" notationtype="mensural.white" lines="5" clef.shape="G" clef.line="2" 
+                                modusminor="3" tempus="2" prolatio="2" mensur.sign="C"/>
+                        </staffGrp>
+                    </scoreDef>
+                    <section>
+                        <staff n="1">
+                            <layer>
+                                <note dur="longa"/>
+                                <note dur="brevis"/>
+                                <note dur="brevis"/>
+                                <note dur="longa"/>
+                            </layer>
+                        </staff>
+                        <staff n="2">
+                            <layer>
+                                <note dur="brevis" pname="a" oct="4"/>
+                                <note dur="brevis" pname="a" oct="4"/>
+                                <note dur="brevis" pname="a" oct="4"/>
+                                <barLine form="dashed"/>
+                                <note dur="brevis" pname="a" oct="4"/>
+                                <barLine form="dashed"/>
+                                <note dur="brevis" pname="a" oct="4"/>
+                                <note dur="brevis" pname="a" oct="4"/>
+                                <barLine form="dashed"/>
+                                <note dur="brevis" pname="a" oct="4"/>
+                                <note dur="brevis" pname="a" oct="4"/>
+                                <note dur="brevis" pname="a" oct="4"/>
+                                <barLine form="dashed"/>
+                            </layer>
+                        </staff>
+                    </section>
+                </score>
+            </mdiv>
+        </body>
+    </music>
+</mei>
+
