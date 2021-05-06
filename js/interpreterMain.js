@@ -150,8 +150,4 @@ $(document).ready(function(){
         vrvInterface.applyZoom();
     });
 
-    $("#elementInfo").click(function() {
-        $(this).empty();
-    });
-
 });

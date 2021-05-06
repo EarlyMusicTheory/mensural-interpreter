@@ -10,7 +10,7 @@ var vrvInterface = (function () {
     var page = 1;
     var svg;
 
-    const elsToSelect = ".note,.rest";
+    const elsToSelect = ".note,.rest,.dot,.mensur";
     const blue = "#007bff";
     const red = "#dc3545";
 
@@ -129,13 +129,21 @@ var vrvInterface = (function () {
             }
             
             let elCode = makeXmlCode(currentElement.outerHTML);
-            //$(elementInfo).after($(elCode).html());
-
+            
+            let heading = $("<h3>Element info</h3>");
+            let hideButton = $("<button id='hideInfo' class='btn btn-secondary btn-sm float-right mt-1'>X</button>");
+            
             $("#elementInfo").html(elementInfo);
+            $(elementInfo).before(heading);
+            $("h3").before(hideButton);
             $("#attList").after(elCode);
             shownEvent = eventEl;
             nextEvent = $(eventEl).next();
             prevEvent = $(eventEl).prev();
+
+            $("#hideInfo").click(function() {
+                hideDetails();
+            });
         }
     }
 
