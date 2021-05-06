@@ -17,7 +17,8 @@ var post = (function() {
             {
                 var event = blocks[b].events[e];
                 var previousSibling = event.previousElementSibling;
-                if (Number.parseInt(event.getAttributeNS(null, "onTheBreveBeat"), 10) === 0 && previousSibling) 
+                // it needs to be decided when a barline gets drawn
+                if (event.getAttributeNS(null, "onTheBreveBeat") && previousSibling) 
                 {
                     let line = meiDoc.doc.createElementNS(meiNS, "barLine");
                     
