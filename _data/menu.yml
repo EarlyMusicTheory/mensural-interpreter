@@ -11,3 +11,7 @@ menu:
     - id: tests
       label: 'Tests'
       url: '/tests'
+
+    - id: rules
+      label: 'Rules'
+      url: '/rules'
