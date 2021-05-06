@@ -171,11 +171,12 @@ var durIO = (function() {
         writePerfection : function (el, mens, rule, defaultMinims = false) {
             durIO.writeDur(rm.simpleMinims(el, mens), el);
             el.setAttributeNS(null, 'dur.quality', 'perfecta');
-            if(!rm.regularlyPerfect(el, mens))
-            {
+            // it doesn't make sense, but maybe Verovio needs it...
+            //if(!rm.regularlyPerfect(el, mens))
+            //{
                 el.setAttributeNS(null, 'num', '2');
                 el.setAttributeNS(null, 'numbase', '3');
-            }
+            //}
             if (defaultMinims === true)
             {
                 el.setAttributeNS(null, 'defaultminims', rm.simpleMinims(el, mens));
