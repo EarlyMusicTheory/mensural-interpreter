@@ -138,13 +138,13 @@ var basic = (function() {
 			var events = sectionBlocks[b].events;
 			var mens = sectionBlocks[b].mens;
 			var menssum = rm.mensurSummary(mens);
-			var alterableLevels = [2, 2, 2].concat(menssum).concat([2]);
+			//var alterableLevels = [2, 2, 2].concat(menssum).concat([2]);
 			var perfectLevels = [2, 2, 2, 2].concat(menssum);
 			for(var e=0; e<events.length; e++){
 				var event = events[e];
 				if(rm.isNote(event) && !durIO.readDur(event)){
 					var level = rm.noteInt(event);
-					if(alterableLevels[level]===3){
+					if(rm.isAlterable(event, mens)){
 						// The level is alterable.
 						// The next note must be the next level up
 						if(e<events.length-1 && rm.noteInt(events[e+1])==level+1){
@@ -157,7 +157,7 @@ var basic = (function() {
 								// syncopation), not possible to be imperfected
 								var augmentedDot = e+1<sectionBlocks[b].events.length
 										&& rm.augDot(sectionBlocks[b].events[e+1]);
-								durIO.writeDurWithRule(event, mens, 'noSimpleAlteration', augmentedDot);
+								durIO.writeDurWithRule(event, mens, 'unalteredImperfectAfterLarger', augmentedDot);
 							}
 							for(let i=e-1; i>=0; i--){
 								if(!durIO.readDur(events[i])){
@@ -179,11 +179,13 @@ var basic = (function() {
 									break;
 								} 
 							}
-						} else if(perfectLevels[level]===2){
+						} 
+						else if(perfectLevels[level]===2)
+						{
 							// Now we can resolve this rhythm
 							var augmentedDot = e+1<sectionBlocks[b].events.length
 									&& rm.augDot(sectionBlocks[b].events[e+1]);
-							durIO.writeDurWithRule(event, mens, 'noSimpleAlteration2', augmentedDot);
+							durIO.writeDurWithRule(event, mens, 'unalteredImperfect', augmentedDot);
 						}
 					}
 				}
