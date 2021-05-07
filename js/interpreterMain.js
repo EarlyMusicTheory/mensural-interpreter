@@ -109,6 +109,7 @@ $(document).ready(function(){
             complexBeats.addStartTimes(meiFile);
             meiFile.renewBlob();
             basicAnalysisDone = true;
+            $("#beatIndependent").prop('disabled', true);
             loadData();
         }
     });
@@ -119,6 +120,7 @@ $(document).ready(function(){
             basic.beatIndependentDurations(meiFile);
             complexBeats.addStartTimes(meiFile);
             basicAnalysisDone = true;
+            $("#beatIndependent").prop('disabled', true);
         }
 
         if(basicAnalysisDone===true && complexAnalysisDone===false)
@@ -128,6 +130,7 @@ $(document).ready(function(){
             meiFile.renewBlob();
             loadData();
             complexAnalysisDone = true;
+            $("#complexBeatAnalysis").prop('disabled', true);
         }
     });
 
