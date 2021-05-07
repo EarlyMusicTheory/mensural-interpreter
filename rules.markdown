@@ -34,6 +34,44 @@ unalteredImperfect
 I.2.b.antesim
 : If a regularly perfect note is followed immediately by a note or rest at the same level, the former cannot be imperfected.
 
-## Complex analysis depending on beat positions
+## Analysis depending on beat positions
 
-[will follow]
+### Imperfection
+
+I.3
+
+I.4a
+
+I.4b
+
+I.4bi
+
+I.4bii
+
+I.5
+
+I.5-add
+
+I.5-literalunits
+
+I.6
+
+I.6-literalunits
+: Trusting in alteration
+
+I.8
+
+I.9a
+
+I.9b
+
+### Alteration
+
+A.1
+: An alterable note on the second beat gets altered.
+
+A.2
+
+A.xxx
+
+A.xxz
