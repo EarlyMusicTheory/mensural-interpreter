@@ -57,7 +57,7 @@ var MEIdoc = (() => {
 	 * @param {Object} prevMens The last mensuration of the previous block
 	 * (this is the default for the first section of hte new block in some
 	 * cases, if none is specified).
-	 * @return {Array[block]} Array of mensurally coherent blocks
+	 * @return {Array<Object>} Array of mensurally coherent blocks
 	 */
 	function getEventsByMensurationForSection(section, meiDoc, prevMens){
 		if(meiDoc.doc.createNodeIterator){
