@@ -5,3 +5,8 @@ _site
 vendor
 
 js/interpreter/wip/
+
+node_modules/
+doc/
+
+package-lock.json
