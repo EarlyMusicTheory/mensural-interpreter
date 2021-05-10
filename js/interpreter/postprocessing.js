@@ -1,14 +1,25 @@
 "use strict";
 
 /**
- * @module interpreter/post
- * Contains postprocessing wrap up
+ * @namespace post
+ * @desc Contains postprocessing wrap up, like drawing barlines
  */
 
 var post = (function() {
     /** private */
 
+    /**
+     * MEI namespace for element generation
+     */
     const meiNS = "http://www.music-encoding.org/ns/mei";
+
+    /**
+     * Adds barlines to an interpreted MEIdoc
+     * Dotted barlines within blocks, solid barlines at the end of a block
+     * @param {MEIdoc} meiDoc 
+     * @memberof post
+     * @inner
+     */
     function addBarLines (meiDoc){
         var blocks = meiDoc.blocks;
         for (let b = 0; b < blocks.length; b++)
@@ -40,7 +51,12 @@ var post = (function() {
     }
 
     return{
-        /** public */
+        
+        /**
+         * Runs postprocessing functions
+         * @param {MEIdoc} meiDoc 
+         * @memberof post
+         */
         run : function (meiDoc) {
             addBarLines(meiDoc);
         }

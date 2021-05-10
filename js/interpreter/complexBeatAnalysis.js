@@ -1,15 +1,20 @@
 /** @fileoverview  */
 "use strict";
 
-/** @module interpreter/complexBeats */
+/** 
+ * @namespace complexBeats
+ * @desc Functionality to add start times and run analysis depending on beat positions
+*/
 
 var complexBeats = (function() {
 
     /**
-     * @summary If event[n] has both a duration assigned to it and a start time,
+     * If event[n] has both a duration assigned to it and a start time,
      * adds a start time for event[n+1]
      * @param {Array} sectionBlocks Array of all the coherent areas of
      * mensurations in a section
+     * @memberof complexBeats
+     * @inner
      */
     function addAllStartTimes(sectionBlocks){
         var nextStart = 0;
@@ -35,7 +40,8 @@ var complexBeats = (function() {
      * More complex stages, for where knowledge is partial and patchy
      * @param {Array} sectionBlocks Array of all the coherent areas of
      * mensurations in a section
-     *
+     * @memberof complexBeats
+     * @inner
      */
     function afterTheEasyBits(sectionBlocks){
         // Now we know many durations and starting points, but not all,
@@ -149,6 +155,8 @@ var complexBeats = (function() {
      * mensuration sign
      * @param {Number} startsAtValue manually set starting position
      * @returns {Number} last starting position
+     * @memberof complexBeats
+     * @inner
      */
     function addStartTimesForBlock(block, startsAtValue){
         var blockFrom = 0;
@@ -174,6 +182,8 @@ var complexBeats = (function() {
      * also singling out which breve beat an event falls on and whether it
      * crosses one (adds @beatPos, @onTheBreveBeat and @crossedABreveBeat)
      * @param {Object} block 
+     * @memberof complexBeats
+     * @inner
      */ 
     function addBreveBoundariesForBlock(block){
         var blockFrom = 0; // <- unused?
@@ -196,6 +206,12 @@ var complexBeats = (function() {
         }
     }
 
+    /**
+     * Updates block info with durations
+     * @param {Array<Object>} sectionBlocks 
+     * @memberof complexBeats
+     * @inner
+     */
     function updateBlocks(sectionBlocks)
     {
         // update block info
@@ -210,8 +226,12 @@ var complexBeats = (function() {
     }
 
     return {
-        /** @public */
-
+        
+        /**
+         * Adds start times to blocks, e.g. after a simple analysis.
+         * @param {MEIdoc} meiDoc 
+         * @memberof complexBeats
+         */
         addStartTimes : function(meiDoc) {
             var sectionBlocks = meiDoc.blocks;
             // add start times as far as possible
@@ -220,6 +240,11 @@ var complexBeats = (function() {
             updateBlocks(sectionBlocks);
         },
 
+        /**
+         * Runs complex analysis depending of beat positions
+         * @param {MEIdoc} meiDoc  
+         * @memberof complexBeats
+         */
         complexAnalysis : function(meiDoc) {
             var sectionBlocks = meiDoc.blocks;
 

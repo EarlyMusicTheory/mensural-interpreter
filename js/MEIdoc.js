@@ -134,9 +134,9 @@ var MEIdoc = (() => {
 	}
 
 	/** 
-	 * @private
 	 * Name space manager function. Takes a prefix and returns the URL for
 	 * that name space. In this case, though, pretty much hard-wired.
+	 * @private
 	 * @param {String} prefix The namespace prefix to retrieve as a URL
 	 */
 	function nsResolver(prefix){
@@ -147,8 +147,8 @@ var MEIdoc = (() => {
 	}
 
     /**
+	 * Given a proportion-specifying element, give its implied multiplier
 	 * @private
-     * Given a proportion-specifying element, give its implied multiplier
      * @param {DOMObject} el proportion element
      * @returns {Number}
      */
@@ -161,11 +161,13 @@ var MEIdoc = (() => {
 
     /**
      * @class
+	 * @public
      * @member {string} text
      * @member {DOMObject} doc
 	 * @member {Blob} blob
      * @member {Array} blocks
      * @member {Object.<string,Object>} idDictionary return block by event id
+	 * @member {Object.<string,Object>} eventDict id to xml element
      * @method appendToIdDictionary
      * @method getBlocksFromSections
      */
@@ -202,6 +204,9 @@ var MEIdoc = (() => {
 		get blob() {
 			return this.meiBlob;
 		}
+		/**
+		 * renew the blob after changes on the document tree
+		 */
 		renewBlob() {
 			this.meiBlob = new Blob([this.text], {type: 'text/xml'});
 		}
@@ -219,9 +224,19 @@ var MEIdoc = (() => {
         set idDictionary(idDictObj) {
             this.idDict = idDictObj;
         }
+		/**
+		 * Adds an entry to the idDictionary
+		 * @param {String} id 
+		 * @param {Object} block 
+		 */
         appendToIdDictionary(id, block) {
             this.idDict[id] = block;
         }
+		/**
+		 * Retrieves a block via the xml:id of one of its events
+		 * @param {String} eventId 
+		 * @returns {Object} block
+		 */
         getBlockByEventId(eventId) {
             return this.idDictionary[eventId];
         }
@@ -229,6 +244,10 @@ var MEIdoc = (() => {
 		get eventDict () {
 			return this.eventIdDict;
 		}
+
+		/**
+		 * builds a dictionary to access an element via its xml:id
+		 */
 		initEventDict()  {
 			var bucket = this.doc.getElementsByTagName('*');
 			for (let element of bucket)
@@ -248,6 +267,9 @@ var MEIdoc = (() => {
 			}
 		}
         
+		/**
+		 * Build mensurally coherent blocks from current document
+		 */
         getBlocksFromSections() {
 			var sections = getAtomicSections(this.doc);
 			var layers = []; 
@@ -274,6 +296,7 @@ var MEIdoc = (() => {
 
         /**
          * Given a block index number, finds the proportion of that block and returns the factor.
+		 * @public
          * @param {integer} blockIndex mei:note or mei:rest
          * @returns {Number} 
          */
@@ -298,6 +321,7 @@ var MEIdoc = (() => {
 		 * * @todo maybe: delete empty <dir>
 		 * * @todo maybe: delete empty <verse>
 		 * * delete note/@lig if it is identical to ligature/@form
+		 * @public
 		 */
 		preprocess(){
 			/** put first clef and keySig into staffDef */
@@ -316,6 +340,7 @@ var MEIdoc = (() => {
 	// preprocessing functions
 	/**
 	 * If a staff starts with clef and keySig, move it to the staffDef
+	 * @private
 	 * @param {DOMElement} staffElement 
 	 */
 	function tidyClefKeySig(staffElement, doc)
@@ -339,6 +364,7 @@ var MEIdoc = (() => {
 
 	/**
 	 * Get the mensuration info from staffDef and put it into the layer
+	 * @private
 	 * @param {DOMElement} staffElement 
 	 */
 	function getMensFromStaffDef(staffElement, doc)
@@ -379,6 +405,7 @@ var MEIdoc = (() => {
 	 * Should remove redundant ligature form and note lig attributes.
 	 * For now, ligatures will be removed completely for better alignment
 	 * @todo Remove just redundant visual attributes when Verovio rendering is properly done
+	 * @private
 	 * @param {DOMElement} staffElement 
 	 */
 	function removeLig(staffElement)
@@ -407,6 +434,7 @@ var MEIdoc = (() => {
 	/**
 	 * Adjacent <mensur> <proport> elements get merged into one <mensur> element
 	 * (avoids misplacments in rendering)
+	 * @private
 	 * @param {DOMElement} staffElement 
 	 */
 	function mergeAdjacentMensProp(staffElement)

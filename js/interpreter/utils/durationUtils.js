@@ -2,8 +2,8 @@
 "use strict";
 
 /** 
- * @module interpreter/utils/durIO
- * Functions for reading and writing durations for events
+ * @namespace durIO
+ * @desc Functions for reading and writing durations for events, encapsules custom MEI ouput
  */
 
 var durIO = (function() {
@@ -14,6 +14,8 @@ var durIO = (function() {
      * @param {Integer} a
      * @param {Integer} b
      * @return {Integer}
+     * @memberof durIO
+     * @inner
      */
     function gcd(a,b) {
         // Find the highest common factor (for tidy num/numbase values)
@@ -30,6 +32,8 @@ var durIO = (function() {
      * @param {Array} struct2 Timepoint
      * @param {Array} minimStruct beat structure in minims
      * @return {Number} Number of breve beats separating the notes
+     * @memberof durIO
+     * @inner
      */
     function breveDifference(struct2, struct1, minimStruct){
         // var breves = 0; <-- not used anyway
@@ -53,12 +57,12 @@ var durIO = (function() {
         /** public */
 
         /**
-         * Given a count of beats, writes dur.ges to an element (appends 'b'
+         * Given a count of beats, writes dur.itermediate to an element (appends 'b'
          * and, if there's a dot of augmentation, multiplies by 1.5)
          * @param  {Integer} num Core duration in minims
          * @param {DOMElement} el mei:note
          * @param {Boolean} dot Is there a dot of augmentation?
-         * 
+         * @memberof durIO
          */
         writeDur : function (num, el, dot) {
             if(dot) {
@@ -67,6 +71,13 @@ var durIO = (function() {
             el.setAttributeNS(null, 'dur.intermediate', num+'b');
         },
 
+        /**
+         * Given an element with dur.intermediate, writes dur.ges to an element,
+         * applying the proportion multiplier.
+         * @param {DOMElement} el 
+         * @param {Number} propMultiplier 
+         * @memberof durIO
+         */
         writeDurGes : function (el, propMultiplier) {
             var dur = this.readDur(el);
             var scaledDur = dur * propMultiplier;
@@ -77,7 +88,7 @@ var durIO = (function() {
         },
         
         /**
-         * Write duration and a rule, without modification
+         * Writes duration and a rule, modifications can be set if necessary,
          * e.g. for ante sim
          * @param {DOMElement} el 
          * @param {DOMElement} mens
@@ -85,6 +96,7 @@ var durIO = (function() {
          * @param {Boolean} dot is there a dot of augmentation? default false
          * @param {Number} modNum numerator of duration modifier
          * @param {Number} modDenom denominator of duration modifier
+         * @memberof durIO
          */
         writeDurWithRule : function (el, mens, rule, dot = false, modNum = 1, modDenom = 1) {
             let modifier = modNum / modDenom;
@@ -106,6 +118,7 @@ var durIO = (function() {
          * @param {DOMElement} mens mei:mensur
          * @param {String} rule Reference for rule used to decide this
          * (written to element as @rule)
+         * @memberof durIO
          *
          */
         writeSimpleImperfection : function (el, mens, rule) {
@@ -127,6 +140,7 @@ var durIO = (function() {
          * @param {String} rule Reference for rule used to decide this
          * (written to element as @rule)
          * @param {Boolean} defaultMinims add default minims?
+         * @memberof durIO
          */
         writeImperfection : function (el, reduceBy, mens, rule, defaultMinims = false) {
             var defaultDur = rm.simpleMinims(el, mens);
@@ -150,6 +164,7 @@ var durIO = (function() {
          * @param {DOMElement} mens mei:mensur
          * @param {String} rule Reference for rule used to decide this
          * (written to element as @rule)
+         * @memberof durIO
          */
         writeAlteration : function (el, mens, rule) {
             //	el.setAttributeNS(null, 'dur.ges', (2 * simpleMinims(el, mens)) + 'b');
@@ -162,11 +177,13 @@ var durIO = (function() {
         },
 
         /**
-         * Writes perfection, if note is regularly perfect, no num/numbase will be added
+         * Writes perfection, 
+         * (if note is regularly perfect, no num/numbase will be added, somehiw Verovio needs it anyway)
          * @param {DOMElement} el 
          * @param {DOMElement} mens 
          * @param {String} rule 
          * @param {Boolean} defaultMinims
+         * @memberof durIO
          */
         writePerfection : function (el, mens, rule, defaultMinims = false) {
             durIO.writeDur(rm.simpleMinims(el, mens), el);
@@ -189,12 +206,20 @@ var durIO = (function() {
          * part
          * @param {DOMElement} mei:note or mei:rest
          * @return {Integer}
+         * @memberof durIO
          */
         readDur : function (el) {
             var str = el ? el.getAttributeNS(null, 'dur.intermediate') : null;
             return str ? Number(str.substring(0, str.length-1)) : false;
         },
 
+        /**
+         * Given an event with dur.ges of the form [0-9]*b, return the integer
+         * part
+         * @param {DOMElement} el 
+         * @returns {Number}
+         * @memberof durIO
+         */
         readDurGes : function (el) {
             var str = el ? el.getAttributeNS(null, 'dur.ges') : null;
             return str ? Number(str.substring(0, str.length-1)) : false;
@@ -205,7 +230,10 @@ var durIO = (function() {
          * calculated. The returned object has attibutes for definite,
          * bareMinimum (including possible extremes of imperfection),
          * approximateMinimum (less extreme) and approximation ('most likely')
-         * 
+         * @param {Array<DOMElement>} events
+         * @param {DOMElement} mens
+         * @returns {Object}
+         * @memberof durIO
          */
          windowDuration : function (events, mens) {
             var duration = {definite: 0, bareMinimum: 0, approximateMinimum: 0, approximation: 0};
@@ -232,35 +260,58 @@ var durIO = (function() {
         },
 
         /**
-         * Writes a comment during interpretation to an element
+         * Writes a @comment during interpretation to an element
          * @param {DOMElement} el 
          * @param {String} comment 
+         * @memberof durIO
          */
         writeComment : function (el, comment) {
             el.setAttributeNS(null, 'comment', comment);
         },
         
         /**
-         * Sets the starting position of an event for a block and the whole part
+         * Sets the starting position of an event for a block (mensurBlockStartsAt) 
+         * and the whole part (startsAt)
          * @param {DOMElement} el 
          * @param {Number} blockFrom start of event in block
          * @param {Number} startsAt start of event per part
+         * @memberof durIO
          */
         setStartsAt : function (el, blockFrom, startsAt) {
             el.setAttributeNS(null, 'mensurBlockStartsAt', blockFrom);
             el.setAttributeNS(null, 'startsAt', startsAt);
         },
 
+        /**
+         * Reads startsAt attribute from element
+         * @param {DOMElement} el 
+         * @returns {Number}
+         * @memberof durIO
+         */
         readStartsAt : function (el) {
             var startsAt = el ? el.getAttribute("startsAt"): null;
             return startsAt ? Number(startsAt) : false;
         },
 
+        /**
+         * Reads mensurBlockStartsAt attribute from element
+         * @param {DOMElement} el 
+         * @returns {Number}
+         * @memberof durIO
+         */
         readBlockFrom : function (el) {
             var blockFrom = el ? el.getAttribute("mensurBlockStartsAt"): null;
             return blockFrom ? Number(blockFrom) : false;
         },
         
+        /**
+         * Retrieves beat structure and writes it to @beatPos
+         * @param {DOMElement} el 
+         * @param {Number} blockPos Current starting position within block
+         * @param {DOMElement} mens 
+         * @returns {Array}
+         * @memberof durIO
+         */
         setBeatPos : function (el, blockPos, mens) {
             var beatStructure = rm.beatUnitStructure(blockPos, mens);
             el.setAttributeNS(null, 'beatPos', beatStructure.join(', '));
@@ -268,6 +319,15 @@ var durIO = (function() {
             return beatStructure;
         },
 
+        /**
+         * Compares two beat structures and sets the attributes
+         * @onTheBreveBeat and @crossedABreveBeat
+         * @param {DOMElement} el 
+         * @param {Array} prevBeatStructure 
+         * @param {Array} beatStructure 
+         * @param {Array} minimStruct 
+         * @memberof durIO
+         */
         setBreveBoundaries : function (el, prevBeatStructure, beatStructure, minimStruct) {
             if(beatStructure[0]===0 && beatStructure[1]===0 && beatStructure[2]===0)
             {
@@ -281,6 +341,12 @@ var durIO = (function() {
             }
         },
 
+        /**
+         * Sets @dur.ges for each event per block according to the
+         * provided block proportion multiplier
+         * @param {meiDoc.block} sectionBlocks 
+         * @memberof durIO
+         */
         setDurGesPerBlock : function (sectionBlocks) {
             // write dur.ges
             for (let block of sectionBlocks)

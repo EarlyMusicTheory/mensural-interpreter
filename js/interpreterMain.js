@@ -1,13 +1,23 @@
 "use strict";
 
+/** @global current url */
 var currentUrl = new URL(window.location.href);
+/** @global current base url */
 var baseUrl = currentUrl.origin + currentUrl.pathname;
+/** @global parameters of current url */
 var currentParams = currentUrl.searchParams;
-var meiUrl;
+//var meiUrl;
+/** @global {MEIdoc} contains the current used MEI document */
 var meiFile = new MEIdoc();
+/** @global {Boolean} if basic analysis is done */
 var basicAnalysisDone = false;
+/** @global {Boolean} if complex analysis is done */
 var complexAnalysisDone = false;
 
+/**
+ * Fetches an existing mei file from any url
+ * @param {String} meiUrl 
+ */
 function fetchMEI(meiUrl) {
     if(meiUrl)
     {
@@ -24,6 +34,9 @@ function fetchMEI(meiUrl) {
     }
 }
 
+/**
+ * Prints block data into a table and shows it within the blocks modal
+ */
 function getSectionBlocks() {
     if (meiFile.blocks.length > 0) {
         $("#blockCount").text(meiFile.blocks.length);
@@ -45,11 +58,19 @@ function getSectionBlocks() {
     }
 }
 
+/**
+ * Loads meiFile with Verovio and adds MEI blob to download button
+ */
 function loadData() {
     vrvInterface.loadData(meiFile.text);
     $("#download").attr("href", URL.createObjectURL(meiFile.blob));
 }
 
+/**
+ * Wraps an xml string into \<code\> elements to display code highlighting
+ * @param {String} htmlString 
+ * @returns {String}
+ */
 function makeXmlCode(htmlString) {
     let ltString = htmlString.replace(/</gm,"&lt;");
     let gtString = ltString.replace(/>/gm, "&gt;");
@@ -59,7 +80,7 @@ function makeXmlCode(htmlString) {
 
 $(document).ready(function(){
 
-    meiUrl = currentParams.get("url");
+    var meiUrl = currentParams.get("url");
     if(meiUrl) 
     {
         fetchMEI(meiUrl);

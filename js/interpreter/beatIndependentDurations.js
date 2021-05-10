@@ -1,24 +1,20 @@
 /** @fileoverview Contains functionality to analyse durations that aren't dependant on any beat positions. */
 "use strict";
 
-/** @module interpreter/beatIndependentDurations */
-
-/**
- * Available functions:
- * * labelRests
- * * actOnColoration
- * * actOnDots
- * * allUnalterableImperfectLevels
- * * simplestAlterations
- * * anteSim
+/** 
+ * @namespace basic
+ * @desc Contains functionality to analyse durations that aren't dependant on any beat positions.
  */
 
 var basic = (function() {
+
 	/**
 	 * Since rests can't be altered or imperfected, all rests can be
 	 * resolved immediately
 	 * @param {Array} sectionBlocks Array of all the coherent areas of
      * mensurations in a section
+	 * @memberof basic
+	 * @inner
 	 */
 	function labelRests(sectionBlocks){
 		for(var b=0; b<sectionBlocks.length; b++)
@@ -40,11 +36,12 @@ var basic = (function() {
 	}
 
 	/**
-	 * @private
 	 * Colored notation is assumed to be simple duple and labelled accordingly
 	 * @todo Take minor color into account?
 	 * @param {Array} sectionBlocks Array of all the coherent areas of
      * mensurations in a section
+	 * @memberof basic
+	 * @inner
 	 */
 	function actOnColoration(sectionBlocks){
 		for(var b=0; b<sectionBlocks.length; b++)
@@ -66,11 +63,11 @@ var basic = (function() {
 	}
 
 	/**
-	 * @private
 	 * Simple processing of dots of augmentation (other dots ignored)
-	 * @todo create a writePerfection() function?
 	 * @param {Array} sectionBlocks Array of all the coherent areas of
      * mensurations in a section
+	 * @memberof basic
+	 * @inner
 	 */
 	function actOnDots(sectionBlocks){
 		for(var b=0; b<sectionBlocks.length; b++){
@@ -91,11 +88,12 @@ var basic = (function() {
 	}
 
 	/**
-	 * @private
 	 * Resolves durations for any note that is not regularly perfect and
 	 * that is not a direct part of a ternary note (so isn't alterable).
 	 * @param {Array} sectionBlocks Array of all the coherent areas of
      * mensurations in a section
+	 * @memberof basic
+	 * @inner
 	 */
 	function allUnalterableImperfectLevels(sectionBlocks){
 		// Anything imperfect and with an imperfect next longer note is trivial
@@ -120,7 +118,6 @@ var basic = (function() {
 	}
 
 	/**
-	 * @private
 	 * Resolves any alterations that can be treated as simple local note
 	 * patterns
 	 * Rule A.1 requires us to know the mensural position of the note,
@@ -131,6 +128,8 @@ var basic = (function() {
 	 * or rest of the perfect unit next larger is altered.
 	 * @param {Array} sectionBlocks Array of all the coherent areas of
      * mensurations in a section
+	 * @memberof basic
+	 * @inner
 	 *
 	 */ 
 	function simplestAlterations(sectionBlocks){
@@ -194,13 +193,14 @@ var basic = (function() {
 	}
 
 	/**
-	 * @private
 	 * If a note is followed immediately by a note or rest at the same
 	 * level, the former cannot be imperfected. Such
 	 * notes can have duration labelled immediately.
 	 * @see leveleq
 	 * @param {Array} sectionBlocks Array of all the coherent areas of
      * mensurations in a section
+	 * @memberof basic
+	 * @inner
 	 */
 	function anteSim(sectionBlocks){
 		for(var b=0; b<sectionBlocks.length; b++){
@@ -223,15 +223,14 @@ var basic = (function() {
 
 	return {
 		/** 
-		 * @public
 		 * Runs resolution steps that aren't dependant on any rhythms or beat
 		 * positions already having been solved. These are: rests (which can't
 		 * be altered or imperfected anyway); coloration; dots of
 		 * augmentation; notes below the first perfect/alterable level;
 		 * trivial alterations (based on pattern, not beat position); ante
 		 * simile.
-		 *
 		 * @param {MEIdoc} meiDoc mei document
+		 * @memberof basic
 		 */
 		beatIndependentDurations : function(meiDoc) {
 			var sectionBlocks = meiDoc.blocks;

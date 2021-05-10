@@ -5,32 +5,33 @@
  "use strict";
 
  /** 
-  * @module interpreter/utils/rm
+  * @namespace rm
+  * @desc Contains functions that know something about mensuration, simple rhythms and musical events.
+  * Encapsulates basic MEI knowledge.
   */
  
  var rm = (function() {
-    /** @private */ 
 
     /**
-     * @private
      * Convert mei:@dur to an integer (semifusa=0, semibrevis=4, maxima=7)
      * @param {String} dur @dur string
-     * @return {Integer}
+     * @return {Integer} (semifusa=0, semibrevis=4, maxima=7)
+     * @memberof rm
+     * @inner
      */
      function noteIntFromDur(dur){
         return ['semifusa', 'fusa', 'semiminima', 'minima', 'semibrevis', 'brevis', 'longa', 'maxima'].indexOf(dur);
     }
 
     return {
-        /** @public */
 
         /**
-         * @public
          * Reads the attributes of a mei:mensur element and returns a
          * four-element array of 2s or 3s for the perfection of each level
          * from prolation to major modus
          * @param {DOMElement} mensur mei:mensur element
-         * @return {Array} Four-element array
+         * @return {Array} Four-element array [prolatio, tempus, modusminor, modusmaior]
+         * @memberof rm
          */ 
         mensurSummary : function (mensur){
             return [mensur.getAttributeNS(null, 'prolatio'), 
@@ -40,7 +41,6 @@
         },
 
         /**
-         * @public
          * Return the number of minims that a given note would be expected to
          * have, given the prevailing mensuration.
          * @param {DOMElement} el mei:note
@@ -48,6 +48,7 @@
          * @param {Integer} levelAdjust Displaces the note level (so, if el is
          * a minim, 1 for levelAdjust will treat it as a semibreve)
          * @return {integer} Minim count
+         * @memberof rm
          */
          simpleMinims : function (el, mensur, levelAdjust) {
             var level = this.noteInt(el) - 3;
@@ -68,8 +69,9 @@
 
         /**
          * Return the duration level of a note or rest as an integer (semifusa=0, semibrevis=4, maxima=7)
-         * @param {DOMObject} el mei:note or mei:rest (or other object with mei:@dur
-         * @return {Integer}
+         * @param {DOMObject} el mei:note or mei:rest (or other object with mei:@dur)
+         * @return {Integer} (semifusa=0, semibrevis=4, maxima=7)
+         * @memberof rm
          */
          noteInt : function (el){
             return noteIntFromDur(el.getAttributeNS(null, 'dur'));
@@ -82,6 +84,7 @@
          * divided into two parts. For notes shorter than a minim, it returns false
          * @param {DOMElement} el An mei:note or mei:rest
          * @returns {Integer | Boolean} 
+         * @memberof rm
          */
         dupleMinimCountFromElement : function (el){
             var level = this.noteInt(el);
@@ -96,6 +99,7 @@
          * better as a pre-processing step).
          * @param {DOMObject} event Probably an mei:dot
          * @returns {Boolean} 
+         * @memberof rm
          */
         augDot : function (event){
             return event.tagName==='dot' && event.getAttributeNS(null, 'form')==='aug';
@@ -108,9 +112,10 @@
          * better as a pre-processing step).
          * @param {DOMObject} event Probably an mei:dot
          * @returns {Boolean} 
+         * @memberof rm
          */
         divisionDot : function (event) {
-        return event.tagName==='dot' && event.getAttributeNS(null, 'form')!=='aug';
+            return event.tagName==='dot' && event.getAttributeNS(null, 'form')!=='aug';
         },
 
         /**
@@ -118,9 +123,10 @@
          * parts (for example, a breve is regularly perfect in perfect tempus,
          * minor prolation and in imperfect tempus, major prolation, but only
          * in the former case is it perfect as a whole)
-         * @param {} note
-         * @param {} mens
-         * @returns {} 
+         * @param {DOMObject} note
+         * @param {DOMObject} mens
+         * @returns {Boolean} 
+         * @memberof rm
          */
         notePerfectAsWhole : function (note, mens){
             if(this.isNote(note)){
@@ -134,7 +140,8 @@
          * Return an integer (semifusa=0, fusa=1,...maxima=7) of the first
          * (shortest) level that is divisible into 3 parts.
          * @param {DOMObject} mensuration mei:mensur
-         * @returns {Integer} Mensural level
+         * @returns {Integer} Mensural level (semifusa=0, ..., minima=3,...maxima=7)
+         * @memberof rm
          */
         firstPerfectLevel : function (mensuration){
             var firstPerf = this.mensurSummary(mensuration).indexOf(3);
@@ -149,8 +156,9 @@
          * A note or rest is regularly perfect if it or any parts of it are
          * are ternary according to the mensuration sign. 
          * @param {DOMObject} element
-         * @mensur {DOMObject} mei:mensur element
+         * @param {DOMObject} mensur mei:mensur element
          * @return {Boolean}
+         * @memberof rm
          */
         regularlyPerfect : function (element, mensur){
             var val = this.noteInt(element);
@@ -184,6 +192,7 @@
          * duple/imperfect and 3 for triple/perfect for each level)
          * @param {Integer} [maxLevel=4] Stopping point
          * @return {Array}
+         * @memberof rm
          */
         minimStructures : function (mensurSummary, maxLevel) {
             var counts = [];
@@ -200,6 +209,7 @@
          * @param {DOMObject} el
          * @param {DOMObject} mensur
          * @returns {Boolean} 
+         * @memberof rm
          */
         isAlterable : function (el, mensur) {
             var m = this.mensurSummary(mensur);
@@ -213,6 +223,7 @@
          * Return true if event is a note or rest
          * @param {DOMObject} event Event from MEI
          * @returns {Boolean} 
+         * @memberof rm
          */
         noteOrRest : function (event) {
             return event.tagName==='rest' || event.tagName==='note';
@@ -222,6 +233,7 @@
          * Return true if event is a note
          * @param {DOMObject} event Event from MEI
          * @returns {Boolean} 
+         * @memberof rm
          */
          isNote : function (event) {
             return event.tagName==='note';
@@ -229,13 +241,20 @@
 
         /**
          * Return true if event is a rest
+         * @public
          * @param {DOMObject} event Event from MEI
          * @returns {Boolean} 
          */
          isRest : function (event) {
             return event.tagName==='rest';
         },
-
+        
+        /**
+         * Returns true if event has @colored attribute
+         * @param {DOMObject} event 
+         * @returns {Boolean}
+         * @memberof rm
+         */
         isColored : function (event) {
             return event.getAttributeNS(null, 'colored')==="true";
         },
@@ -246,6 +265,7 @@
          * @param {DOMObject} e1 mei:note or mei:rest
          * @param {DOMObject} e2 mei:note or mei:rest
          * @returns {Boolean} 
+         * @memberof rm
          */
          leveleq : function (e1, e2) {
             return e1.getAttributeNS(null, 'dur')===e2.getAttributeNS(null, 'dur');
@@ -257,6 +277,8 @@
          * @param {Number} startMinims Minim steps since the start of the
          * counting period
          * @parm {DOMObject} mens mei:mensur
+         * @returns {Array<Number>}
+         * @memberof rm
          */
         beatUnitStructure : function (startMinims, mens){
             var rem = startMinims;

@@ -1,8 +1,9 @@
+/** @fileoverview Check imperfection rules */
 "use strict";
 
 /**
- * @module interpreter/imperfect
- * Check imperfection rules
+ * @namespace imperfect
+ * @desc Check imperfection rules
  */
 var imperfect = (function() {
     /** private */
@@ -16,6 +17,8 @@ var imperfect = (function() {
      * length).
      * @param {DOMObject} mens mei:mensur
      * @returns {DOMObject} This function returns the modified event (why?)
+     * @memberof imperfect
+     * @inner
      */
     function firstBeatImperfectionCheck(event, window, mens){
         var level = rm.noteInt(event);
@@ -98,6 +101,8 @@ var imperfect = (function() {
      * @param {integer} index Index of the current event (start point for the search)
      * @param {Array} seq Array of events
      * @return {(integer|boolean)} Position if found (false if not)
+     * @memberof imperfect
+     * @inner
      */
     function indexOfNextSameOrLongerOrDot(level, index, seq){
         for(var i=index+1; i<seq.length; i++){
@@ -116,6 +121,8 @@ var imperfect = (function() {
      * @param {Integer} longLevel Level (semifusa=0, fusa=1,...maxima=7) of longer note
      * @param {Array} menssum Summary of mensuration (as returned by {@link mensurSummary}
      * @returns {Boolean} 
+     * @memberof imperfect
+     * @inner
      */
     function canImperfect(shortLevel, longLevel, menssum){
         // can something at shortlevel imperfect a note at longlevel, given
@@ -130,10 +137,12 @@ var imperfect = (function() {
     }
 
     /**
-     * Returns the minim counts for all levels that can imperfect elemnt
+     * Returns the minim counts for all levels that can imperfect element
      * @param {DOMObject} element
      * @param {DOMObject} mensur
      * @returns {Array} 
+     * @memberof imperfect
+     * @inner
      */
     function imperfectingLevels(element, mensur){
         // A note can be imperfected by any value that is less than the note's
@@ -166,6 +175,8 @@ var imperfect = (function() {
      * @param {DOMObject} rest2 mei:rest
      * @param {String} direction "left" | "right"
      * @returns {Boolean} 
+     * @memberof imperfect
+     * @inner
      */
     function divisionLikeRests(maxLevel, rest1, rest2, direction){
         return ((!direction && rm.noteInt(rest1)<maxLevel && rm.noteInt(rest2)<maxLevel)
@@ -180,6 +191,8 @@ var imperfect = (function() {
      * @param {Integer} index Index of the current event (start point for the seach
      * @param {Array} seq Array of events
      * @return {Integer} Position if found (false if not)
+     * @memberof imperfect
+     * @inner
      */
     function indexOfNextDot(index, seq){
         for(var i=index+1; i<seq.length; i++){
@@ -200,6 +213,8 @@ var imperfect = (function() {
      * @param {Integer} minimCount
      * @param {Array} possibleDivisors
      * @returns {} 
+     * @memberof imperfect
+     * @inner
      */
     function solidBlock(minimCount, possibleDivisors){
         // If a block of notes looks like it is made up of a small number of
@@ -231,6 +246,7 @@ var imperfect = (function() {
          * @param {Array} events Sequence of events in this section for this voice 
          * @param {DOMObject} mens mei:mensur
          * @returns {DOMObject} This function returns the modified event (why?)
+         * @memberof imperfect
          */
         firstBeatImperfection : function (event, index, events, mens) {
             var level = rm.noteInt(event);
@@ -274,6 +290,7 @@ var imperfect = (function() {
          * @param {Array} events Sequence of events in this section for this voice 
          * @param {DOMObject} mens mei:mensur
          * @returns {DOMObject} This function returns the modified event (why?)
+         * @memberof imperfect
          */
         secondBeatImperfection : function (event, index, events, mens) {
             // Let's pretend this is easy, and apply I.8 as if we *knew* that
@@ -290,6 +307,7 @@ var imperfect = (function() {
          * @param {Array} events Sequence of events in this section for this voice 
          * @param {DOMObject} mens mei:mensur
          * @returns {DOMObject} This function returns the modified event (why?)
+         * @memberof imperfect
          */
         thirdBeatImperfection : function (event, index, events, mens) {
             // More complex
@@ -321,6 +339,7 @@ var imperfect = (function() {
          * @param {DOMObject} mens mei:mensur
          * @returns {DOMObject} This function returns the altered event (why?)
          * @returns {DOMObject} Returns the event (unmodified at the moment)
+         * @memberof imperfect
          */
         midBeatImperfection : function (event, index, events, mens) {
             // More complex

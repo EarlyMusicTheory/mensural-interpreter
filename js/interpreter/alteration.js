@@ -1,11 +1,14 @@
+/**
+ * @fileoverview Gathers alteration functions
+ */
 "use strict";
 
 /**
- * @module interpreter/alterate
+ * @namespace alterate
+ * @desc Gathers alteration functions
  */
 
 var alterate = (function() {
-    /** private */
 
     /**
      * Check an event for evidence of alteration. Alters event if it falls
@@ -19,6 +22,8 @@ var alterate = (function() {
      * @param {Array} events Sequence of events in this section for this voice 
      * @param {DOMObject} mens mei:mensur
      * @returns {DOMObject} This function returns the altered event (why?) 
+     * @memberof alterate
+     * @inner
      */
     function checkForGeneralAlteration(event, index, events, mens){
         var level = rm.noteInt(event);
@@ -59,6 +64,7 @@ var alterate = (function() {
          * @param {Array} events Sequence of events in this section for this voice 
          * @param {DOMObject} mens mei:mensur
          * @returns {DOMObject} This function returns the modified event (why?)
+         * @memberof alterate
          */
         firstBeatAlteration : function (event, index, events, mens) {
             return checkForGeneralAlteration(event, index, events, mens);
@@ -72,6 +78,7 @@ var alterate = (function() {
          * @param {Array} events Sequence of events in this section for this voice 
          * @param {DOMObject} mens mei:mensur
          * @returns {DOMObject} This function returns the modified event (why?)
+         * @memberof alterate
          */
         secondBeatAlteration : function (event, index, events, mens) {
             // second beat is special...
@@ -91,6 +98,7 @@ var alterate = (function() {
          * @param {Array} events Sequence of events in this section for this voice 
          * @param {DOMObject} mens mei:mensur
          * @returns {DOMObject} This function returns the modified event (why?)
+         * @memberof alterate
          */
         thirdBeatAlteration : function (event, index, events, mens) {
             return checkForGeneralAlteration(event, index, events, mens);
@@ -106,6 +114,7 @@ var alterate = (function() {
          * @param {DOMObject} mens mei:mensur
          * @returns {DOMObject} This function returns the altered event (why?)
          * @returns {DOMObject} Returns the event (unmodified at the moment)
+         * @memberof alterate
          */
         midBeatAlteration : function (event, index, events, mens) {
             return event;

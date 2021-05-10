@@ -1,26 +1,50 @@
+/** @fileoverview Contains interaction with Verovio toolkit and rendered music */
 "use strict";
+
+/**
+ * @namespace vrvInterface
+ * @desc Contains interaction with Verovio toolkit and rendered music
+ */
 
 var vrvInterface = (function () {
     /** private */
     const vrv = new verovio.toolkit();
 
+    /** current zoom rate */
     var zoom = 50;
+    /** current page height */
     var pageHeight = 2970;
+    /** current page width */
     var pageWidth = 2100;
+    /** current page numbrt */
     var page = 1;
+    /** current svg to display */
     var svg;
 
+    /** elements for interaction */
     const elsToSelect = ".note,.rest,.dot,.mensur";
+    /** Bootstrap blue to highlight events */
     const blue = "#007bff";
+    /** Bootstrap red to highlight events */
     const red = "#dc3545";
 
+    /** is a keyup event in progress? */
     var keyUpInProgress = false;
+    /** are events currently bound? */
     var eventsBinded = false;
+    /** event that is currently shown in detail */
     var shownEvent = null;
+    /** event preceding the currently shown event */
     var prevEvent = null;
+    /** event that follows the currently shown event */
     var nextEvent = null;
     
 
+    /**
+     * Sets Verovio options
+     * @memberof vrvInterface
+     * @inner
+     */
     function setOptions() {
         pageHeight = $(document).height() * 100 / zoom ;
         pageWidth = ($(window).width() - ($("#side").width() * 1.2) ) * 100 / zoom ;
@@ -33,6 +57,13 @@ var vrvInterface = (function () {
         vrv.setOptions(options);
     }
 
+    /**
+     * Renders the current page of the loaded MEI file
+     * Outputs current page number into page control
+     * Binds interaction events
+     * @memberof vrvInterface
+     * @inner
+     */
     function loadPage() {
         $("#vrvPageN").html(page + "/" + vrv.getPageCount());
     
@@ -42,6 +73,11 @@ var vrvInterface = (function () {
         
     }
 
+    /**
+     * Binds events to interact with rendered MEI
+     * @memberof vrvInterface
+     * @inner
+     */
     function bindInteractionEvents() {
         /* Super fancy music interaction */
         // Undbind all events just for safety
@@ -84,6 +120,8 @@ var vrvInterface = (function () {
     /**
      * Select element for showing details
      * @param {DOMObject} eventEl 
+     * @memberof vrvInterface
+     * @inner
      */
     function selectEvent(eventEl) {
         $(eventEl).attr("fill", blue);
@@ -92,6 +130,8 @@ var vrvInterface = (function () {
     /**
      * Deselect element
      * @param {DOMObject} eventEl 
+     * @memberof vrvInterface
+     * @inner
      */
     function deselectEvent(eventEl) {
         if($(eventEl).attr("fill")!==red)
@@ -103,6 +143,8 @@ var vrvInterface = (function () {
     /**
      * Shows event details of chosen element
      * @param {DOMObject} eventEl 
+     * @memberof vrvInterface
+     * @inner
      */
     function showDetails(eventEl) {
         hideDetails();
@@ -149,6 +191,8 @@ var vrvInterface = (function () {
 
     /**
      * Remove details of the currently shown event
+     * @memberof vrvInterface
+     * @inner
      */
     function hideDetails() {
         const killRed = "[fill='" + red + "']";
@@ -161,6 +205,11 @@ var vrvInterface = (function () {
 
     /* public */
     return {
+        /**
+         * Loads Verovio rendering and bind events to interact with rendered MEI
+         * @param {String} data 
+         * @memberof vrvInterface
+         */
         loadData : function (data) {
             eventsBinded = false;
             setOptions();
@@ -168,6 +217,10 @@ var vrvInterface = (function () {
             loadPage();
         },
 
+        /**
+         * Go to next page if possible
+         * @memberof vrvInterface
+         */
         nextPage : function () {
             if (page >= vrv.getPageCount()) {
                 return;
@@ -176,6 +229,10 @@ var vrvInterface = (function () {
             loadPage();
         },
         
+        /**
+         * Go to previous page if possible
+         * @memberof vrvInterface
+         */
         prevPage : function () {
             if (page <= 1) {
                 return;
@@ -184,6 +241,10 @@ var vrvInterface = (function () {
             loadPage();
         },
         
+        /**
+         * Applies zoom after zoom has been set
+         * @memberof vrvInterface
+         */
         applyZoom : function () {
             setOptions();
             vrv.redoLayout();
@@ -191,6 +252,10 @@ var vrvInterface = (function () {
             loadPage();
         },
         
+        /**
+         * Half zoom and apply zoom
+         * @memberof vrvInterface
+         */
         zoomOut : function () {
             if (zoom < 20) {
                 return;
@@ -199,6 +264,10 @@ var vrvInterface = (function () {
             this.applyZoom();
         },   
         
+        /**
+         * Double zoom and apply zoom
+         * @memberof vrvInterface
+         */
         zoomIn : function () {
             if (zoom > 80) {
                 return;
