@@ -24,7 +24,7 @@ jobs:
             npm install jsdoc
             npm install docdash
     - name: Build docs
-      run: jsdoc -c doc-config.json
+      run: node_modules/.bin/jsdoc -c doc-conf.json
     - name: Store docs
       uses: EndBug/add-and-commit@v7
       with:
