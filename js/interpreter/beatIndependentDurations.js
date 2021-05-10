@@ -80,7 +80,7 @@ var basic = (function() {
 						if(rm.notePerfectAsWhole(prev, mens)){
 							durIO.writePerfection(prev, mens,'I.2.a.PerfDot');
 						} else {
-							durIO.writeDurWithRule(prev, mens, 'simpleDot', true, 3, 2);
+							durIO.writeDurWithRule(prev, mens, 'simpleDot', true);
 						}
 				}
 			}
