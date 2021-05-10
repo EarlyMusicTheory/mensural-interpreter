@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="utf-8">
+    <title>interpreter/utils/durationUtils.js - Documentation</title>
+    
+    
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+    <script src="scripts/nav.js" defer></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav >
+    
+    <input type="text" id="nav-search" placeholder="Search" />
+    
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="MEIdoc.html">MEIdoc</a><ul class='methods'><li data-type='method' style='display: none;'><a href="MEIdoc.html#appendToIdDictionary">appendToIdDictionary</a></li><li data-type='method' style='display: none;'><a href="MEIdoc.html#getBlockByEventId">getBlockByEventId</a></li><li data-type='method' style='display: none;'><a href="MEIdoc.html#getBlocksFromSections">getBlocksFromSections</a></li><li data-type='method' style='display: none;'><a href="MEIdoc.html#initEventDict">initEventDict</a></li><li data-type='method' style='display: none;'><a href="MEIdoc.html#preprocess">preprocess</a></li><li data-type='method' style='display: none;'><a href="MEIdoc.html#proportionMultiplier">proportionMultiplier</a></li><li data-type='method' style='display: none;'><a href="MEIdoc.html#renewBlob">renewBlob</a></li></ul></li></ul><h3>Namespaces</h3><ul><li><a href="alterate.html">alterate</a><ul class='methods'><li data-type='method' style='display: none;'><a href="alterate.html#.firstBeatAlteration">firstBeatAlteration</a></li><li data-type='method' style='display: none;'><a href="alterate.html#.midBeatAlteration">midBeatAlteration</a></li><li data-type='method' style='display: none;'><a href="alterate.html#.secondBeatAlteration">secondBeatAlteration</a></li><li data-type='method' style='display: none;'><a href="alterate.html#.thirdBeatAlteration">thirdBeatAlteration</a></li><li data-type='method' style='display: none;'><a href="alterate.html#~checkForGeneralAlteration">checkForGeneralAlteration</a></li></ul></li><li><a href="basic.html">basic</a><ul class='methods'><li data-type='method' style='display: none;'><a href="basic.html#.beatIndependentDurations">beatIndependentDurations</a></li><li data-type='method' style='display: none;'><a href="basic.html#~actOnColoration">actOnColoration</a></li><li data-type='method' style='display: none;'><a href="basic.html#~actOnDots">actOnDots</a></li><li data-type='method' style='display: none;'><a href="basic.html#~allUnalterableImperfectLevels">allUnalterableImperfectLevels</a></li><li data-type='method' style='display: none;'><a href="basic.html#~anteSim">anteSim</a></li><li data-type='method' style='display: none;'><a href="basic.html#~labelRests">labelRests</a></li><li data-type='method' style='display: none;'><a href="basic.html#~simplestAlterations">simplestAlterations</a></li></ul></li><li><a href="complexBeats.html">complexBeats</a><ul class='methods'><li data-type='method' style='display: none;'><a href="complexBeats.html#.addStartTimes">addStartTimes</a></li><li data-type='method' style='display: none;'><a href="complexBeats.html#.complexAnalysis">complexAnalysis</a></li><li data-type='method' style='display: none;'><a href="complexBeats.html#~addAllStartTimes">addAllStartTimes</a></li><li data-type='method' style='display: none;'><a href="complexBeats.html#~addBreveBoundariesForBlock">addBreveBoundariesForBlock</a></li><li data-type='method' style='display: none;'><a href="complexBeats.html#~addStartTimesForBlock">addStartTimesForBlock</a></li><li data-type='method' style='display: none;'><a href="complexBeats.html#~afterTheEasyBits">afterTheEasyBits</a></li><li data-type='method' style='display: none;'><a href="complexBeats.html#~updateBlocks">updateBlocks</a></li></ul></li><li><a href="durIO.html">durIO</a><ul class='methods'><li data-type='method' style='display: none;'><a href="durIO.html#.readBlockFrom">readBlockFrom</a></li><li data-type='method' style='display: none;'><a href="durIO.html#.readDur">readDur</a></li><li data-type='method' style='display: none;'><a href="durIO.html#.readDurGes">readDurGes</a></li><li data-type='method' style='display: none;'><a href="durIO.html#.readStartsAt">readStartsAt</a></li><li data-type='method' style='display: none;'><a href="durIO.html#.setBeatPos">setBeatPos</a></li><li data-type='method' style='display: none;'><a href="durIO.html#.setBreveBoundaries">setBreveBoundaries</a></li><li data-type='method' style='display: none;'><a href="durIO.html#.setDurGesPerBlock">setDurGesPerBlock</a></li><li data-type='method' style='display: none;'><a href="durIO.html#.setStartsAt">setStartsAt</a></li><li data-type='method' style='display: none;'><a href="durIO.html#.windowDuration">windowDuration</a></li><li data-type='method' style='display: none;'><a href="durIO.html#.writeAlteration">writeAlteration</a></li><li data-type='method' style='display: none;'><a href="durIO.html#.writeComment">writeComment</a></li><li data-type='method' style='display: none;'><a href="durIO.html#.writeDur">writeDur</a></li><li data-type='method' style='display: none;'><a href="durIO.html#.writeDurGes">writeDurGes</a></li><li data-type='method' style='display: none;'><a href="durIO.html#.writeDurWithRule">writeDurWithRule</a></li><li data-type='method' style='display: none;'><a href="durIO.html#.writeImperfection">writeImperfection</a></li><li data-type='method' style='display: none;'><a href="durIO.html#.writePerfection">writePerfection</a></li><li data-type='method' style='display: none;'><a href="durIO.html#.writeSimpleImperfection">writeSimpleImperfection</a></li><li data-type='method' style='display: none;'><a href="durIO.html#~breveDifference">breveDifference</a></li><li data-type='method' style='display: none;'><a href="durIO.html#~gcd">gcd</a></li></ul></li><li><a href="imperfect.html">imperfect</a><ul class='methods'><li data-type='method' style='display: none;'><a href="imperfect.html#.firstBeatImperfection">firstBeatImperfection</a></li><li data-type='method' style='display: none;'><a href="imperfect.html#.midBeatImperfection">midBeatImperfection</a></li><li data-type='method' style='display: none;'><a href="imperfect.html#.secondBeatImperfection">secondBeatImperfection</a></li><li data-type='method' style='display: none;'><a href="imperfect.html#.thirdBeatImperfection">thirdBeatImperfection</a></li><li data-type='method' style='display: none;'><a href="imperfect.html#~canImperfect">canImperfect</a></li><li data-type='method' style='display: none;'><a href="imperfect.html#~divisionLikeRests">divisionLikeRests</a></li><li data-type='method' style='display: none;'><a href="imperfect.html#~firstBeatImperfectionCheck">firstBeatImperfectionCheck</a></li><li data-type='method' style='display: none;'><a href="imperfect.html#~imperfectingLevels">imperfectingLevels</a></li><li data-type='method' style='display: none;'><a href="imperfect.html#~indexOfNextDot">indexOfNextDot</a></li><li data-type='method' style='display: none;'><a href="imperfect.html#~indexOfNextSameOrLongerOrDot">indexOfNextSameOrLongerOrDot</a></li><li data-type='method' style='display: none;'><a href="imperfect.html#~solidBlock">solidBlock</a></li></ul></li><li><a href="post.html">post</a><ul class='methods'><li data-type='method' style='display: none;'><a href="post.html#.run">run</a></li><li data-type='method' style='display: none;'><a href="post.html#~addBarLines">addBarLines</a></li></ul></li><li><a href="rm.html">rm</a><ul class='methods'><li data-type='method' style='display: none;'><a href="rm.html#.augDot">augDot</a></li><li data-type='method' style='display: none;'><a href="rm.html#.beatUnitStructure">beatUnitStructure</a></li><li data-type='method' style='display: none;'><a href="rm.html#.divisionDot">divisionDot</a></li><li data-type='method' style='display: none;'><a href="rm.html#.dupleMinimCountFromElement">dupleMinimCountFromElement</a></li><li data-type='method' style='display: none;'><a href="rm.html#.firstPerfectLevel">firstPerfectLevel</a></li><li data-type='method' style='display: none;'><a href="rm.html#.isAlterable">isAlterable</a></li><li data-type='method' style='display: none;'><a href="rm.html#.isColored">isColored</a></li><li data-type='method' style='display: none;'><a href="rm.html#.isNote">isNote</a></li><li data-type='method' style='display: none;'><a href="rm.html#.leveleq">leveleq</a></li><li data-type='method' style='display: none;'><a href="rm.html#.mensurSummary">mensurSummary</a></li><li data-type='method' style='display: none;'><a href="rm.html#.minimStructures">minimStructures</a></li><li data-type='method' style='display: none;'><a href="rm.html#.noteInt">noteInt</a></li><li data-type='method' style='display: none;'><a href="rm.html#.noteOrRest">noteOrRest</a></li><li data-type='method' style='display: none;'><a href="rm.html#.notePerfectAsWhole">notePerfectAsWhole</a></li><li data-type='method' style='display: none;'><a href="rm.html#.regularlyPerfect">regularlyPerfect</a></li><li data-type='method' style='display: none;'><a href="rm.html#.simpleMinims">simpleMinims</a></li><li data-type='method' style='display: none;'><a href="rm.html#~noteIntFromDur">noteIntFromDur</a></li></ul></li><li><a href="vrvInterface.html">vrvInterface</a><ul class='methods'><li data-type='method' style='display: none;'><a href="vrvInterface.html#.applyZoom">applyZoom</a></li><li data-type='method' style='display: none;'><a href="vrvInterface.html#.loadData">loadData</a></li><li data-type='method' style='display: none;'><a href="vrvInterface.html#.nextPage">nextPage</a></li><li data-type='method' style='display: none;'><a href="vrvInterface.html#.prevPage">prevPage</a></li><li data-type='method' style='display: none;'><a href="vrvInterface.html#.zoomIn">zoomIn</a></li><li data-type='method' style='display: none;'><a href="vrvInterface.html#.zoomOut">zoomOut</a></li><li data-type='method' style='display: none;'><a href="vrvInterface.html#~bindInteractionEvents">bindInteractionEvents</a></li><li data-type='method' style='display: none;'><a href="vrvInterface.html#~deselectEvent">deselectEvent</a></li><li data-type='method' style='display: none;'><a href="vrvInterface.html#~hideDetails">hideDetails</a></li><li data-type='method' style='display: none;'><a href="vrvInterface.html#~loadPage">loadPage</a></li><li data-type='method' style='display: none;'><a href="vrvInterface.html#~selectEvent">selectEvent</a></li><li data-type='method' style='display: none;'><a href="vrvInterface.html#~setOptions">setOptions</a></li><li data-type='method' style='display: none;'><a href="vrvInterface.html#~showDetails">showDetails</a></li></ul></li></ul><h3>Global</h3><ul><li><a href="global.html#baseUrl">baseUrl</a></li><li><a href="global.html#basicAnalysisDone">basicAnalysisDone</a></li><li><a href="global.html#complexAnalysisDone">complexAnalysisDone</a></li><li><a href="global.html#currentParams">currentParams</a></li><li><a href="global.html#currentUrl">currentUrl</a></li><li><a href="global.html#fetchMEI">fetchMEI</a></li><li><a href="global.html#getSectionBlocks">getSectionBlocks</a></li><li><a href="global.html#isRest">isRest</a></li><li><a href="global.html#loadData">loadData</a></li><li><a href="global.html#makeXmlCode">makeXmlCode</a></li><li><a href="global.html#meiFile">meiFile</a></li></ul>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">interpreter/utils/durationUtils.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/** @fileoverview Utility functions for duration I/O */
+"use strict";
+
+/** 
+ * @namespace durIO
+ * @desc Functions for reading and writing durations for events, encapsules custom MEI ouput
+ */
+
+var durIO = (function() {
+    /** private */
+    /**
+     * Find highest common factor (for tidy @num/@numbase use). May be
+     * less useful, depending how these attributes actually work.
+     * @param {Integer} a
+     * @param {Integer} b
+     * @return {Integer}
+     * @memberof durIO
+     * @inner
+     */
+    function gcd(a,b) {
+        // Find the highest common factor (for tidy num/numbase values)
+        // This is recursive, so prob unwise in the general case, but fine here
+        // Taken from rosettaCode
+        return b ? gcd(b, a % b) : Math.abs(a);
+    }
+
+    /**
+     * Calculate the number of breves between two times, specified as
+     * the number of mensural units into the current section (so [subminims,
+     * minims, semibreves, breves, longs, maximas])
+     * @param {Array} struct2 Timepoint
+     * @param {Array} struct2 Timepoint
+     * @param {Array} minimStruct beat structure in minims
+     * @return {Number} Number of breve beats separating the notes
+     * @memberof durIO
+     * @inner
+     */
+    function breveDifference(struct2, struct1, minimStruct){
+        // var breves = 0; &lt;-- not used anyway
+        var minims = 0;
+        var MiB = minimStruct[1];
+        for(var i=3; i&lt;struct2.length; i++)
+        {
+            if(struct1[i]>struct2[i])
+            {
+                minims += minimStruct[i-2]*(struct1[i] - struct2[i]) - minimStruct[i-1];
+            } 
+            else if (struct2[i]>struct1[i])
+            {
+                minims += minimStruct[i-2]*(struct2[i] - struct1[i]);
+            }
+        }
+        return minims/MiB;
+    }
+
+    return {
+        /** public */
+
+        /**
+         * Given a count of beats, writes dur.itermediate to an element (appends 'b'
+         * and, if there's a dot of augmentation, multiplies by 1.5)
+         * @param  {Integer} num Core duration in minims
+         * @param {DOMElement} el mei:note
+         * @param {Boolean} dot Is there a dot of augmentation?
+         * @memberof durIO
+         */
+        writeDur : function (num, el, dot) {
+            if(dot) {
+                num = num*1.5;
+            }
+            el.setAttributeNS(null, 'dur.intermediate', num+'b');
+        },
+
+        /**
+         * Given an element with dur.intermediate, writes dur.ges to an element,
+         * applying the proportion multiplier.
+         * @param {DOMElement} el 
+         * @param {Number} propMultiplier 
+         * @memberof durIO
+         */
+        writeDurGes : function (el, propMultiplier) {
+            var dur = this.readDur(el);
+            var scaledDur = dur * propMultiplier;
+            if(dur)
+            {
+                el.setAttributeNS(null, "dur.ges", scaledDur + 'b');
+            }
+        },
+        
+        /**
+         * Writes duration and a rule, modifications can be set if necessary,
+         * e.g. for ante sim
+         * @param {DOMElement} el 
+         * @param {DOMElement} mens
+         * @param {string} rule 
+         * @param {Boolean} dot is there a dot of augmentation? default false
+         * @param {Number} modNum numerator of duration modifier
+         * @param {Number} modDenom denominator of duration modifier
+         * @memberof durIO
+         */
+        writeDurWithRule : function (el, mens, rule, dot = false, modNum = 1, modDenom = 1) {
+            let modifier = modNum / modDenom;
+            this.writeDur(rm.simpleMinims(el, mens) * modifier, el, dot);
+            el.setAttributeNS(null, 'rule', rule);
+            if (modNum !== 1 || modDenom !== 1)
+            {
+                el.setAttributeNS(null, 'num', modDenom);
+				el.setAttributeNS(null, 'numbase', modNum);
+            }
+        },
+        
+        /**
+         * Write duration information for a note that we've decided should be
+         * the simplest form of imperfection (subtract a third). For other
+         * imperfection, use {@link writeImperfection}
+         * @param {DOMElement} el mei:note
+         * @param {Integer} reduceBy Time (in minims) to subtract
+         * @param {DOMElement} mens mei:mensur
+         * @param {String} rule Reference for rule used to decide this
+         * (written to element as @rule)
+         * @memberof durIO
+         *
+         */
+        writeSimpleImperfection : function (el, mens, rule) {
+            //	el.setAttributeNS(null, 'dur.ges', (2 * simpleMinims(el, mens) / 3) + 'b');
+            this.writeDur((2 * rm.simpleMinims(el, mens) / 3), el, false);
+            el.setAttributeNS(null, 'num', "3");
+            el.setAttributeNS(null, 'numbase', "2");
+            el.setAttributeNS(null, 'dur.quality', 'imperfecta');
+            //el.setAttributeNS(null, 'quality', 'i');
+            el.setAttributeNS(null, 'rule', rule);
+        },
+        
+        /**
+         * Write duration information for a note that we've decided should be
+         * imperfected
+         * @param {DOMElement} el mei:note
+         * @param {Integer} reduceBy Time (in minims) to subtract
+         * @param {DOMElement} mens mei:mensur
+         * @param {String} rule Reference for rule used to decide this
+         * (written to element as @rule)
+         * @param {Boolean} defaultMinims add default minims?
+         * @memberof durIO
+         */
+        writeImperfection : function (el, reduceBy, mens, rule, defaultMinims = false) {
+            var defaultDur = rm.simpleMinims(el, mens);
+            var factor = gcd(defaultDur, reduceBy);
+            var finalDur = defaultDur - reduceBy;
+            this.writeDur(finalDur, el, false);
+            el.setAttributeNS(null, 'num', finalDur / factor);
+            el.setAttributeNS(null, 'numbase', defaultDur / factor);
+            el.setAttributeNS(null, 'dur.quality', 'imperfecta');
+            el.setAttributeNS(null, 'rule', rule);	
+            if (defaultMinims === true)
+            {
+                el.setAttributeNS(null, 'defaultminims', rm.simpleMinims(el, mens));
+            }
+        },
+        
+        /**
+         * Write duration information for a note that we've decided should be
+         * altered
+         * @param {DOMElement} el mei:note
+         * @param {DOMElement} mens mei:mensur
+         * @param {String} rule Reference for rule used to decide this
+         * (written to element as @rule)
+         * @memberof durIO
+         */
+        writeAlteration : function (el, mens, rule) {
+            //	el.setAttributeNS(null, 'dur.ges', (2 * simpleMinims(el, mens)) + 'b');
+            this.writeDur((2 * rm.simpleMinims(el, mens)), el, false);
+            el.setAttributeNS(null, 'num', "1");
+            el.setAttributeNS(null, 'numbase', "2");
+            el.setAttributeNS(null, 'dur.quality', 'altera');
+            //el.setAttributeNS(null, 'quality', 'a');
+            el.setAttributeNS(null, 'rule', rule);
+        },
+
+        /**
+         * Writes perfection, 
+         * (if note is regularly perfect, no num/numbase will be added, somehiw Verovio needs it anyway)
+         * @param {DOMElement} el 
+         * @param {DOMElement} mens 
+         * @param {String} rule 
+         * @param {Boolean} defaultMinims
+         * @memberof durIO
+         */
+        writePerfection : function (el, mens, rule, defaultMinims = false) {
+            durIO.writeDur(rm.simpleMinims(el, mens), el);
+            el.setAttributeNS(null, 'dur.quality', 'perfecta');
+            // it doesn't make sense, but maybe Verovio needs it...
+            //if(!rm.regularlyPerfect(el, mens))
+            //{
+                el.setAttributeNS(null, 'num', '2');
+                el.setAttributeNS(null, 'numbase', '3');
+            //}
+            if (defaultMinims === true)
+            {
+                el.setAttributeNS(null, 'defaultminims', rm.simpleMinims(el, mens));
+            }
+            el.setAttributeNS(null, 'rule', rule);
+        },
+        
+        /**
+         * Given an event with dur.intermediate of the form [0-9]*b, return the integer
+         * part
+         * @param {DOMElement} mei:note or mei:rest
+         * @return {Integer}
+         * @memberof durIO
+         */
+        readDur : function (el) {
+            var str = el ? el.getAttributeNS(null, 'dur.intermediate') : null;
+            return str ? Number(str.substring(0, str.length-1)) : false;
+        },
+
+        /**
+         * Given an event with dur.ges of the form [0-9]*b, return the integer
+         * part
+         * @param {DOMElement} el 
+         * @returns {Number}
+         * @memberof durIO
+         */
+        readDurGes : function (el) {
+            var str = el ? el.getAttributeNS(null, 'dur.ges') : null;
+            return str ? Number(str.substring(0, str.length-1)) : false;
+        },
+
+        /**
+         * Get exact, estimated and minimum durations for a window, naively
+         * calculated. The returned object has attibutes for definite,
+         * bareMinimum (including possible extremes of imperfection),
+         * approximateMinimum (less extreme) and approximation ('most likely')
+         * @param {Array&lt;DOMElement>} events
+         * @param {DOMElement} mens
+         * @returns {Object}
+         * @memberof durIO
+         */
+         windowDuration : function (events, mens) {
+            var duration = {definite: 0, bareMinimum: 0, approximateMinimum: 0, approximation: 0};
+            var definite = true;
+            for(var i=0; i&lt;events.length; i++){
+                var event = events[i];
+                if(rm.noteOrRest(event)){
+                    if(this.readDur(event)) {
+                        var dur = this.readDur(event);
+                        if(definite) duration.definite += dur;
+                        duration.bareMinimum += dur;
+                        duration.approximateMinimum += dur;
+                        duration.approximation += dur;
+                    } else {
+                        definite = false;
+                        duration.definite = false;
+                        var mins = rm.simpleMinims(event, mens);
+                        duration.approximateMinimum += mins / 3;
+                        duration.approximation += mins;
+                    }
+                }
+            }
+            return duration;
+        },
+
+        /**
+         * Writes a @comment during interpretation to an element
+         * @param {DOMElement} el 
+         * @param {String} comment 
+         * @memberof durIO
+         */
+        writeComment : function (el, comment) {
+            el.setAttributeNS(null, 'comment', comment);
+        },
+        
+        /**
+         * Sets the starting position of an event for a block (mensurBlockStartsAt) 
+         * and the whole part (startsAt)
+         * @param {DOMElement} el 
+         * @param {Number} blockFrom start of event in block
+         * @param {Number} startsAt start of event per part
+         * @memberof durIO
+         */
+        setStartsAt : function (el, blockFrom, startsAt) {
+            el.setAttributeNS(null, 'mensurBlockStartsAt', blockFrom);
+            el.setAttributeNS(null, 'startsAt', startsAt);
+        },
+
+        /**
+         * Reads startsAt attribute from element
+         * @param {DOMElement} el 
+         * @returns {Number}
+         * @memberof durIO
+         */
+        readStartsAt : function (el) {
+            var startsAt = el ? el.getAttribute("startsAt"): null;
+            return startsAt ? Number(startsAt) : false;
+        },
+
+        /**
+         * Reads mensurBlockStartsAt attribute from element
+         * @param {DOMElement} el 
+         * @returns {Number}
+         * @memberof durIO
+         */
+        readBlockFrom : function (el) {
+            var blockFrom = el ? el.getAttribute("mensurBlockStartsAt"): null;
+            return blockFrom ? Number(blockFrom) : false;
+        },
+        
+        /**
+         * Retrieves beat structure and writes it to @beatPos
+         * @param {DOMElement} el 
+         * @param {Number} blockPos Current starting position within block
+         * @param {DOMElement} mens 
+         * @returns {Array}
+         * @memberof durIO
+         */
+        setBeatPos : function (el, blockPos, mens) {
+            var beatStructure = rm.beatUnitStructure(blockPos, mens);
+            el.setAttributeNS(null, 'beatPos', beatStructure.join(', '));
+
+            return beatStructure;
+        },
+
+        /**
+         * Compares two beat structures and sets the attributes
+         * @onTheBreveBeat and @crossedABreveBeat
+         * @param {DOMElement} el 
+         * @param {Array} prevBeatStructure 
+         * @param {Array} beatStructure 
+         * @param {Array} minimStruct 
+         * @memberof durIO
+         */
+        setBreveBoundaries : function (el, prevBeatStructure, beatStructure, minimStruct) {
+            if(beatStructure[0]===0 &amp;&amp; beatStructure[1]===0 &amp;&amp; beatStructure[2]===0)
+            {
+                el.setAttributeNS(null, 'onTheBreveBeat', beatStructure[3]);
+            } 
+            else if(!(beatStructure[5]===prevBeatStructure[5]
+                    &amp;&amp; beatStructure[4]===prevBeatStructure[4]
+                    &amp;&amp; beatStructure[3]===prevBeatStructure[3]))
+            {
+                el.setAttributeNS(null, 'crossedABreveBeat', breveDifference(beatStructure, prevBeatStructure, minimStruct));
+            }
+        },
+
+        /**
+         * Sets @dur.ges for each event per block according to the
+         * provided block proportion multiplier
+         * @param {meiDoc.block} sectionBlocks 
+         * @memberof durIO
+         */
+        setDurGesPerBlock : function (sectionBlocks) {
+            // write dur.ges
+            for (let block of sectionBlocks)
+            {
+                let propMultiplier = block.prevPropMultiplier;
+                let events = block.events;
+                for (let event of events)
+                {
+                    if(rm.noteOrRest(event))
+                    {
+                        durIO.writeDurGes(event, propMultiplier);
+                    }
+                }
+            }
+        }
+    
+    };
+})();</code></pre>
+        </article>
+    </section>
+
+
+
+
+    
+    
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.6</a> on Mon May 10 2021 12:36:07 GMT+0000 (Coordinated Universal Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/polyfill.js"></script>
+<script src="scripts/linenumber.js"></script>
+
+<script src="scripts/search.js" defer></script>
+
+
+<script src="scripts/collapse.js" defer></script>
+
+
+</body>
+</html>

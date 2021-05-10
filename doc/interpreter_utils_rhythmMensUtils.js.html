@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="utf-8">
+    <title>interpreter/utils/rhythmMensUtils.js - Documentation</title>
+    
+    
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+    <script src="scripts/nav.js" defer></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav >
+    
+    <input type="text" id="nav-search" placeholder="Search" />
+    
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="MEIdoc.html">MEIdoc</a><ul class='methods'><li data-type='method' style='display: none;'><a href="MEIdoc.html#appendToIdDictionary">appendToIdDictionary</a></li><li data-type='method' style='display: none;'><a href="MEIdoc.html#getBlockByEventId">getBlockByEventId</a></li><li data-type='method' style='display: none;'><a href="MEIdoc.html#getBlocksFromSections">getBlocksFromSections</a></li><li data-type='method' style='display: none;'><a href="MEIdoc.html#initEventDict">initEventDict</a></li><li data-type='method' style='display: none;'><a href="MEIdoc.html#preprocess">preprocess</a></li><li data-type='method' style='display: none;'><a href="MEIdoc.html#proportionMultiplier">proportionMultiplier</a></li><li data-type='method' style='display: none;'><a href="MEIdoc.html#renewBlob">renewBlob</a></li></ul></li></ul><h3>Namespaces</h3><ul><li><a href="alterate.html">alterate</a><ul class='methods'><li data-type='method' style='display: none;'><a href="alterate.html#.firstBeatAlteration">firstBeatAlteration</a></li><li data-type='method' style='display: none;'><a href="alterate.html#.midBeatAlteration">midBeatAlteration</a></li><li data-type='method' style='display: none;'><a href="alterate.html#.secondBeatAlteration">secondBeatAlteration</a></li><li data-type='method' style='display: none;'><a href="alterate.html#.thirdBeatAlteration">thirdBeatAlteration</a></li><li data-type='method' style='display: none;'><a href="alterate.html#~checkForGeneralAlteration">checkForGeneralAlteration</a></li></ul></li><li><a href="basic.html">basic</a><ul class='methods'><li data-type='method' style='display: none;'><a href="basic.html#.beatIndependentDurations">beatIndependentDurations</a></li><li data-type='method' style='display: none;'><a href="basic.html#~actOnColoration">actOnColoration</a></li><li data-type='method' style='display: none;'><a href="basic.html#~actOnDots">actOnDots</a></li><li data-type='method' style='display: none;'><a href="basic.html#~allUnalterableImperfectLevels">allUnalterableImperfectLevels</a></li><li data-type='method' style='display: none;'><a href="basic.html#~anteSim">anteSim</a></li><li data-type='method' style='display: none;'><a href="basic.html#~labelRests">labelRests</a></li><li data-type='method' style='display: none;'><a href="basic.html#~simplestAlterations">simplestAlterations</a></li></ul></li><li><a href="complexBeats.html">complexBeats</a><ul class='methods'><li data-type='method' style='display: none;'><a href="complexBeats.html#.addStartTimes">addStartTimes</a></li><li data-type='method' style='display: none;'><a href="complexBeats.html#.complexAnalysis">complexAnalysis</a></li><li data-type='method' style='display: none;'><a href="complexBeats.html#~addAllStartTimes">addAllStartTimes</a></li><li data-type='method' style='display: none;'><a href="complexBeats.html#~addBreveBoundariesForBlock">addBreveBoundariesForBlock</a></li><li data-type='method' style='display: none;'><a href="complexBeats.html#~addStartTimesForBlock">addStartTimesForBlock</a></li><li data-type='method' style='display: none;'><a href="complexBeats.html#~afterTheEasyBits">afterTheEasyBits</a></li><li data-type='method' style='display: none;'><a href="complexBeats.html#~updateBlocks">updateBlocks</a></li></ul></li><li><a href="durIO.html">durIO</a><ul class='methods'><li data-type='method' style='display: none;'><a href="durIO.html#.readBlockFrom">readBlockFrom</a></li><li data-type='method' style='display: none;'><a href="durIO.html#.readDur">readDur</a></li><li data-type='method' style='display: none;'><a href="durIO.html#.readDurGes">readDurGes</a></li><li data-type='method' style='display: none;'><a href="durIO.html#.readStartsAt">readStartsAt</a></li><li data-type='method' style='display: none;'><a href="durIO.html#.setBeatPos">setBeatPos</a></li><li data-type='method' style='display: none;'><a href="durIO.html#.setBreveBoundaries">setBreveBoundaries</a></li><li data-type='method' style='display: none;'><a href="durIO.html#.setDurGesPerBlock">setDurGesPerBlock</a></li><li data-type='method' style='display: none;'><a href="durIO.html#.setStartsAt">setStartsAt</a></li><li data-type='method' style='display: none;'><a href="durIO.html#.windowDuration">windowDuration</a></li><li data-type='method' style='display: none;'><a href="durIO.html#.writeAlteration">writeAlteration</a></li><li data-type='method' style='display: none;'><a href="durIO.html#.writeComment">writeComment</a></li><li data-type='method' style='display: none;'><a href="durIO.html#.writeDur">writeDur</a></li><li data-type='method' style='display: none;'><a href="durIO.html#.writeDurGes">writeDurGes</a></li><li data-type='method' style='display: none;'><a href="durIO.html#.writeDurWithRule">writeDurWithRule</a></li><li data-type='method' style='display: none;'><a href="durIO.html#.writeImperfection">writeImperfection</a></li><li data-type='method' style='display: none;'><a href="durIO.html#.writePerfection">writePerfection</a></li><li data-type='method' style='display: none;'><a href="durIO.html#.writeSimpleImperfection">writeSimpleImperfection</a></li><li data-type='method' style='display: none;'><a href="durIO.html#~breveDifference">breveDifference</a></li><li data-type='method' style='display: none;'><a href="durIO.html#~gcd">gcd</a></li></ul></li><li><a href="imperfect.html">imperfect</a><ul class='methods'><li data-type='method' style='display: none;'><a href="imperfect.html#.firstBeatImperfection">firstBeatImperfection</a></li><li data-type='method' style='display: none;'><a href="imperfect.html#.midBeatImperfection">midBeatImperfection</a></li><li data-type='method' style='display: none;'><a href="imperfect.html#.secondBeatImperfection">secondBeatImperfection</a></li><li data-type='method' style='display: none;'><a href="imperfect.html#.thirdBeatImperfection">thirdBeatImperfection</a></li><li data-type='method' style='display: none;'><a href="imperfect.html#~canImperfect">canImperfect</a></li><li data-type='method' style='display: none;'><a href="imperfect.html#~divisionLikeRests">divisionLikeRests</a></li><li data-type='method' style='display: none;'><a href="imperfect.html#~firstBeatImperfectionCheck">firstBeatImperfectionCheck</a></li><li data-type='method' style='display: none;'><a href="imperfect.html#~imperfectingLevels">imperfectingLevels</a></li><li data-type='method' style='display: none;'><a href="imperfect.html#~indexOfNextDot">indexOfNextDot</a></li><li data-type='method' style='display: none;'><a href="imperfect.html#~indexOfNextSameOrLongerOrDot">indexOfNextSameOrLongerOrDot</a></li><li data-type='method' style='display: none;'><a href="imperfect.html#~solidBlock">solidBlock</a></li></ul></li><li><a href="post.html">post</a><ul class='methods'><li data-type='method' style='display: none;'><a href="post.html#.run">run</a></li><li data-type='method' style='display: none;'><a href="post.html#~addBarLines">addBarLines</a></li></ul></li><li><a href="rm.html">rm</a><ul class='methods'><li data-type='method' style='display: none;'><a href="rm.html#.augDot">augDot</a></li><li data-type='method' style='display: none;'><a href="rm.html#.beatUnitStructure">beatUnitStructure</a></li><li data-type='method' style='display: none;'><a href="rm.html#.divisionDot">divisionDot</a></li><li data-type='method' style='display: none;'><a href="rm.html#.dupleMinimCountFromElement">dupleMinimCountFromElement</a></li><li data-type='method' style='display: none;'><a href="rm.html#.firstPerfectLevel">firstPerfectLevel</a></li><li data-type='method' style='display: none;'><a href="rm.html#.isAlterable">isAlterable</a></li><li data-type='method' style='display: none;'><a href="rm.html#.isColored">isColored</a></li><li data-type='method' style='display: none;'><a href="rm.html#.isNote">isNote</a></li><li data-type='method' style='display: none;'><a href="rm.html#.leveleq">leveleq</a></li><li data-type='method' style='display: none;'><a href="rm.html#.mensurSummary">mensurSummary</a></li><li data-type='method' style='display: none;'><a href="rm.html#.minimStructures">minimStructures</a></li><li data-type='method' style='display: none;'><a href="rm.html#.noteInt">noteInt</a></li><li data-type='method' style='display: none;'><a href="rm.html#.noteOrRest">noteOrRest</a></li><li data-type='method' style='display: none;'><a href="rm.html#.notePerfectAsWhole">notePerfectAsWhole</a></li><li data-type='method' style='display: none;'><a href="rm.html#.regularlyPerfect">regularlyPerfect</a></li><li data-type='method' style='display: none;'><a href="rm.html#.simpleMinims">simpleMinims</a></li><li data-type='method' style='display: none;'><a href="rm.html#~noteIntFromDur">noteIntFromDur</a></li></ul></li><li><a href="vrvInterface.html">vrvInterface</a><ul class='methods'><li data-type='method' style='display: none;'><a href="vrvInterface.html#.applyZoom">applyZoom</a></li><li data-type='method' style='display: none;'><a href="vrvInterface.html#.loadData">loadData</a></li><li data-type='method' style='display: none;'><a href="vrvInterface.html#.nextPage">nextPage</a></li><li data-type='method' style='display: none;'><a href="vrvInterface.html#.prevPage">prevPage</a></li><li data-type='method' style='display: none;'><a href="vrvInterface.html#.zoomIn">zoomIn</a></li><li data-type='method' style='display: none;'><a href="vrvInterface.html#.zoomOut">zoomOut</a></li><li data-type='method' style='display: none;'><a href="vrvInterface.html#~bindInteractionEvents">bindInteractionEvents</a></li><li data-type='method' style='display: none;'><a href="vrvInterface.html#~deselectEvent">deselectEvent</a></li><li data-type='method' style='display: none;'><a href="vrvInterface.html#~hideDetails">hideDetails</a></li><li data-type='method' style='display: none;'><a href="vrvInterface.html#~loadPage">loadPage</a></li><li data-type='method' style='display: none;'><a href="vrvInterface.html#~selectEvent">selectEvent</a></li><li data-type='method' style='display: none;'><a href="vrvInterface.html#~setOptions">setOptions</a></li><li data-type='method' style='display: none;'><a href="vrvInterface.html#~showDetails">showDetails</a></li></ul></li></ul><h3>Global</h3><ul><li><a href="global.html#baseUrl">baseUrl</a></li><li><a href="global.html#basicAnalysisDone">basicAnalysisDone</a></li><li><a href="global.html#complexAnalysisDone">complexAnalysisDone</a></li><li><a href="global.html#currentParams">currentParams</a></li><li><a href="global.html#currentUrl">currentUrl</a></li><li><a href="global.html#fetchMEI">fetchMEI</a></li><li><a href="global.html#getSectionBlocks">getSectionBlocks</a></li><li><a href="global.html#isRest">isRest</a></li><li><a href="global.html#loadData">loadData</a></li><li><a href="global.html#makeXmlCode">makeXmlCode</a></li><li><a href="global.html#meiFile">meiFile</a></li></ul>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">interpreter/utils/rhythmMensUtils.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/** 
+ * @fileoverview 
+ * Utility functions IV and V
+ * Functions that know something about mensuration and simple rhythm functions */
+ "use strict";
+
+ /** 
+  * @namespace rm
+  * @desc Contains functions that know something about mensuration, simple rhythms and musical events.
+  * Encapsulates basic MEI knowledge.
+  */
+ 
+ var rm = (function() {
+
+    /**
+     * Convert mei:@dur to an integer (semifusa=0, semibrevis=4, maxima=7)
+     * @param {String} dur @dur string
+     * @return {Integer} (semifusa=0, semibrevis=4, maxima=7)
+     * @memberof rm
+     * @inner
+     */
+     function noteIntFromDur(dur){
+        return ['semifusa', 'fusa', 'semiminima', 'minima', 'semibrevis', 'brevis', 'longa', 'maxima'].indexOf(dur);
+    }
+
+    return {
+
+        /**
+         * Reads the attributes of a mei:mensur element and returns a
+         * four-element array of 2s or 3s for the perfection of each level
+         * from prolation to major modus
+         * @param {DOMElement} mensur mei:mensur element
+         * @return {Array} Four-element array [prolatio, tempus, modusminor, modusmaior]
+         * @memberof rm
+         */ 
+        mensurSummary : function (mensur){
+            return [mensur.getAttributeNS(null, 'prolatio'), 
+                    mensur.getAttributeNS(null, 'tempus'), 
+                    mensur.getAttributeNS(null, 'modusminor'), 
+                    mensur.getAttributeNS(null, 'modusmaior')].map(x=>x?parseInt(x, 10) : false);
+        },
+
+        /**
+         * Return the number of minims that a given note would be expected to
+         * have, given the prevailing mensuration.
+         * @param {DOMElement} el mei:note
+         * @param {DOMElement} mens mei:mensur
+         * @param {Integer} levelAdjust Displaces the note level (so, if el is
+         * a minim, 1 for levelAdjust will treat it as a semibreve)
+         * @return {integer} Minim count
+         * @memberof rm
+         */
+         simpleMinims : function (el, mensur, levelAdjust) {
+            var level = this.noteInt(el) - 3;
+            if(levelAdjust) level+= levelAdjust;
+            if(level&lt;1) return Math.pow(2, level);
+            var minims = 1;
+            var exponents = this.mensurSummary(mensur);
+            for(var i=0; i&lt;level; i++){
+                if(exponents[i]) {
+                    minims = minims * exponents[i];
+                } else {
+                    console.log('missing info for', el, i, 'using', mensur, 'stupidly assuming 2');
+                    minims = minims * 2;
+                }
+            }
+            return minims;
+        },
+
+        /**
+         * Return the duration level of a note or rest as an integer (semifusa=0, semibrevis=4, maxima=7)
+         * @param {DOMObject} el mei:note or mei:rest (or other object with mei:@dur)
+         * @return {Integer} (semifusa=0, semibrevis=4, maxima=7)
+         * @memberof rm
+         */
+         noteInt : function (el){
+            return noteIntFromDur(el.getAttributeNS(null, 'dur'));
+        },
+
+        /**
+         * @num and @numbase seem to be relative to a purely imperfect
+         * interpretation of note division. This function takes an element and
+         * returns the number of minims it would consist of if all notes
+         * divided into two parts. For notes shorter than a minim, it returns false
+         * @param {DOMElement} el An mei:note or mei:rest
+         * @returns {Integer | Boolean} 
+         * @memberof rm
+         */
+        dupleMinimCountFromElement : function (el){
+            var level = this.noteInt(el);
+            if(level&lt;3) return false;
+            return Math.pow(2, level-3);
+        },
+
+        /**
+         * Return true if event is a dot of augmentation. Assumes that this is
+         * indicated using @mei:form=aug. In the longer term, this might be
+         * the place to put more sophisticated reasoning in (or it might be
+         * better as a pre-processing step).
+         * @param {DOMObject} event Probably an mei:dot
+         * @returns {Boolean} 
+         * @memberof rm
+         */
+        augDot : function (event){
+            return event.tagName==='dot' &amp;&amp; event.getAttributeNS(null, 'form')==='aug';
+        },
+
+        /**
+         * Return true if event is a dot of division. Assumes that this is
+         * indicated using @mei:form!=aug. In the longer term, this might be
+         * the place to put more sophisticated reasoning in (or it might be
+         * better as a pre-processing step).
+         * @param {DOMObject} event Probably an mei:dot
+         * @returns {Boolean} 
+         * @memberof rm
+         */
+        divisionDot : function (event) {
+            return event.tagName==='dot' &amp;&amp; event.getAttributeNS(null, 'form')!=='aug';
+        },
+
+        /**
+         * Is note perfect as a whole, i.e. is it divisible into 3 direct
+         * parts (for example, a breve is regularly perfect in perfect tempus,
+         * minor prolation and in imperfect tempus, major prolation, but only
+         * in the former case is it perfect as a whole)
+         * @param {DOMObject} note
+         * @param {DOMObject} mens
+         * @returns {Boolean} 
+         * @memberof rm
+         */
+        notePerfectAsWhole : function (note, mens){
+            if(this.isNote(note)){
+                var level = this.noteInt(note);
+                var msum = this.mensurSummary(mens);
+                return ([false, false, false, false].concat(msum))[level] === 3;
+            } return false;
+        },
+
+        /**
+         * Return an integer (semifusa=0, fusa=1,...maxima=7) of the first
+         * (shortest) level that is divisible into 3 parts.
+         * @param {DOMObject} mensuration mei:mensur
+         * @returns {Integer} Mensural level (semifusa=0, ..., minima=3,...maxima=7)
+         * @memberof rm
+         */
+        firstPerfectLevel : function (mensuration){
+            var firstPerf = this.mensurSummary(mensuration).indexOf(3);
+            if(firstPerf===-1){
+                return 20;
+            } else {
+                return firstPerf+3;
+            }
+        },
+
+        /**
+         * A note or rest is regularly perfect if it or any parts of it are
+         * are ternary according to the mensuration sign. 
+         * @param {DOMObject} element
+         * @param {DOMObject} mensur mei:mensur element
+         * @return {Boolean}
+         * @memberof rm
+         */
+        regularlyPerfect : function (element, mensur){
+            var val = this.noteInt(element);
+            if(val>3){
+                if(mensur.getAttributeNS(null, 'prolatio')==="2"){
+                    if(val>4){
+                        if(mensur.getAttributeNS(null, 'tempus')==="2"){
+                            if(val>5){
+                                if(!mensur.getAttributeNS(null, 'modusminor')
+                                    || mensur.getAttributeNS(null, 'modusminor')==="2"){
+                                    if(val>6){
+                                        if(!mensur.getAttributeNS(null, 'modusmaior')
+                                            || mensur.getAttributeNS(null, 'modusmaior')==="2"){
+                                            return false;
+                                        } else return true;
+                                    } else return false
+                                } else return true;
+                            } else return false;
+                        } else return true;
+                    } else return false;
+                } else return true;
+            } else {
+                return false;
+            }
+        },
+
+        /**
+         * Given the output of {@link mensurSummary}, return an array of minim
+         * counts for each level.
+         * @param {Array} mensurSummary Mensural structure (2 for
+         * duple/imperfect and 3 for triple/perfect for each level)
+         * @param {Integer} [maxLevel=4] Stopping point
+         * @return {Array}
+         * @memberof rm
+         */
+        minimStructures : function (mensurSummary, maxLevel) {
+            var counts = [];
+            var minims = 1;
+            for(var i=0; i &lt; (maxLevel ? maxLevel : 4); i++){
+                minims = minims*(mensurSummary[i] ? mensurSummary[i] : 2);
+                counts.push(minims);
+            }
+            return counts;
+        },
+        
+        /**
+         * True if the supplied element is a note contained in a ternary unit
+         * @param {DOMObject} el
+         * @param {DOMObject} mensur
+         * @returns {Boolean} 
+         * @memberof rm
+         */
+        isAlterable : function (el, mensur) {
+            var m = this.mensurSummary(mensur);
+            var durPos = this.noteInt(el) - 3;
+            if(durPos&lt;0 || durPos>3 || (m[durPos]===2 || m[durPos]===false) || el.tagName==="rest"){
+                return false;
+            } else return true;
+        },
+
+        /**
+         * Return true if event is a note or rest
+         * @param {DOMObject} event Event from MEI
+         * @returns {Boolean} 
+         * @memberof rm
+         */
+        noteOrRest : function (event) {
+            return event.tagName==='rest' || event.tagName==='note';
+        },
+
+        /**
+         * Return true if event is a note
+         * @param {DOMObject} event Event from MEI
+         * @returns {Boolean} 
+         * @memberof rm
+         */
+         isNote : function (event) {
+            return event.tagName==='note';
+        },
+
+        /**
+         * Return true if event is a rest
+         * @public
+         * @param {DOMObject} event Event from MEI
+         * @returns {Boolean} 
+         */
+         isRest : function (event) {
+            return event.tagName==='rest';
+        },
+        
+        /**
+         * Returns true if event has @colored attribute
+         * @param {DOMObject} event 
+         * @returns {Boolean}
+         * @memberof rm
+         */
+        isColored : function (event) {
+            return event.getAttributeNS(null, 'colored')==="true";
+        },
+           
+        /**
+         * True if e1 and e2 are notes or rests at the same mensural level
+         * (e.g. minima or semibrevis)
+         * @param {DOMObject} e1 mei:note or mei:rest
+         * @param {DOMObject} e2 mei:note or mei:rest
+         * @returns {Boolean} 
+         * @memberof rm
+         */
+         leveleq : function (e1, e2) {
+            return e1.getAttributeNS(null, 'dur')===e2.getAttributeNS(null, 'dur');
+        },
+
+        /**
+         * Return an array of an event's position with respect to all mensural
+         * levels.
+         * @param {Number} startMinims Minim steps since the start of the
+         * counting period
+         * @parm {DOMObject} mens mei:mensur
+         * @returns {Array&lt;Number>}
+         * @memberof rm
+         */
+        beatUnitStructure : function (startMinims, mens){
+            var rem = startMinims;
+            var levels = this.minimStructures(this.mensurSummary(mens));
+            var units = [0, 0, 0, 0, 0, 0];
+            var leveln = levels.length
+            for(var i=0; i&lt;leveln; i++){
+                var minims = levels[leveln-1-i];
+                var beats = Math.floor(rem / minims);
+                rem = rem % minims;
+                units[5-i] = beats;
+            }
+            units[1] = Math.floor(rem);
+            units[0] = rem%1;
+            return units;
+        }
+
+     }
+ })();</code></pre>
+        </article>
+    </section>
+
+
+
+
+    
+    
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.6</a> on Mon May 10 2021 12:36:07 GMT+0000 (Coordinated Universal Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/polyfill.js"></script>
+<script src="scripts/linenumber.js"></script>
+
+<script src="scripts/search.js" defer></script>
+
+
+<script src="scripts/collapse.js" defer></script>
+
+
+</body>
+</html>

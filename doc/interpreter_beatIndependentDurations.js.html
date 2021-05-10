@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="utf-8">
+    <title>interpreter/beatIndependentDurations.js - Documentation</title>
+    
+    
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+    <script src="scripts/nav.js" defer></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav >
+    
+    <input type="text" id="nav-search" placeholder="Search" />
+    
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="MEIdoc.html">MEIdoc</a><ul class='methods'><li data-type='method' style='display: none;'><a href="MEIdoc.html#appendToIdDictionary">appendToIdDictionary</a></li><li data-type='method' style='display: none;'><a href="MEIdoc.html#getBlockByEventId">getBlockByEventId</a></li><li data-type='method' style='display: none;'><a href="MEIdoc.html#getBlocksFromSections">getBlocksFromSections</a></li><li data-type='method' style='display: none;'><a href="MEIdoc.html#initEventDict">initEventDict</a></li><li data-type='method' style='display: none;'><a href="MEIdoc.html#preprocess">preprocess</a></li><li data-type='method' style='display: none;'><a href="MEIdoc.html#proportionMultiplier">proportionMultiplier</a></li><li data-type='method' style='display: none;'><a href="MEIdoc.html#renewBlob">renewBlob</a></li></ul></li></ul><h3>Namespaces</h3><ul><li><a href="alterate.html">alterate</a><ul class='methods'><li data-type='method' style='display: none;'><a href="alterate.html#.firstBeatAlteration">firstBeatAlteration</a></li><li data-type='method' style='display: none;'><a href="alterate.html#.midBeatAlteration">midBeatAlteration</a></li><li data-type='method' style='display: none;'><a href="alterate.html#.secondBeatAlteration">secondBeatAlteration</a></li><li data-type='method' style='display: none;'><a href="alterate.html#.thirdBeatAlteration">thirdBeatAlteration</a></li><li data-type='method' style='display: none;'><a href="alterate.html#~checkForGeneralAlteration">checkForGeneralAlteration</a></li></ul></li><li><a href="basic.html">basic</a><ul class='methods'><li data-type='method' style='display: none;'><a href="basic.html#.beatIndependentDurations">beatIndependentDurations</a></li><li data-type='method' style='display: none;'><a href="basic.html#~actOnColoration">actOnColoration</a></li><li data-type='method' style='display: none;'><a href="basic.html#~actOnDots">actOnDots</a></li><li data-type='method' style='display: none;'><a href="basic.html#~allUnalterableImperfectLevels">allUnalterableImperfectLevels</a></li><li data-type='method' style='display: none;'><a href="basic.html#~anteSim">anteSim</a></li><li data-type='method' style='display: none;'><a href="basic.html#~labelRests">labelRests</a></li><li data-type='method' style='display: none;'><a href="basic.html#~simplestAlterations">simplestAlterations</a></li></ul></li><li><a href="complexBeats.html">complexBeats</a><ul class='methods'><li data-type='method' style='display: none;'><a href="complexBeats.html#.addStartTimes">addStartTimes</a></li><li data-type='method' style='display: none;'><a href="complexBeats.html#.complexAnalysis">complexAnalysis</a></li><li data-type='method' style='display: none;'><a href="complexBeats.html#~addAllStartTimes">addAllStartTimes</a></li><li data-type='method' style='display: none;'><a href="complexBeats.html#~addBreveBoundariesForBlock">addBreveBoundariesForBlock</a></li><li data-type='method' style='display: none;'><a href="complexBeats.html#~addStartTimesForBlock">addStartTimesForBlock</a></li><li data-type='method' style='display: none;'><a href="complexBeats.html#~afterTheEasyBits">afterTheEasyBits</a></li><li data-type='method' style='display: none;'><a href="complexBeats.html#~updateBlocks">updateBlocks</a></li></ul></li><li><a href="durIO.html">durIO</a><ul class='methods'><li data-type='method' style='display: none;'><a href="durIO.html#.readBlockFrom">readBlockFrom</a></li><li data-type='method' style='display: none;'><a href="durIO.html#.readDur">readDur</a></li><li data-type='method' style='display: none;'><a href="durIO.html#.readDurGes">readDurGes</a></li><li data-type='method' style='display: none;'><a href="durIO.html#.readStartsAt">readStartsAt</a></li><li data-type='method' style='display: none;'><a href="durIO.html#.setBeatPos">setBeatPos</a></li><li data-type='method' style='display: none;'><a href="durIO.html#.setBreveBoundaries">setBreveBoundaries</a></li><li data-type='method' style='display: none;'><a href="durIO.html#.setDurGesPerBlock">setDurGesPerBlock</a></li><li data-type='method' style='display: none;'><a href="durIO.html#.setStartsAt">setStartsAt</a></li><li data-type='method' style='display: none;'><a href="durIO.html#.windowDuration">windowDuration</a></li><li data-type='method' style='display: none;'><a href="durIO.html#.writeAlteration">writeAlteration</a></li><li data-type='method' style='display: none;'><a href="durIO.html#.writeComment">writeComment</a></li><li data-type='method' style='display: none;'><a href="durIO.html#.writeDur">writeDur</a></li><li data-type='method' style='display: none;'><a href="durIO.html#.writeDurGes">writeDurGes</a></li><li data-type='method' style='display: none;'><a href="durIO.html#.writeDurWithRule">writeDurWithRule</a></li><li data-type='method' style='display: none;'><a href="durIO.html#.writeImperfection">writeImperfection</a></li><li data-type='method' style='display: none;'><a href="durIO.html#.writePerfection">writePerfection</a></li><li data-type='method' style='display: none;'><a href="durIO.html#.writeSimpleImperfection">writeSimpleImperfection</a></li><li data-type='method' style='display: none;'><a href="durIO.html#~breveDifference">breveDifference</a></li><li data-type='method' style='display: none;'><a href="durIO.html#~gcd">gcd</a></li></ul></li><li><a href="imperfect.html">imperfect</a><ul class='methods'><li data-type='method' style='display: none;'><a href="imperfect.html#.firstBeatImperfection">firstBeatImperfection</a></li><li data-type='method' style='display: none;'><a href="imperfect.html#.midBeatImperfection">midBeatImperfection</a></li><li data-type='method' style='display: none;'><a href="imperfect.html#.secondBeatImperfection">secondBeatImperfection</a></li><li data-type='method' style='display: none;'><a href="imperfect.html#.thirdBeatImperfection">thirdBeatImperfection</a></li><li data-type='method' style='display: none;'><a href="imperfect.html#~canImperfect">canImperfect</a></li><li data-type='method' style='display: none;'><a href="imperfect.html#~divisionLikeRests">divisionLikeRests</a></li><li data-type='method' style='display: none;'><a href="imperfect.html#~firstBeatImperfectionCheck">firstBeatImperfectionCheck</a></li><li data-type='method' style='display: none;'><a href="imperfect.html#~imperfectingLevels">imperfectingLevels</a></li><li data-type='method' style='display: none;'><a href="imperfect.html#~indexOfNextDot">indexOfNextDot</a></li><li data-type='method' style='display: none;'><a href="imperfect.html#~indexOfNextSameOrLongerOrDot">indexOfNextSameOrLongerOrDot</a></li><li data-type='method' style='display: none;'><a href="imperfect.html#~solidBlock">solidBlock</a></li></ul></li><li><a href="post.html">post</a><ul class='methods'><li data-type='method' style='display: none;'><a href="post.html#.run">run</a></li><li data-type='method' style='display: none;'><a href="post.html#~addBarLines">addBarLines</a></li></ul></li><li><a href="rm.html">rm</a><ul class='methods'><li data-type='method' style='display: none;'><a href="rm.html#.augDot">augDot</a></li><li data-type='method' style='display: none;'><a href="rm.html#.beatUnitStructure">beatUnitStructure</a></li><li data-type='method' style='display: none;'><a href="rm.html#.divisionDot">divisionDot</a></li><li data-type='method' style='display: none;'><a href="rm.html#.dupleMinimCountFromElement">dupleMinimCountFromElement</a></li><li data-type='method' style='display: none;'><a href="rm.html#.firstPerfectLevel">firstPerfectLevel</a></li><li data-type='method' style='display: none;'><a href="rm.html#.isAlterable">isAlterable</a></li><li data-type='method' style='display: none;'><a href="rm.html#.isColored">isColored</a></li><li data-type='method' style='display: none;'><a href="rm.html#.isNote">isNote</a></li><li data-type='method' style='display: none;'><a href="rm.html#.leveleq">leveleq</a></li><li data-type='method' style='display: none;'><a href="rm.html#.mensurSummary">mensurSummary</a></li><li data-type='method' style='display: none;'><a href="rm.html#.minimStructures">minimStructures</a></li><li data-type='method' style='display: none;'><a href="rm.html#.noteInt">noteInt</a></li><li data-type='method' style='display: none;'><a href="rm.html#.noteOrRest">noteOrRest</a></li><li data-type='method' style='display: none;'><a href="rm.html#.notePerfectAsWhole">notePerfectAsWhole</a></li><li data-type='method' style='display: none;'><a href="rm.html#.regularlyPerfect">regularlyPerfect</a></li><li data-type='method' style='display: none;'><a href="rm.html#.simpleMinims">simpleMinims</a></li><li data-type='method' style='display: none;'><a href="rm.html#~noteIntFromDur">noteIntFromDur</a></li></ul></li><li><a href="vrvInterface.html">vrvInterface</a><ul class='methods'><li data-type='method' style='display: none;'><a href="vrvInterface.html#.applyZoom">applyZoom</a></li><li data-type='method' style='display: none;'><a href="vrvInterface.html#.loadData">loadData</a></li><li data-type='method' style='display: none;'><a href="vrvInterface.html#.nextPage">nextPage</a></li><li data-type='method' style='display: none;'><a href="vrvInterface.html#.prevPage">prevPage</a></li><li data-type='method' style='display: none;'><a href="vrvInterface.html#.zoomIn">zoomIn</a></li><li data-type='method' style='display: none;'><a href="vrvInterface.html#.zoomOut">zoomOut</a></li><li data-type='method' style='display: none;'><a href="vrvInterface.html#~bindInteractionEvents">bindInteractionEvents</a></li><li data-type='method' style='display: none;'><a href="vrvInterface.html#~deselectEvent">deselectEvent</a></li><li data-type='method' style='display: none;'><a href="vrvInterface.html#~hideDetails">hideDetails</a></li><li data-type='method' style='display: none;'><a href="vrvInterface.html#~loadPage">loadPage</a></li><li data-type='method' style='display: none;'><a href="vrvInterface.html#~selectEvent">selectEvent</a></li><li data-type='method' style='display: none;'><a href="vrvInterface.html#~setOptions">setOptions</a></li><li data-type='method' style='display: none;'><a href="vrvInterface.html#~showDetails">showDetails</a></li></ul></li></ul><h3>Global</h3><ul><li><a href="global.html#baseUrl">baseUrl</a></li><li><a href="global.html#basicAnalysisDone">basicAnalysisDone</a></li><li><a href="global.html#complexAnalysisDone">complexAnalysisDone</a></li><li><a href="global.html#currentParams">currentParams</a></li><li><a href="global.html#currentUrl">currentUrl</a></li><li><a href="global.html#fetchMEI">fetchMEI</a></li><li><a href="global.html#getSectionBlocks">getSectionBlocks</a></li><li><a href="global.html#isRest">isRest</a></li><li><a href="global.html#loadData">loadData</a></li><li><a href="global.html#makeXmlCode">makeXmlCode</a></li><li><a href="global.html#meiFile">meiFile</a></li></ul>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">interpreter/beatIndependentDurations.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/** @fileoverview Contains functionality to analyse durations that aren't dependant on any beat positions. */
+"use strict";
+
+/** 
+ * @namespace basic
+ * @desc Contains functionality to analyse durations that aren't dependant on any beat positions.
+ */
+
+var basic = (function() {
+
+	/**
+	 * Since rests can't be altered or imperfected, all rests can be
+	 * resolved immediately
+	 * @param {Array} sectionBlocks Array of all the coherent areas of
+     * mensurations in a section
+	 * @memberof basic
+	 * @inner
+	 */
+	function labelRests(sectionBlocks){
+		for(var b=0; b&lt;sectionBlocks.length; b++)
+		{
+			var mens = sectionBlocks[b].mens;
+			for(var e=0; e&lt;sectionBlocks[b].events.length; e++)
+			{
+				var event = sectionBlocks[b].events[e];
+				if(rm.isRest(event))
+				{
+					var augmentedDot = e+1&lt;sectionBlocks[b].events.length
+							&amp;&amp; rm.augDot(sectionBlocks[b].events[e+1]);
+					//durIO.writeDur(rm.simpleMinims(event, mens, 0), event, augmentedDot);
+					//event.setAttributeNS(null, 'rule', 'rest');
+					durIO.writeDurWithRule(event, mens, 'rest', augmentedDot);
+				}
+			}
+		}
+	}
+
+	/**
+	 * Colored notation is assumed to be simple duple and labelled accordingly
+	 * @todo Take minor color into account?
+	 * @param {Array} sectionBlocks Array of all the coherent areas of
+     * mensurations in a section
+	 * @memberof basic
+	 * @inner
+	 */
+	function actOnColoration(sectionBlocks){
+		for(var b=0; b&lt;sectionBlocks.length; b++)
+		{
+			var mens = sectionBlocks[b].mens;
+			for(var e=0; e&lt;sectionBlocks[b].events.length; e++)
+			{
+				var event = sectionBlocks[b].events[e];
+				if(rm.isNote(event) &amp;&amp; rm.isColored(event))
+				{
+					var augmentedDot = e+1&lt;sectionBlocks[b].events.length
+							&amp;&amp; rm.augDot(sectionBlocks[b].events[e+1]);
+					//durIO.writeDur(rm.simpleMinims(event, mens) * 2/3, event, augmentedDot);
+					//event.setAttributeNS(null, 'rule', 'coloration');
+					durIO.writeDurWithRule(event, mens, 'coloration', augmentedDot, 2, 3);
+				}
+			}
+		}
+	}
+
+	/**
+	 * Simple processing of dots of augmentation (other dots ignored)
+	 * @param {Array} sectionBlocks Array of all the coherent areas of
+     * mensurations in a section
+	 * @memberof basic
+	 * @inner
+	 */
+	function actOnDots(sectionBlocks){
+		for(var b=0; b&lt;sectionBlocks.length; b++){
+			var mens = sectionBlocks[b].mens;
+			for(var e=0; e&lt;sectionBlocks[b].events.length; e++){
+				var event = sectionBlocks[b].events[e];
+				if(rm.augDot(event) &amp;&amp; e){
+					var prev = sectionBlocks[b].events[e-1];
+					if(e &amp;&amp; !prev.getAttributeNS(null, 'dur.intermediate'))
+						if(rm.notePerfectAsWhole(prev, mens)){
+							durIO.writePerfection(prev, mens,'I.2.a.PerfDot');
+						} else {
+							durIO.writeDurWithRule(prev, mens, 'simpleDot', true, 3, 2);
+						}
+				}
+			}
+		}
+	}
+
+	/**
+	 * Resolves durations for any note that is not regularly perfect and
+	 * that is not a direct part of a ternary note (so isn't alterable).
+	 * @param {Array} sectionBlocks Array of all the coherent areas of
+     * mensurations in a section
+	 * @memberof basic
+	 * @inner
+	 */
+	function allUnalterableImperfectLevels(sectionBlocks){
+		// Anything imperfect and with an imperfect next longer note is trivial
+		for(var b=0; b&lt;sectionBlocks.length; b++){
+			var mens = sectionBlocks[b].mens;
+			var menssum = rm.mensurSummary(mens);
+			//var alterableLevels = [2, 2, 2].concat(menssum).concat([2]);
+			var firstPerf = rm.firstPerfectLevel(mens);
+			for(var e=0; e&lt;sectionBlocks[b].events.length; e++){
+				var event = sectionBlocks[b].events[e];
+				if(rm.isNote(event) &amp;&amp; !durIO.readDur(event)){
+					var level = rm.noteInt(event);
+					if(level &lt; firstPerf &amp;&amp; !rm.isAlterable(event, mens))
+					{
+						// Assume that actOnDots has already been run on all dotted notes
+						durIO.writeDurWithRule(event, mens, 'unalterableImperfect');
+						//durIO.writeDur(rm.simpleMinims(event, mens), event, false);
+					}
+				}
+			}
+		}
+	}
+
+	/**
+	 * Resolves any alterations that can be treated as simple local note
+	 * patterns
+	 * Rule A.1 requires us to know the mensural position of the note,
+	 * so we can't resolve that yet, but we can rule out things that
+	 * won't work, and we can apply rule A.2:
+	 * An alterable note that is preceded by a larger note followed by
+	 * the equivalent of its own regular value and followed by a note
+	 * or rest of the perfect unit next larger is altered.
+	 * @param {Array} sectionBlocks Array of all the coherent areas of
+     * mensurations in a section
+	 * @memberof basic
+	 * @inner
+	 *
+	 */ 
+	function simplestAlterations(sectionBlocks){
+		for(var b=0; b&lt;sectionBlocks.length; b++){
+			var events = sectionBlocks[b].events;
+			var mens = sectionBlocks[b].mens;
+			var menssum = rm.mensurSummary(mens);
+			//var alterableLevels = [2, 2, 2].concat(menssum).concat([2]);
+			var perfectLevels = [2, 2, 2, 2].concat(menssum);
+			for(var e=0; e&lt;events.length; e++){
+				var event = events[e];
+				if(rm.isNote(event) &amp;&amp; !durIO.readDur(event)){
+					var level = rm.noteInt(event);
+					if(rm.isAlterable(event, mens)){
+						// The level is alterable.
+						// The next note must be the next level up
+						if(e&lt;events.length-1 &amp;&amp; rm.noteInt(events[e+1])==level+1){
+							// These are the only things that can be altered all.
+							///For A.2 to be true, we need to count backwards by one
+							// unit (assuming we have all the necessary dur.ges values;
+							var target = rm.simpleMinims(event, mens);
+							if((e==0 || rm.noteInt(events[e-1])>level) &amp;&amp; perfectLevels[level]===2){
+								// highly unlikely to be an alteration (would require
+								// syncopation), not possible to be imperfected
+								var augmentedDot = e+1&lt;sectionBlocks[b].events.length
+										&amp;&amp; rm.augDot(sectionBlocks[b].events[e+1]);
+								durIO.writeDurWithRule(event, mens, 'unalteredImperfectAfterLarger', augmentedDot);
+							}
+							for(let i=e-1; i>=0; i--){
+								if(!durIO.readDur(events[i])){
+									break;
+								}
+								target = durIO.readDur(events[i]);
+								if(target===0){
+									if(i===0 || rm.noteInt(events[i-1])>level
+										|| rm.divisionDot(events[i-1])){
+										// Yay, it's an alteration
+										durIO.writeAlteration(event, mens, "A.2b");
+										//durIO.writeDur(2 * rm.simpleMinims(event, mens), event, false);
+										//event.setAttributeNS(null, 'quality', 'a');
+										//event.setAttributeNS(null, 'rule', 'A.2b');
+									}
+									break;
+								} else if(target&lt;0){
+									// A.2 doesn't apply
+									break;
+								} 
+							}
+						} 
+						else if(perfectLevels[level]===2)
+						{
+							// Now we can resolve this rhythm
+							var augmentedDot = e+1&lt;sectionBlocks[b].events.length
+									&amp;&amp; rm.augDot(sectionBlocks[b].events[e+1]);
+							durIO.writeDurWithRule(event, mens, 'unalteredImperfect', augmentedDot);
+						}
+					}
+				}
+			}
+		}
+	}
+
+	/**
+	 * If a note is followed immediately by a note or rest at the same
+	 * level, the former cannot be imperfected. Such
+	 * notes can have duration labelled immediately.
+	 * @see leveleq
+	 * @param {Array} sectionBlocks Array of all the coherent areas of
+     * mensurations in a section
+	 * @memberof basic
+	 * @inner
+	 */
+	function anteSim(sectionBlocks){
+		for(var b=0; b&lt;sectionBlocks.length; b++){
+			var mens = sectionBlocks[b].mens;
+			for(var e=0; e&lt;sectionBlocks[b].events.length; e++){
+				var event = sectionBlocks[b].events[e];
+				if(rm.isNote(event) &amp;&amp; !durIO.readDur(event)
+					&amp;&amp; rm.regularlyPerfect(event, mens)
+					&amp;&amp; (e+1)&lt;sectionBlocks[b].events.length
+					&amp;&amp; rm.noteOrRest(sectionBlocks[b].events[e+1])
+					&amp;&amp; rm.leveleq(sectionBlocks[b].events[e+1], event))
+				{
+					//durIO.writeDur(rm.simpleMinims(event, mens), event, false);
+					//event.setAttributeNS(null, 'rule', 'I.2.b.antesim');
+					durIO.writeDurWithRule(event, mens, 'I.2.b.antesim');
+				}
+			}
+		}
+	}
+
+	return {
+		/** 
+		 * Runs resolution steps that aren't dependant on any rhythms or beat
+		 * positions already having been solved. These are: rests (which can't
+		 * be altered or imperfected anyway); coloration; dots of
+		 * augmentation; notes below the first perfect/alterable level;
+		 * trivial alterations (based on pattern, not beat position); ante
+		 * simile.
+		 * @param {MEIdoc} meiDoc mei document
+		 * @memberof basic
+		 */
+		beatIndependentDurations : function(meiDoc) {
+			var sectionBlocks = meiDoc.blocks;
+
+			labelRests(sectionBlocks);
+			actOnColoration(sectionBlocks);
+			actOnDots(sectionBlocks);
+			allUnalterableImperfectLevels(sectionBlocks);
+			simplestAlterations(sectionBlocks);
+			anteSim(sectionBlocks);
+
+			// write dur.ges => dur.intermediate * propMultiplier
+			durIO.setDurGesPerBlock(sectionBlocks);
+		}
+	}
+
+})();
+
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+    
+    
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.6</a> on Mon May 10 2021 12:36:07 GMT+0000 (Coordinated Universal Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/polyfill.js"></script>
+<script src="scripts/linenumber.js"></script>
+
+<script src="scripts/search.js" defer></script>
+
+
+<script src="scripts/collapse.js" defer></script>
+
+
+</body>
+</html>

@@ -1,0 +1,1329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="utf-8">
+    <title>alterate - Documentation</title>
+    
+    
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+    <script src="scripts/nav.js" defer></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav >
+    
+    <input type="text" id="nav-search" placeholder="Search" />
+    
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="MEIdoc.html">MEIdoc</a><ul class='methods'><li data-type='method' style='display: none;'><a href="MEIdoc.html#appendToIdDictionary">appendToIdDictionary</a></li><li data-type='method' style='display: none;'><a href="MEIdoc.html#getBlockByEventId">getBlockByEventId</a></li><li data-type='method' style='display: none;'><a href="MEIdoc.html#getBlocksFromSections">getBlocksFromSections</a></li><li data-type='method' style='display: none;'><a href="MEIdoc.html#initEventDict">initEventDict</a></li><li data-type='method' style='display: none;'><a href="MEIdoc.html#preprocess">preprocess</a></li><li data-type='method' style='display: none;'><a href="MEIdoc.html#proportionMultiplier">proportionMultiplier</a></li><li data-type='method' style='display: none;'><a href="MEIdoc.html#renewBlob">renewBlob</a></li></ul></li></ul><h3>Namespaces</h3><ul><li><a href="alterate.html">alterate</a><ul class='methods'><li data-type='method' style='display: none;'><a href="alterate.html#.firstBeatAlteration">firstBeatAlteration</a></li><li data-type='method' style='display: none;'><a href="alterate.html#.midBeatAlteration">midBeatAlteration</a></li><li data-type='method' style='display: none;'><a href="alterate.html#.secondBeatAlteration">secondBeatAlteration</a></li><li data-type='method' style='display: none;'><a href="alterate.html#.thirdBeatAlteration">thirdBeatAlteration</a></li><li data-type='method' style='display: none;'><a href="alterate.html#~checkForGeneralAlteration">checkForGeneralAlteration</a></li></ul></li><li><a href="basic.html">basic</a><ul class='methods'><li data-type='method' style='display: none;'><a href="basic.html#.beatIndependentDurations">beatIndependentDurations</a></li><li data-type='method' style='display: none;'><a href="basic.html#~actOnColoration">actOnColoration</a></li><li data-type='method' style='display: none;'><a href="basic.html#~actOnDots">actOnDots</a></li><li data-type='method' style='display: none;'><a href="basic.html#~allUnalterableImperfectLevels">allUnalterableImperfectLevels</a></li><li data-type='method' style='display: none;'><a href="basic.html#~anteSim">anteSim</a></li><li data-type='method' style='display: none;'><a href="basic.html#~labelRests">labelRests</a></li><li data-type='method' style='display: none;'><a href="basic.html#~simplestAlterations">simplestAlterations</a></li></ul></li><li><a href="complexBeats.html">complexBeats</a><ul class='methods'><li data-type='method' style='display: none;'><a href="complexBeats.html#.addStartTimes">addStartTimes</a></li><li data-type='method' style='display: none;'><a href="complexBeats.html#.complexAnalysis">complexAnalysis</a></li><li data-type='method' style='display: none;'><a href="complexBeats.html#~addAllStartTimes">addAllStartTimes</a></li><li data-type='method' style='display: none;'><a href="complexBeats.html#~addBreveBoundariesForBlock">addBreveBoundariesForBlock</a></li><li data-type='method' style='display: none;'><a href="complexBeats.html#~addStartTimesForBlock">addStartTimesForBlock</a></li><li data-type='method' style='display: none;'><a href="complexBeats.html#~afterTheEasyBits">afterTheEasyBits</a></li><li data-type='method' style='display: none;'><a href="complexBeats.html#~updateBlocks">updateBlocks</a></li></ul></li><li><a href="durIO.html">durIO</a><ul class='methods'><li data-type='method' style='display: none;'><a href="durIO.html#.readBlockFrom">readBlockFrom</a></li><li data-type='method' style='display: none;'><a href="durIO.html#.readDur">readDur</a></li><li data-type='method' style='display: none;'><a href="durIO.html#.readDurGes">readDurGes</a></li><li data-type='method' style='display: none;'><a href="durIO.html#.readStartsAt">readStartsAt</a></li><li data-type='method' style='display: none;'><a href="durIO.html#.setBeatPos">setBeatPos</a></li><li data-type='method' style='display: none;'><a href="durIO.html#.setBreveBoundaries">setBreveBoundaries</a></li><li data-type='method' style='display: none;'><a href="durIO.html#.setDurGesPerBlock">setDurGesPerBlock</a></li><li data-type='method' style='display: none;'><a href="durIO.html#.setStartsAt">setStartsAt</a></li><li data-type='method' style='display: none;'><a href="durIO.html#.windowDuration">windowDuration</a></li><li data-type='method' style='display: none;'><a href="durIO.html#.writeAlteration">writeAlteration</a></li><li data-type='method' style='display: none;'><a href="durIO.html#.writeComment">writeComment</a></li><li data-type='method' style='display: none;'><a href="durIO.html#.writeDur">writeDur</a></li><li data-type='method' style='display: none;'><a href="durIO.html#.writeDurGes">writeDurGes</a></li><li data-type='method' style='display: none;'><a href="durIO.html#.writeDurWithRule">writeDurWithRule</a></li><li data-type='method' style='display: none;'><a href="durIO.html#.writeImperfection">writeImperfection</a></li><li data-type='method' style='display: none;'><a href="durIO.html#.writePerfection">writePerfection</a></li><li data-type='method' style='display: none;'><a href="durIO.html#.writeSimpleImperfection">writeSimpleImperfection</a></li><li data-type='method' style='display: none;'><a href="durIO.html#~breveDifference">breveDifference</a></li><li data-type='method' style='display: none;'><a href="durIO.html#~gcd">gcd</a></li></ul></li><li><a href="imperfect.html">imperfect</a><ul class='methods'><li data-type='method' style='display: none;'><a href="imperfect.html#.firstBeatImperfection">firstBeatImperfection</a></li><li data-type='method' style='display: none;'><a href="imperfect.html#.midBeatImperfection">midBeatImperfection</a></li><li data-type='method' style='display: none;'><a href="imperfect.html#.secondBeatImperfection">secondBeatImperfection</a></li><li data-type='method' style='display: none;'><a href="imperfect.html#.thirdBeatImperfection">thirdBeatImperfection</a></li><li data-type='method' style='display: none;'><a href="imperfect.html#~canImperfect">canImperfect</a></li><li data-type='method' style='display: none;'><a href="imperfect.html#~divisionLikeRests">divisionLikeRests</a></li><li data-type='method' style='display: none;'><a href="imperfect.html#~firstBeatImperfectionCheck">firstBeatImperfectionCheck</a></li><li data-type='method' style='display: none;'><a href="imperfect.html#~imperfectingLevels">imperfectingLevels</a></li><li data-type='method' style='display: none;'><a href="imperfect.html#~indexOfNextDot">indexOfNextDot</a></li><li data-type='method' style='display: none;'><a href="imperfect.html#~indexOfNextSameOrLongerOrDot">indexOfNextSameOrLongerOrDot</a></li><li data-type='method' style='display: none;'><a href="imperfect.html#~solidBlock">solidBlock</a></li></ul></li><li><a href="post.html">post</a><ul class='methods'><li data-type='method' style='display: none;'><a href="post.html#.run">run</a></li><li data-type='method' style='display: none;'><a href="post.html#~addBarLines">addBarLines</a></li></ul></li><li><a href="rm.html">rm</a><ul class='methods'><li data-type='method' style='display: none;'><a href="rm.html#.augDot">augDot</a></li><li data-type='method' style='display: none;'><a href="rm.html#.beatUnitStructure">beatUnitStructure</a></li><li data-type='method' style='display: none;'><a href="rm.html#.divisionDot">divisionDot</a></li><li data-type='method' style='display: none;'><a href="rm.html#.dupleMinimCountFromElement">dupleMinimCountFromElement</a></li><li data-type='method' style='display: none;'><a href="rm.html#.firstPerfectLevel">firstPerfectLevel</a></li><li data-type='method' style='display: none;'><a href="rm.html#.isAlterable">isAlterable</a></li><li data-type='method' style='display: none;'><a href="rm.html#.isColored">isColored</a></li><li data-type='method' style='display: none;'><a href="rm.html#.isNote">isNote</a></li><li data-type='method' style='display: none;'><a href="rm.html#.leveleq">leveleq</a></li><li data-type='method' style='display: none;'><a href="rm.html#.mensurSummary">mensurSummary</a></li><li data-type='method' style='display: none;'><a href="rm.html#.minimStructures">minimStructures</a></li><li data-type='method' style='display: none;'><a href="rm.html#.noteInt">noteInt</a></li><li data-type='method' style='display: none;'><a href="rm.html#.noteOrRest">noteOrRest</a></li><li data-type='method' style='display: none;'><a href="rm.html#.notePerfectAsWhole">notePerfectAsWhole</a></li><li data-type='method' style='display: none;'><a href="rm.html#.regularlyPerfect">regularlyPerfect</a></li><li data-type='method' style='display: none;'><a href="rm.html#.simpleMinims">simpleMinims</a></li><li data-type='method' style='display: none;'><a href="rm.html#~noteIntFromDur">noteIntFromDur</a></li></ul></li><li><a href="vrvInterface.html">vrvInterface</a><ul class='methods'><li data-type='method' style='display: none;'><a href="vrvInterface.html#.applyZoom">applyZoom</a></li><li data-type='method' style='display: none;'><a href="vrvInterface.html#.loadData">loadData</a></li><li data-type='method' style='display: none;'><a href="vrvInterface.html#.nextPage">nextPage</a></li><li data-type='method' style='display: none;'><a href="vrvInterface.html#.prevPage">prevPage</a></li><li data-type='method' style='display: none;'><a href="vrvInterface.html#.zoomIn">zoomIn</a></li><li data-type='method' style='display: none;'><a href="vrvInterface.html#.zoomOut">zoomOut</a></li><li data-type='method' style='display: none;'><a href="vrvInterface.html#~bindInteractionEvents">bindInteractionEvents</a></li><li data-type='method' style='display: none;'><a href="vrvInterface.html#~deselectEvent">deselectEvent</a></li><li data-type='method' style='display: none;'><a href="vrvInterface.html#~hideDetails">hideDetails</a></li><li data-type='method' style='display: none;'><a href="vrvInterface.html#~loadPage">loadPage</a></li><li data-type='method' style='display: none;'><a href="vrvInterface.html#~selectEvent">selectEvent</a></li><li data-type='method' style='display: none;'><a href="vrvInterface.html#~setOptions">setOptions</a></li><li data-type='method' style='display: none;'><a href="vrvInterface.html#~showDetails">showDetails</a></li></ul></li></ul><h3>Global</h3><ul><li><a href="global.html#baseUrl">baseUrl</a></li><li><a href="global.html#basicAnalysisDone">basicAnalysisDone</a></li><li><a href="global.html#complexAnalysisDone">complexAnalysisDone</a></li><li><a href="global.html#currentParams">currentParams</a></li><li><a href="global.html#currentUrl">currentUrl</a></li><li><a href="global.html#fetchMEI">fetchMEI</a></li><li><a href="global.html#getSectionBlocks">getSectionBlocks</a></li><li><a href="global.html#isRest">isRest</a></li><li><a href="global.html#loadData">loadData</a></li><li><a href="global.html#makeXmlCode">makeXmlCode</a></li><li><a href="global.html#meiFile">meiFile</a></li></ul>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">alterate</h1>
+    
+
+    
+
+
+
+
+<section>
+
+<header>
+    
+        <h2>
+        alterate
+        </h2>
+        
+    
+</header>
+
+<article>
+    
+        <div class="container-overview">
+        
+            
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="interpreter_alteration.js.html">interpreter/alteration.js</a>, <a href="interpreter_alteration.js.html#line6">line 6</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+            
+                <div class="description usertext"><p>Gathers alteration functions</p></div>
+            
+
+            
+        
+        </div>
+    
+
+    
+
+    
+
+    
+    
+    
+
+     
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    <h4 class="name" id=".firstBeatAlteration"><span class="type-signature">(static) </span>firstBeatAlteration<span class="signature">(event, index, events, mens)</span><span class="type-signature"> &rarr; {DOMObject}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="interpreter_alteration.js.html">interpreter/alteration.js</a>, <a href="interpreter_alteration.js.html#line69">line 69</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description usertext">
+    <p>Given an event on the first beat, if we can tell if it's altered,
+label the duration.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>event</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">DOMObject</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>mei:note (rest would have been resolved already)</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>index</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Integer</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The note's position in events</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>events</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Sequence of events in this section for this voice</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>mens</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">DOMObject</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>mei:mensur</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>This function returns the modified event (why?)</p>
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">DOMObject</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".midBeatAlteration"><span class="type-signature">(static) </span>midBeatAlteration<span class="signature">(event, index, events, mens)</span><span class="type-signature"> &rarr; {DOMObject|DOMObject}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="interpreter_alteration.js.html">interpreter/alteration.js</a>, <a href="interpreter_alteration.js.html#line119">line 119</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description usertext">
+    <p>Currently a placeholder for deciding the alteration status of a
+note that isn't on beats 1, 2 or 3</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>event</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">DOMObject</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>mei:note (rest would have been resolved already)</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>index</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Integer</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The note's position in events</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>events</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Sequence of events in this section for this voice</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>mens</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">DOMObject</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>mei:mensur</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+<ul>
+        <li>
+<div class="param-desc">
+    <p>This function returns the altered event (why?)</p>
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">DOMObject</span>
+
+
+    </dd>
+</dl>
+</li>
+    
+        <li>
+<div class="param-desc">
+    <p>Returns the event (unmodified at the moment)</p>
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">DOMObject</span>
+
+
+    </dd>
+</dl>
+</li>
+    </ul>
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".secondBeatAlteration"><span class="type-signature">(static) </span>secondBeatAlteration<span class="signature">(event, index, events, mens)</span><span class="type-signature"> &rarr; {DOMObject}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="interpreter_alteration.js.html">interpreter/alteration.js</a>, <a href="interpreter_alteration.js.html#line83">line 83</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description usertext">
+    <p>Given an event on the second beat, if we can tell if it's altered,
+label the duration. Currently, absolutely assumes alteration is appropriate.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>event</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">DOMObject</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>mei:note (rest would have been resolved already)</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>index</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Integer</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The note's position in events</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>events</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Sequence of events in this section for this voice</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>mens</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">DOMObject</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>mei:mensur</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>This function returns the modified event (why?)</p>
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">DOMObject</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".thirdBeatAlteration"><span class="type-signature">(static) </span>thirdBeatAlteration<span class="signature">(event, index, events, mens)</span><span class="type-signature"> &rarr; {DOMObject}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="interpreter_alteration.js.html">interpreter/alteration.js</a>, <a href="interpreter_alteration.js.html#line103">line 103</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description usertext">
+    <p>Given an event on the third beat, if we can tell if it's altered,
+label the duration.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>event</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">DOMObject</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>mei:note (rest would have been resolved already)</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>index</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Integer</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The note's position in events</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>events</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Sequence of events in this section for this voice</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>mens</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">DOMObject</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>mei:mensur</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>This function returns the modified event (why?)</p>
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">DOMObject</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="~checkForGeneralAlteration"><span class="type-signature">(inner) </span>checkForGeneralAlteration<span class="signature">(event, index, events, mens)</span><span class="type-signature"> &rarr; {DOMObject}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="interpreter_alteration.js.html">interpreter/alteration.js</a>, <a href="interpreter_alteration.js.html#line28">line 28</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description usertext">
+    <p>Check an event for evidence of alteration. Alters event if it falls
+after a longer note followed by its own duration. Where there is
+uncertainty about the intervening duration, rule out alteration if
+the minimum interpretation of that duration is too long. We assume
+that the calling function has established that the ensuing durations
+are suitable.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>event</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">DOMObject</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>mei:note (rests can't be altered)</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>index</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Integer</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The note's position in events</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>events</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Sequence of events in this section for this voice</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>mens</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">DOMObject</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>mei:mensur</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>This function returns the altered event (why?)</p>
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">DOMObject</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+    
+
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+    
+    
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.6</a> on Mon May 10 2021 12:36:07 GMT+0000 (Coordinated Universal Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/polyfill.js"></script>
+<script src="scripts/linenumber.js"></script>
+
+<script src="scripts/search.js" defer></script>
+
+
+<script src="scripts/collapse.js" defer></script>
+
+
+</body>
+</html>
