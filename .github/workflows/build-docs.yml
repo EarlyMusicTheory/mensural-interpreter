@@ -1,0 +1,35 @@
+# This workflow will do a clean install of node dependencies, build the source code and run tests across different versions of node
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
+
+name: Build JSDoc
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    name: Build docs
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+        with:
+          ref: 'main'
+    - name: Use Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '14'
+    - name: Install docdash
+      run: npm install docdash
+    - name: Build docs
+      run: jsdoc -c doc-config.json
+    - name: Store docs
+      uses: EndBug/add-and-commit@v7
+      with:
+        add: 'doc/'
+        author_name: GitHub Actions
+        auhtor_email: actions@github.com
+        branch: main
+        message: 'Updated docs after push'
