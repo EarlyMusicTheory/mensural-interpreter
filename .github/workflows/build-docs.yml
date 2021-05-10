@@ -30,6 +30,6 @@ jobs:
       with:
         add: 'doc/'
         author_name: GitHub Actions
-        auhtor_email: actions@github.com
+        author_email: actions@github.com
         branch: main
         message: 'Updated docs after push'
