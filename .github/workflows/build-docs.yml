@@ -20,6 +20,7 @@ jobs:
       with:
         node-version: '14'
     - name: Install docdash
+      run: npm install jsdoc
       run: npm install docdash
     - name: Build docs
       run: jsdoc -c doc-config.json
