@@ -1,17 +1,17 @@
 "use strict";
 
-/** @global current url */
+/** @var {URL} currentUrl current url */
 var currentUrl = new URL(window.location.href);
-/** @global current base url */
+/** @var baseUrl current base url */
 var baseUrl = currentUrl.origin + currentUrl.pathname;
-/** @global parameters of current url */
+/** @var currentParams parameters of current url */
 var currentParams = currentUrl.searchParams;
 //var meiUrl;
-/** @global {MEIdoc} contains the current used MEI document */
+/** @var {MEIdoc} meiFile contains the current used MEI document */
 var meiFile = new MEIdoc();
-/** @global {Boolean} if basic analysis is done */
+/** @var {Boolean} basicAnalysisDone if basic analysis is done */
 var basicAnalysisDone = false;
-/** @global {Boolean} if complex analysis is done */
+/** @var {Boolean} complexAnalysisDone if complex analysis is done */
 var complexAnalysisDone = false;
 
 /**

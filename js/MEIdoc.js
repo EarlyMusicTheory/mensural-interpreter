@@ -5,6 +5,7 @@
  * 
  * Trying to fake some kind of private scope for the class.
  * Used https://blog.bitsrc.io/doing-it-right-private-class-properties-in-javascript-cc74ef88682e
+ * 
  */
 
 var MEIdoc = (() => {
@@ -15,7 +16,6 @@ var MEIdoc = (() => {
 	 * Return all the sections that themselves contain no sections (we
 	 * have a hierarchical tree structure for parts, so this only chooses
 	 * the lowest level structural unit.
-	 * @private
 	 * @param {DOMObject} MEIDoc 
 	 * @return {Array} Array of mei:section elements
 	 * @see easyRhythms
@@ -26,7 +26,6 @@ var MEIdoc = (() => {
 	}
 
 	/**
-	 * @private
 	 * Return true if x (an XML DOM object, normally MEI) contains *no*
 	 * mei:sections. this needs to be set as a DOM document object.
 	 * @param {DOMObject} x - the part of the tree.  
@@ -41,7 +40,6 @@ var MEIdoc = (() => {
 	}
 
 	/**
-	 * @private
 	 * Return all layers for a section
 	 * @param {DOMObject} section 
 	 * @return {Array} Array of mei:layer elements 
@@ -52,7 +50,6 @@ var MEIdoc = (() => {
 	}
 
 	/**
-	 * @private
 	 * Creates an array of mensurally coherent blocks, each an object with
 	 * mensuration and events attributes.
 	 * @param {DOMObject} section The section to process
@@ -136,7 +133,6 @@ var MEIdoc = (() => {
 	/** 
 	 * Name space manager function. Takes a prefix and returns the URL for
 	 * that name space. In this case, though, pretty much hard-wired.
-	 * @private
 	 * @param {String} prefix The namespace prefix to retrieve as a URL
 	 */
 	function nsResolver(prefix){
@@ -148,8 +144,7 @@ var MEIdoc = (() => {
 
     /**
 	 * Given a proportion-specifying element, give its implied multiplier
-	 * @private
-     * @param {DOMObject} el proportion element
+	 * @param {DOMObject} el proportion element
      * @returns {Number}
      */
     function propProportionMultiplier(el) {
@@ -161,17 +156,12 @@ var MEIdoc = (() => {
 
     /**
      * @class
-	 * @public
-     * @member {string} text
-     * @member {DOMObject} doc
-	 * @member {Blob} blob
-     * @member {Array} blocks
-     * @member {Object.<string,Object>} idDictionary return block by event id
-	 * @member {Object.<string,Object>} eventDict id to xml element
-     * @method appendToIdDictionary
-     * @method getBlocksFromSections
      */
     class MEIdoc {
+		/**
+		 * @constructs MEIdoc
+		 * @param {string} meiText 
+		 */
         constructor(meiText) {
             this.meiDoc = meiText ? parser.parseFromString(meiText, "text/xml") : null;
 			this.idDict = {};
@@ -182,6 +172,9 @@ var MEIdoc = (() => {
 			if(this.doc) this.getBlocksFromSections();
         }
 
+		/**
+		 * @property {string} text
+		 */
         get text() {
             return this.doc ? serializer.serializeToString(this.doc) : null;
         }
@@ -190,6 +183,7 @@ var MEIdoc = (() => {
 			if (this.doc) this.getBlocksFromSections();
         }
 
+		/** @property {DOMObject} doc */
         get doc() {
             return this.meiDoc ? this.meiDoc : null;
         }
@@ -201,6 +195,9 @@ var MEIdoc = (() => {
 			if(this.meiDoc) this.meiBlob = new Blob([this.text], {type: 'text/xml'});
         }
 
+		/**
+		 * @property {Blob} blob
+		 */
 		get blob() {
 			return this.meiBlob;
 		}
@@ -211,6 +208,9 @@ var MEIdoc = (() => {
 			this.meiBlob = new Blob([this.text], {type: 'text/xml'});
 		}
 
+		/**
+		 * @property {Array<Object>} blocks
+		 */
         get blocks() {
             return this.sectionBlocks;
         }
@@ -218,6 +218,9 @@ var MEIdoc = (() => {
             this.sectionBlocks = blockArray;
         }
 
+		/**
+		 * @property {Object.<string,Object>} idDictionary return block by event id
+		 */
         get idDictionary() {
             return this.idDict;
         }
@@ -241,6 +244,9 @@ var MEIdoc = (() => {
             return this.idDictionary[eventId];
         }
 
+		/**
+		 * @property {Object.<string,Object>} eventDict id to xml element
+		 */
 		get eventDict () {
 			return this.eventIdDict;
 		}
@@ -296,8 +302,7 @@ var MEIdoc = (() => {
 
         /**
          * Given a block index number, finds the proportion of that block and returns the factor.
-		 * @public
-         * @param {integer} blockIndex mei:note or mei:rest
+		 * @param {integer} blockIndex mei:note or mei:rest
          * @returns {Number} 
          */
         proportionMultiplier(blockIndex){
@@ -321,7 +326,6 @@ var MEIdoc = (() => {
 		 * * @todo maybe: delete empty <dir>
 		 * * @todo maybe: delete empty <verse>
 		 * * delete note/@lig if it is identical to ligature/@form
-		 * @public
 		 */
 		preprocess(){
 			/** put first clef and keySig into staffDef */
@@ -340,7 +344,6 @@ var MEIdoc = (() => {
 	// preprocessing functions
 	/**
 	 * If a staff starts with clef and keySig, move it to the staffDef
-	 * @private
 	 * @param {DOMElement} staffElement 
 	 */
 	function tidyClefKeySig(staffElement, doc)
@@ -364,7 +367,6 @@ var MEIdoc = (() => {
 
 	/**
 	 * Get the mensuration info from staffDef and put it into the layer
-	 * @private
 	 * @param {DOMElement} staffElement 
 	 */
 	function getMensFromStaffDef(staffElement, doc)
@@ -405,7 +407,6 @@ var MEIdoc = (() => {
 	 * Should remove redundant ligature form and note lig attributes.
 	 * For now, ligatures will be removed completely for better alignment
 	 * @todo Remove just redundant visual attributes when Verovio rendering is properly done
-	 * @private
 	 * @param {DOMElement} staffElement 
 	 */
 	function removeLig(staffElement)
@@ -434,7 +435,6 @@ var MEIdoc = (() => {
 	/**
 	 * Adjacent <mensur> <proport> elements get merged into one <mensur> element
 	 * (avoids misplacments in rendering)
-	 * @private
 	 * @param {DOMElement} staffElement 
 	 */
 	function mergeAdjacentMensProp(staffElement)
