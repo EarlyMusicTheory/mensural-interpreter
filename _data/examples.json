@@ -18,8 +18,20 @@
           "url": "colorWDot.xml"
         },
         {
+          "label": "Dot of perfection",
+          "url": "perfDot.xml"
+        },
+        {
           "label": "Simple Dot",
           "url": "simpleDot.xml"
+        },
+        {
+          "label": "All unalterable imperfect",
+          "url": "unalterableImperfect.xml"
+        },
+        {
+          "label": "Ante simile",
+          "url": "anteSim.xml"
         },
         {
           "label": "Alteration 1",
