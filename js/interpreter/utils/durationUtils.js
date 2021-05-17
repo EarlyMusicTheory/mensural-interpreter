@@ -57,17 +57,16 @@ var durIO = (function() {
         /** public */
 
         /**
-         * Given a count of beats, writes dur.itermediate to an element (appends 'b'
-         * and, if there's a dot of augmentation, multiplies by 1.5)
+         * Given a count of beats, writes dur.itermediate to an element
          * @param  {Integer} num Core duration in minims
          * @param {DOMElement} el mei:note
-         * @param {Boolean} dot Is there a dot of augmentation?
          * @memberof durIO
          */
-        writeDur : function (num, el, dot) {
-            if(dot) {
+        writeDur : function (num, el) {
+            // remove dot functionality to handle it elsewhere
+            /*if(dot) {
                 num = num*1.5;
-            }
+            }*/
             el.setAttributeNS(null, 'dur.intermediate', num+'b');
         },
 
@@ -99,8 +98,17 @@ var durIO = (function() {
          * @memberof durIO
          */
         writeDurWithRule : function (el, mens, rule, dot = false, modNum = 1, modDenom = 1) {
+            if(dot)
+            {
+                modNum = modNum * 3;
+                modDenom = modDenom * 2;
+                let factor = gcd(modNum, modDenom);
+                modNum = modNum / factor;
+                modDenom = modDenom / factor;
+            }
+            
             let modifier = modNum / modDenom;
-            this.writeDur(rm.simpleMinims(el, mens) * modifier, el, dot);
+            this.writeDur(rm.simpleMinims(el, mens) * modifier, el);
             el.setAttributeNS(null, 'rule', rule);
             if (modNum !== 1 || modDenom !== 1)
             {
@@ -123,7 +131,7 @@ var durIO = (function() {
          */
         writeSimpleImperfection : function (el, mens, rule) {
             //	el.setAttributeNS(null, 'dur.ges', (2 * simpleMinims(el, mens) / 3) + 'b');
-            this.writeDur((2 * rm.simpleMinims(el, mens) / 3), el, false);
+            this.writeDur((2 * rm.simpleMinims(el, mens) / 3), el);
             el.setAttributeNS(null, 'num', "3");
             el.setAttributeNS(null, 'numbase', "2");
             el.setAttributeNS(null, 'dur.quality', 'imperfecta');
@@ -146,7 +154,7 @@ var durIO = (function() {
             var defaultDur = rm.simpleMinims(el, mens);
             var factor = gcd(defaultDur, reduceBy);
             var finalDur = defaultDur - reduceBy;
-            this.writeDur(finalDur, el, false);
+            this.writeDur(finalDur, el);
             el.setAttributeNS(null, 'num', finalDur / factor);
             el.setAttributeNS(null, 'numbase', defaultDur / factor);
             el.setAttributeNS(null, 'dur.quality', 'imperfecta');
@@ -168,7 +176,7 @@ var durIO = (function() {
          */
         writeAlteration : function (el, mens, rule) {
             //	el.setAttributeNS(null, 'dur.ges', (2 * simpleMinims(el, mens)) + 'b');
-            this.writeDur((2 * rm.simpleMinims(el, mens)), el, false);
+            this.writeDur((2 * rm.simpleMinims(el, mens)), el);
             el.setAttributeNS(null, 'num', "1");
             el.setAttributeNS(null, 'numbase', "2");
             el.setAttributeNS(null, 'dur.quality', 'altera');

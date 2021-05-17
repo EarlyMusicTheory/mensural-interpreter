@@ -6,8 +6,36 @@
     "tests":
       [
         {
-          "label": "Alteration",
-          "url": "AltExample.xml"
+          "label": "Rests",
+          "url": "Rests.xml"
+        },
+        {
+          "label": "Coloration",
+          "url": "Coloration.xml"
+        },
+        {
+          "label": "Coloration with dot",
+          "url": "colorWDot.xml"
+        },
+        {
+          "label": "Dot of perfection",
+          "url": "perfDot.xml"
+        },
+        {
+          "label": "Simple Dot",
+          "url": "simpleDot.xml"
+        },
+        {
+          "label": "All unalterable imperfect",
+          "url": "unalterableImperfect.xml"
+        },
+        {
+          "label": "Ante simile",
+          "url": "anteSim.xml"
+        },
+        {
+          "label": "Alteration 1",
+          "url": "Alt1.xml"
         }
       ]
     }
