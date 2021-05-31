@@ -53,6 +53,17 @@ var durIO = (function() {
         return minims/MiB;
     }
 
+    function writeAttr(eventEl, dictObj) {
+        for(let attr in dictObj)
+        {
+            eventEl.setAttributeNS(null, attr, dictObj[attr]);
+        }
+    }
+
+    function readAttr(eventEl, attrName) {
+        return eventEl ? eventEl.getAttributeNS(null, attrName) : null;
+    }
+
     return {
         /** public */
 
@@ -67,7 +78,7 @@ var durIO = (function() {
             /*if(dot) {
                 num = num*1.5;
             }*/
-            el.setAttributeNS(null, 'dur.intermediate', num+'b');
+            writeAttr(el, {'dur.intermediate': num+'b'});
         },
 
         /**
@@ -82,7 +93,7 @@ var durIO = (function() {
             var scaledDur = dur * propMultiplier;
             if(dur)
             {
-                el.setAttributeNS(null, "dur.ges", scaledDur + 'b');
+                writeAttr(el, {'dur.ges': scaledDur+'b'});
             }
         },
         
@@ -109,11 +120,10 @@ var durIO = (function() {
             
             let modifier = modNum / modDenom;
             this.writeDur(rm.simpleMinims(el, mens) * modifier, el);
-            el.setAttributeNS(null, 'rule', rule);
+            writeAttr(el, {"rule": rule});
             if (modNum !== 1 || modDenom !== 1)
             {
-                el.setAttributeNS(null, 'num', modDenom);
-				el.setAttributeNS(null, 'numbase', modNum);
+                writeAttr(el, {"num": modDenom, "numbase": modNum});
             }
         },
         
@@ -132,11 +142,12 @@ var durIO = (function() {
         writeSimpleImperfection : function (el, mens, rule) {
             //	el.setAttributeNS(null, 'dur.ges', (2 * simpleMinims(el, mens) / 3) + 'b');
             this.writeDur((2 * rm.simpleMinims(el, mens) / 3), el);
-            el.setAttributeNS(null, 'num', "3");
-            el.setAttributeNS(null, 'numbase', "2");
-            el.setAttributeNS(null, 'dur.quality', 'imperfecta');
-            //el.setAttributeNS(null, 'quality', 'i');
-            el.setAttributeNS(null, 'rule', rule);
+            writeAttr(el, 
+                {"num": "3", 
+                "numbase": "2", 
+                'dur.quality': 'imperfecta',
+                "rule": rule
+            });
         },
         
         /**
@@ -155,13 +166,15 @@ var durIO = (function() {
             var factor = gcd(defaultDur, reduceBy);
             var finalDur = defaultDur - reduceBy;
             this.writeDur(finalDur, el);
-            el.setAttributeNS(null, 'num', finalDur / factor);
-            el.setAttributeNS(null, 'numbase', defaultDur / factor);
-            el.setAttributeNS(null, 'dur.quality', 'imperfecta');
-            el.setAttributeNS(null, 'rule', rule);	
+            writeAttr(el, 
+                {'num': finalDur / factor,
+                'numbase': defaultDur / factor,
+                'dur.quality': 'imperfecta',
+                'rule': rule
+            });
             if (defaultMinims === true)
             {
-                el.setAttributeNS(null, 'defaultminims', rm.simpleMinims(el, mens));
+                writeAttr(el, {'defaultminims': rm.simpleMinims(el, mens)});
             }
         },
         
@@ -177,11 +190,12 @@ var durIO = (function() {
         writeAlteration : function (el, mens, rule) {
             //	el.setAttributeNS(null, 'dur.ges', (2 * simpleMinims(el, mens)) + 'b');
             this.writeDur((2 * rm.simpleMinims(el, mens)), el);
-            el.setAttributeNS(null, 'num', "1");
-            el.setAttributeNS(null, 'numbase', "2");
-            el.setAttributeNS(null, 'dur.quality', 'altera');
-            //el.setAttributeNS(null, 'quality', 'a');
-            el.setAttributeNS(null, 'rule', rule);
+            writeAttr(el, {
+                "num": "1",
+                "numbase": "2",
+                "dur.quality": "altera",
+                "rule": rule
+            });
         },
 
         /**
@@ -195,18 +209,18 @@ var durIO = (function() {
          */
         writePerfection : function (el, mens, rule, defaultMinims = false) {
             durIO.writeDur(rm.simpleMinims(el, mens), el);
-            el.setAttributeNS(null, 'dur.quality', 'perfecta');
-            // it doesn't make sense, but maybe Verovio needs it...
-            //if(!rm.regularlyPerfect(el, mens))
-            //{
-                el.setAttributeNS(null, 'num', '2');
-                el.setAttributeNS(null, 'numbase', '3');
-            //}
+            writeAttr(el, {
+                'dur.quality': 'perfecta',
+                'num': '2',
+                'numbase': '3',
+                'rule': rule
+            });
+            // it doesn't make sense, but maybe Verovio seems to need num/numbase
+            
             if (defaultMinims === true)
             {
-                el.setAttributeNS(null, 'defaultminims', rm.simpleMinims(el, mens));
+                writeAttr(el, {'defaultminims': rm.simpleMinims(el, mens)});
             }
-            el.setAttributeNS(null, 'rule', rule);
         },
         
         /**
@@ -217,7 +231,7 @@ var durIO = (function() {
          * @memberof durIO
          */
         readDur : function (el) {
-            var str = el ? el.getAttributeNS(null, 'dur.intermediate') : null;
+            var str = readAttr(el, 'dur.intermediate');
             return str ? Number(str.substring(0, str.length-1)) : false;
         },
 
@@ -229,7 +243,7 @@ var durIO = (function() {
          * @memberof durIO
          */
         readDurGes : function (el) {
-            var str = el ? el.getAttributeNS(null, 'dur.ges') : null;
+            var str = readAttr(el, 'dur.ges');
             return str ? Number(str.substring(0, str.length-1)) : false;
         },
 
@@ -274,7 +288,7 @@ var durIO = (function() {
          * @memberof durIO
          */
         writeComment : function (el, comment) {
-            el.setAttributeNS(null, 'comment', comment);
+            writeAttr(el, {'comment': comment});
         },
         
         /**
@@ -286,8 +300,10 @@ var durIO = (function() {
          * @memberof durIO
          */
         setStartsAt : function (el, blockFrom, startsAt) {
-            el.setAttributeNS(null, 'mensurBlockStartsAt', blockFrom);
-            el.setAttributeNS(null, 'startsAt', startsAt);
+            writeAttr(el, {
+                'mensurBlockStartsAt': blockFrom,
+                'startsAt': startsAt
+            });
         },
 
         /**
@@ -297,7 +313,7 @@ var durIO = (function() {
          * @memberof durIO
          */
         readStartsAt : function (el) {
-            var startsAt = el ? el.getAttribute("startsAt"): null;
+            var startsAt = readAttr(el, "startsAt");
             return startsAt ? Number(startsAt) : false;
         },
 
@@ -308,7 +324,7 @@ var durIO = (function() {
          * @memberof durIO
          */
         readBlockFrom : function (el) {
-            var blockFrom = el ? el.getAttribute("mensurBlockStartsAt"): null;
+            var blockFrom = readAttr(el, "mensurBlockStartsAt");
             return blockFrom ? Number(blockFrom) : false;
         },
         
@@ -322,7 +338,7 @@ var durIO = (function() {
          */
         setBeatPos : function (el, blockPos, mens) {
             var beatStructure = rm.beatUnitStructure(blockPos, mens);
-            el.setAttributeNS(null, 'beatPos', beatStructure.join(', '));
+            writeAttr(el, {'beatPos': beatStructure.join(', ')});
 
             return beatStructure;
         },
@@ -339,13 +355,15 @@ var durIO = (function() {
         setBreveBoundaries : function (el, prevBeatStructure, beatStructure, minimStruct) {
             if(beatStructure[0]===0 && beatStructure[1]===0 && beatStructure[2]===0)
             {
-                el.setAttributeNS(null, 'onTheBreveBeat', beatStructure[3]);
+                writeAttr(el, {'onTheBreveBeat': beatStructure[3]});
             } 
             else if(!(beatStructure[5]===prevBeatStructure[5]
                     && beatStructure[4]===prevBeatStructure[4]
                     && beatStructure[3]===prevBeatStructure[3]))
             {
-                el.setAttributeNS(null, 'crossedABreveBeat', breveDifference(beatStructure, prevBeatStructure, minimStruct));
+                writeAttr(el, 
+                    {'crossedABreveBeat': breveDifference(beatStructure, prevBeatStructure, minimStruct)}
+                );
             }
         },
 
