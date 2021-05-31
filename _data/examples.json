@@ -14,28 +14,36 @@
           "url": "Coloration.xml"
         },
         {
-          "label": "Coloration with dot",
+          "label": "Coloration with dot of augmentation",
           "url": "colorWDot.xml"
         },
         {
-          "label": "Dot of perfection",
-          "url": "perfDot.xml"
-        },
-        {
-          "label": "Simple Dot",
+          "label": "Simple dot of augmentation",
           "url": "simpleDot.xml"
         },
         {
-          "label": "All unalterable imperfect",
+          "label": "Unalterable imperfect",
           "url": "unalterableImperfect.xml"
         },
         {
-          "label": "Ante simile",
+          "label": "Imperfection 2: Dot of perfection",
+          "url": "perfDot.xml"
+        },
+        {
+          "label": "Imperfection 2: Ante simile",
           "url": "anteSim.xml"
+        },
+        {
+          "label": "Imperfection 3",
+          "url": "I3.xml"
         },
         {
           "label": "Alteration 1",
           "url": "Alt1.xml"
+        },
+        {
+          "label": "Alteration 2",
+          "url": "Alt2.xml"
         }
       ]
     }

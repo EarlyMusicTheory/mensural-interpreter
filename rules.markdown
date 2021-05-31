@@ -7,6 +7,8 @@ permalink: /rules/
 
 ## Beat independent rules
 
+In order of execution:
+
 rest
 : Rests can't be altered or imperfected.
 
@@ -26,7 +28,7 @@ unalteredImperfectAfterLarger
 : An alterable note preceded by a larger note is followed by a larger note and regularly imperfect.
 
 A.2b
-: An alterable note that is preceded by a larger note followed by the equivalent of its own regular value and followed by a note or rest of the perfect unit next larger is altered.
+: ???
 
 unalteredImperfect
 : A regularly imperfect alterable note that is not followed by a larger note.
@@ -39,6 +41,7 @@ I.2.b.antesim
 ### Imperfection
 
 I.3
+: A regularly perfect note that falls on the first subunit of its own unit and is followed by any larger note or rest is ipso facto perfect.
 
 I.4a
 
@@ -60,6 +63,7 @@ I.6-literalunits
 : Trusting in alteration
 
 I.8
+: A regularly perfect note that falls on the second subunit of its own unit is imperfected from ahead by what would imperfect it, either immediately or by syncope.
 
 I.9a
 
@@ -71,6 +75,7 @@ A.1
 : An alterable note on the second beat gets altered.
 
 A.2
+: An alterable note that is preceded by a dot of division followed by the equivalent of its own regular value and followed by a note or rest of the perfect unit next larger is altered.
 
 A.xxx
 
