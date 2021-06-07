@@ -76,7 +76,7 @@ var basic = (function() {
 				var event = sectionBlocks[b].events[e];
 				if(rm.augDot(event) && e){
 					var prev = sectionBlocks[b].events[e-1];
-					if(e && !prev.getAttributeNS(null, 'dur.intermediate'))
+					if(e && !durIO.readDur(prev))
 						if(rm.notePerfectAsWhole(prev, mens)){
 							durIO.writePerfection(prev, mens,'I.2.a.PerfDot');
 						} else {
