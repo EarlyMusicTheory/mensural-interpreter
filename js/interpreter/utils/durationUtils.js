@@ -188,9 +188,9 @@ var durIO = (function() {
             writeAttr(el, 
                 {"num": "3", 
                 "numbase": "2", 
-                'dur.quality': 'imperfecta',
-                "rule": rule
+                'dur.quality': 'imperfecta'
             });
+            setAnnot(el.getAttribute("xml:id"), {"rule": rule});
         },
         
         /**
@@ -212,12 +212,12 @@ var durIO = (function() {
             writeAttr(el, 
                 {'num': finalDur / factor,
                 'numbase': defaultDur / factor,
-                'dur.quality': 'imperfecta',
-                'rule': rule
+                'dur.quality': 'imperfecta'
             });
+            setAnnot(el.getAttribute("xml:id"), {"rule": rule});
             if (defaultMinims === true)
             {
-                writeAttr(el, {'defaultminims': rm.simpleMinims(el, mens)});
+                setAnnot(el.getAttribute("xml:id"), {'defaultminims': rm.simpleMinims(el, mens)});
             }
         },
         
@@ -236,9 +236,9 @@ var durIO = (function() {
             writeAttr(el, {
                 "num": "1",
                 "numbase": "2",
-                "dur.quality": "altera",
-                "rule": rule
+                "dur.quality": "altera"
             });
+            setAnnot(el.getAttribute("xml:id"), {"rule": rule});
         },
 
         /**
@@ -255,14 +255,14 @@ var durIO = (function() {
             writeAttr(el, {
                 'dur.quality': 'perfecta',
                 'num': '2',
-                'numbase': '3',
-                'rule': rule
+                'numbase': '3'
             });
+            setAnnot(el.getAttribute("xml:id"), {"rule": rule});
             // it doesn't make sense, but maybe Verovio seems to need num/numbase
             
             if (defaultMinims === true)
             {
-                writeAttr(el, {'defaultminims': rm.simpleMinims(el, mens)});
+                setAnnot(el.getAttribute("xml:id"), {'defaultminims': rm.simpleMinims(el, mens)});
             }
         },
         
@@ -331,7 +331,7 @@ var durIO = (function() {
          * @memberof durIO
          */
         writeComment : function (el, comment) {
-            writeAttr(el, {'comment': comment});
+            setAnnot(el.getAttribute("xml:id"), {'comment': comment});
         },
         
         /**
