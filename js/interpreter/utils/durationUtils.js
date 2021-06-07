@@ -121,7 +121,7 @@ var durIO = (function() {
             /*if(dot) {
                 num = num*1.5;
             }*/
-            writeAttr(el, {'dur.intermediate': num});
+            writeAttr(el, {'dur.ppq': num});
         },
 
         /**
@@ -274,7 +274,7 @@ var durIO = (function() {
          * @memberof durIO
          */
         readDur : function (el) {
-            var str = readAttr(el, 'dur.intermediate');
+            var str = readAttr(el, 'dur.ppq');
             return str ? Number(str) : false;
         },
 
