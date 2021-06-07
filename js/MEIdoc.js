@@ -167,6 +167,7 @@ var MEIdoc = (() => {
 			this.idDict = {};
 			this.eventIdDict = {};
             this.sectionBlocks;
+			this.annots = {};
 			if(this.doc) this.initEventDict();
 			this.meiBlob = this.meiDoc ? new Blob([this.text], {type: 'text/xml'}) : null;
 			if(this.doc) this.getBlocksFromSections();
@@ -272,6 +273,38 @@ var MEIdoc = (() => {
 				this.eventIdDict[id] = element;
 			}
 		}
+		
+		addMeiElement(elName) {
+			let el = this.doc.createElementNS(nsResolver("mei"), elName);
+			let id = "ID" + uuidv4();
+			el.setAttribute("xml:id", id);
+			this.eventIdDict[id] = el;
+
+			return el;
+		}
+
+		/** @property {Object.<string,Object>} annotations event id to annotations */
+		get annotations () {
+			return this.annots;
+		}
+
+		getAnnotation (eventID) {
+			return this.annotations[eventID];
+		}
+		addAnnotation (eventID) {
+			let annot = this.addMeiElement("annot");
+			annot.setAttribute("startid", "#" + eventID);
+			annot.setAttribute("type", "#mensural-interpreter");
+
+			let layer = this.doc.evaluate("./ancestor::mei:layer[1]", this.eventDict[eventID], nsResolver, 9).singleNodeValue;
+
+			layer.after(annot);
+
+			this.annots[eventID] = annot;
+			return annot;
+		}
+
+		/** non-property related methods */
         
 		/**
 		 * Build mensurally coherent blocks from current document
@@ -337,6 +370,11 @@ var MEIdoc = (() => {
 				mergeAdjacentMensProp(staff);
 			}
 
+		}
+
+		doXPathOnDoc(expression, context, resultType)
+		{
+			return this.doc.evaluate(expression, context, nsResolver, resultType);
 		}
         
     }  

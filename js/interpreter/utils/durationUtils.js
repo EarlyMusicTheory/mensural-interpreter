@@ -53,6 +53,49 @@ var durIO = (function() {
         return minims/MiB;
     }
 
+    /** instead of attributes, annotations could be used for custom MEI export */
+
+    function getAnnot(eventID, attrName) {
+        var attrEl = null;
+        
+        // pulling the gobal document like a bunny out of the hat is bad, 
+        // but just live with it in this one case...
+        if(meiFile.annotations[eventID])
+        {
+            let annot = meiFile.annotations[eventID];
+            attrEl = meiFile.doXPathOnDoc("./annot[@type='" + attrName + "']", annot, 9).singleNodeValue;
+        }
+        
+        return attrEl;
+    }
+
+    function setAnnot(eventID, dictObj) {
+        var annot;
+
+        // pulling the gobal document like a bunny out of the hat is bad, 
+        // but just live with it in this one case...
+        if(meiFile.annotations[eventID])
+        {
+            annot = meiFile.annotations[eventID];
+        }
+        else 
+        {
+            annot = meiFile.addAnnotation(eventID);
+        }
+
+        for (let attr in dictObj)
+        {
+            let attrAnnot = getAnnot(eventID, attr);
+            if(attrAnnot===null)
+            {
+                attrAnnot = meiFile.addMeiElement("annot");
+                attrAnnot.setAttribute("type", attr);
+            }
+            attrAnnot.innerHTML = dictObj[attr];
+            annot.appendChild(attrAnnot);
+        }
+    }
+
     function writeAttr(eventEl, dictObj) {
         for(let attr in dictObj)
         {
@@ -120,7 +163,7 @@ var durIO = (function() {
             
             let modifier = modNum / modDenom;
             this.writeDur(rm.simpleMinims(el, mens) * modifier, el);
-            writeAttr(el, {"rule": rule});
+            setAnnot(el.getAttribute("xml:id"), {"rule": rule});
             if (modNum !== 1 || modDenom !== 1)
             {
                 writeAttr(el, {"num": modDenom, "numbase": modNum});
