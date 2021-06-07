@@ -63,7 +63,7 @@ var durIO = (function() {
         if(meiFile.annotations[eventID])
         {
             let annot = meiFile.annotations[eventID];
-            attrEl = meiFile.doXPathOnDoc("./annot[@type='" + attrName + "']", annot, 9).singleNodeValue;
+            attrEl = meiFile.doXPathOnDoc("./mei:annot[@type='" + attrName + "']", annot, 9).singleNodeValue;
         }
         
         return attrEl;
@@ -343,7 +343,7 @@ var durIO = (function() {
          * @memberof durIO
          */
         setStartsAt : function (el, blockFrom, startsAt) {
-            writeAttr(el, {
+            setAnnot(el.getAttribute("xml:id"), {
                 'mensurBlockStartsAt': blockFrom,
                 'startsAt': startsAt
             });
@@ -356,8 +356,8 @@ var durIO = (function() {
          * @memberof durIO
          */
         readStartsAt : function (el) {
-            var startsAt = readAttr(el, "startsAt");
-            return startsAt ? Number(startsAt) : false;
+            var startsAt = getAnnot(el.getAttribute("xml:id"), "startsAt");
+            return startsAt ? Number(startsAt.innerHTML) : false;
         },
 
         /**
@@ -367,8 +367,8 @@ var durIO = (function() {
          * @memberof durIO
          */
         readBlockFrom : function (el) {
-            var blockFrom = readAttr(el, "mensurBlockStartsAt");
-            return blockFrom ? Number(blockFrom) : false;
+            var blockFrom = getAnnot(el.getAttribute("xml:id"), "mensurBlockStartsAt");
+            return blockFrom ? Number(blockFrom.innerHTML) : false;
         },
         
         /**
@@ -381,7 +381,7 @@ var durIO = (function() {
          */
         setBeatPos : function (el, blockPos, mens) {
             var beatStructure = rm.beatUnitStructure(blockPos, mens);
-            writeAttr(el, {'beatPos': beatStructure.join(', ')});
+            setAnnot(el.getAttribute("xml:id"), {'beatPos': beatStructure.join(', ')});
 
             return beatStructure;
         },
@@ -398,13 +398,13 @@ var durIO = (function() {
         setBreveBoundaries : function (el, prevBeatStructure, beatStructure, minimStruct) {
             if(beatStructure[0]===0 && beatStructure[1]===0 && beatStructure[2]===0)
             {
-                writeAttr(el, {'onTheBreveBeat': beatStructure[3]});
+                setAnnot(el.getAttribute("xml:id"), {'onTheBreveBeat': beatStructure[3]});
             } 
             else if(!(beatStructure[5]===prevBeatStructure[5]
                     && beatStructure[4]===prevBeatStructure[4]
                     && beatStructure[3]===prevBeatStructure[3]))
             {
-                writeAttr(el, 
+                setAnnot(el.getAttribute("xml:id"), 
                     {'crossedABreveBeat': breveDifference(beatStructure, prevBeatStructure, minimStruct)}
                 );
             }

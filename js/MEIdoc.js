@@ -296,9 +296,9 @@ var MEIdoc = (() => {
 			annot.setAttribute("startid", "#" + eventID);
 			annot.setAttribute("type", "#mensural-interpreter");
 
-			let layer = this.doc.evaluate("./ancestor::mei:layer[1]", this.eventDict[eventID], nsResolver, 9).singleNodeValue;
+			let staff = this.doc.evaluate("./ancestor::mei:staff[1]", this.eventDict[eventID], nsResolver, 9).singleNodeValue;
 
-			layer.after(annot);
+			staff.appendChild(annot);
 
 			this.annots[eventID] = annot;
 			return annot;
