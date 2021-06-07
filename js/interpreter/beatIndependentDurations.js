@@ -243,7 +243,7 @@ var basic = (function() {
 			anteSim(sectionBlocks);
 
 			// write dur.ges => dur.intermediate * propMultiplier
-			durIO.setDurGesPerBlock(sectionBlocks);
+			//durIO.setDurGesPerBlock(sectionBlocks);
 		}
 	}
 
