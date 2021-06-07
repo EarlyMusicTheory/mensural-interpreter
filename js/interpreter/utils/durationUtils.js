@@ -121,7 +121,7 @@ var durIO = (function() {
             /*if(dot) {
                 num = num*1.5;
             }*/
-            writeAttr(el, {'dur.intermediate': num+'b'});
+            writeAttr(el, {'dur.intermediate': num});
         },
 
         /**
@@ -136,7 +136,7 @@ var durIO = (function() {
             var scaledDur = dur * propMultiplier;
             if(dur)
             {
-                writeAttr(el, {'dur.ges': scaledDur+'b'});
+                writeAttr(el, {'dur.ges': scaledDur});
             }
         },
         
@@ -275,7 +275,7 @@ var durIO = (function() {
          */
         readDur : function (el) {
             var str = readAttr(el, 'dur.intermediate');
-            return str ? Number(str.substring(0, str.length-1)) : false;
+            return str ? Number(str) : false;
         },
 
         /**
@@ -287,7 +287,7 @@ var durIO = (function() {
          */
         readDurGes : function (el) {
             var str = readAttr(el, 'dur.ges');
-            return str ? Number(str.substring(0, str.length-1)) : false;
+            return str ? Number(str) : false;
         },
 
         /**
