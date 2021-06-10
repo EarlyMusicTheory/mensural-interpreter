@@ -151,16 +151,9 @@ var vrvInterface = (function () {
         $(eventEl).attr("fill", red);
 
         let thisID = $(eventEl).attr("id");
-        let currentElement = meiFile.eventDict[thisID];
-        let attributes = {};
-        if (currentElement)
+        let attributes = durIO.readAllAttrs(thisID);
+        if (attributes)
         {
-            for (let attr of currentElement.attributes)
-            {
-                attributes[attr.nodeName] = attr.value;
-            }
-            
-
             let elementInfo = $("<dl id='attList' class='row'></dl>");
             for (let attr in attributes)
             {
@@ -170,7 +163,7 @@ var vrvInterface = (function () {
                 $(elementInfo).append(dd);
             }
             
-            let elCode = makeXmlCode(currentElement.outerHTML);
+            let elCode = makeXmlCode(meiFile.eventDict[thisID].outerHTML);
             
             let heading = $("<h3>Element info</h3>");
             let hideButton = $("<button id='hideInfo' class='btn btn-secondary btn-sm float-right mt-1'>X</button>");

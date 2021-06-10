@@ -430,6 +430,39 @@ var durIO = (function() {
                     }
                 }
             }
+        },
+
+        /**
+         * Retrieves all xml attributes of the MEI event with the
+         * given xml:id and all annotations.
+         * @param {string} eventID xml:id of MEI event
+         * @returns object with attributes and anotations
+         */
+        readAllAttrs : function (eventID) {
+            let currentElement = meiFile.eventDict[eventID];
+            let currentAnnotations = meiFile.annotations[eventID];
+
+            var eventInfo = {};
+
+            eventInfo["elementName"] = currentElement.nodeName;
+
+            for (let attr of currentElement.attributes)
+            {
+                eventInfo[attr.nodeName] = attr.value;
+            }
+
+            // there are no annotations before the interpreter has run!
+            if (currentAnnotations)
+            {
+                for (let annot of currentAnnotations.children)
+                {
+                    let annotType = annot.getAttribute("type");
+                    let annotValue = annot.innerHTML;
+                    eventInfo[annotType] = annotValue;
+                }
+            }
+            
+            return eventInfo;
         }
     
     };
