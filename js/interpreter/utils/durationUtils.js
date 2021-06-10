@@ -55,6 +55,13 @@ var durIO = (function() {
 
     /** instead of attributes, annotations could be used for custom MEI export */
 
+    /**
+     * Reads the <annot> control event for an event and returns
+     * the sub-annotation for the given annotation type.
+     * @param {string} eventID xml:id of MEI event
+     * @param {string} attrName type of annotation
+     * @returns {DOMElement} annotation element
+     */
     function getAnnot(eventID, attrName) {
         var attrEl = null;
         
@@ -69,6 +76,13 @@ var durIO = (function() {
         return attrEl;
     }
 
+    /**
+     * Creates an <annot> control event connected to the given eventID.
+     * Adds sub-annotations for each key-value pair in the dictionary.
+     * Key will be the annotation type and value the annotation content.
+     * @param {string} eventID xml:id of MEI event
+     * @param {Object<string,string>} dictObj dictionary of key-value pairs
+     */
     function setAnnot(eventID, dictObj) {
         var annot;
 
@@ -96,6 +110,12 @@ var durIO = (function() {
         }
     }
 
+    /**
+     * Takes a dictionary and adds xml attributes for each key value pair.
+     * Key is used as attribute name.
+     * @param {DOMElement} eventEl 
+     * @param {Object<string,string>} dictObj 
+     */
     function writeAttr(eventEl, dictObj) {
         for(let attr in dictObj)
         {
@@ -103,6 +123,12 @@ var durIO = (function() {
         }
     }
 
+    /**
+     * Reads the value of a defined xml attribute from the given element
+     * @param {DOMElement} eventEl 
+     * @param {string} attrName 
+     * @returns the value of the defined attribute or null
+     */
     function readAttr(eventEl, attrName) {
         return eventEl ? eventEl.getAttributeNS(null, attrName) : null;
     }

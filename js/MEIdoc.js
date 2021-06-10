@@ -274,6 +274,12 @@ var MEIdoc = (() => {
 			}
 		}
 		
+		/**
+		 * Creates a new mei element with the given name and registers
+		 * it in the eventDict.
+		 * @param {string} elName 
+		 * @returns {DOMElement} created element
+		 */
 		addMeiElement(elName) {
 			let el = this.doc.createElementNS(nsResolver("mei"), elName);
 			let id = "ID" + uuidv4();
@@ -288,6 +294,11 @@ var MEIdoc = (() => {
 			return this.annots;
 		}
 
+		/**
+		 * Retrieves the annotation control event for the event with the given id.
+		 * @param {string} eventID xml:id of MEI event
+		 * @returns {DOMElement} <annot>
+		 */
 		getAnnotation (eventID) {
 			return this.annotations[eventID];
 		}
@@ -372,6 +383,14 @@ var MEIdoc = (() => {
 
 		}
 
+		/**
+		 * A convenient way to pipe XPath queries to the meiDoc.
+		 * Uses the internal ns-resolver.
+		 * @param {string} expression XPath expression
+		 * @param {DOMElement|Document} context context element or document
+		 * @param {integer} resultType https://developer.mozilla.org/en-US/docs/Web/API/Document/evaluate#result_types
+		 * @returns {XPathResult} result
+		 */
 		doXPathOnDoc(expression, context, resultType)
 		{
 			return this.doc.evaluate(expression, context, nsResolver, resultType);
