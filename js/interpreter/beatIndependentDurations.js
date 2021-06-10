@@ -76,7 +76,7 @@ var basic = (function() {
 				var event = sectionBlocks[b].events[e];
 				if(rm.augDot(event) && e){
 					var prev = sectionBlocks[b].events[e-1];
-					if(e && !prev.getAttributeNS(null, 'dur.intermediate'))
+					if(e && !durIO.readDur(prev))
 						if(rm.notePerfectAsWhole(prev, mens)){
 							durIO.writePerfection(prev, mens,'I.2.a.PerfDot');
 						} else {
@@ -99,14 +99,14 @@ var basic = (function() {
 		// Anything imperfect and with an imperfect next longer note is trivial
 		for(var b=0; b<sectionBlocks.length; b++){
 			var mens = sectionBlocks[b].mens;
-			var menssum = rm.mensurSummary(mens);
+			//var menssum = rm.mensurSummary(mens);
 			//var alterableLevels = [2, 2, 2].concat(menssum).concat([2]);
-			var firstPerf = rm.firstPerfectLevel(mens);
+			//var firstPerf = rm.firstPerfectLevel(mens);
 			for(var e=0; e<sectionBlocks[b].events.length; e++){
 				var event = sectionBlocks[b].events[e];
 				if(rm.isNote(event) && !durIO.readDur(event)){
-					var level = rm.noteInt(event);
-					if(level < firstPerf && !rm.isAlterable(event, mens))
+					//var level = rm.noteInt(event);
+					if(!rm.notePerfectAsWhole(event, mens) && !rm.isAlterable(event, mens))
 					{
 						// Assume that actOnDots has already been run on all dotted notes
 						durIO.writeDurWithRule(event, mens, 'unalterableImperfect');
@@ -243,7 +243,7 @@ var basic = (function() {
 			anteSim(sectionBlocks);
 
 			// write dur.ges => dur.intermediate * propMultiplier
-			durIO.setDurGesPerBlock(sectionBlocks);
+			//durIO.setDurGesPerBlock(sectionBlocks);
 		}
 	}
 

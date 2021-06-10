@@ -11,6 +11,25 @@
 var alterate = (function() {
 
     /**
+     * Backward window support – find the previous note that's at least as
+     * long, or find a dot of division
+     * @param {Integer} level Level of the note
+     * @param {Integer} index Index of the current event (end point for the search)
+     * @param {Array} seq Array of events
+     * @return {Integer} Position if found (false if not)
+     */
+    function indexOfPrevLongerOrDot(level, index, seq){
+        for(var i=index-1; i>=0; i--)
+        {
+            if(rm.divisionDot(seq[i]) || rm.noteInt(seq[i])>level)
+            {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    /**
      * Check an event for evidence of alteration. Alters event if it falls
      * after a longer note followed by its own duration. Where there is
      * uncertainty about the intervening duration, rule out alteration if

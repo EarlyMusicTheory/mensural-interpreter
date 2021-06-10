@@ -259,7 +259,7 @@ var complexBeats = (function() {
                 nextRemaining = afterTheEasyBits(sectionBlocks);
             }
 
-            durIO.setDurGesPerBlock(sectionBlocks);
+            //durIO.setDurGesPerBlock(sectionBlocks);
 
             updateBlocks(sectionBlocks);
 

@@ -159,19 +159,27 @@
          * @param {DOMObject} mensur mei:mensur element
          * @return {Boolean}
          * @memberof rm
+         *  @todo Something is wrong here!
          */
         regularlyPerfect : function (element, mensur){
             var val = this.noteInt(element);
-            if(val>3){
+            if(val>3)
+            {
                 if(mensur.getAttributeNS(null, 'prolatio')==="2"){
-                    if(val>4){
-                        if(mensur.getAttributeNS(null, 'tempus')==="2"){
-                            if(val>5){
+                    if(val>4)
+                    {
+                        if(mensur.getAttributeNS(null, 'tempus')==="2")
+                        {
+                            if(val>5)
+                            {
                                 if(!mensur.getAttributeNS(null, 'modusminor')
-                                    || mensur.getAttributeNS(null, 'modusminor')==="2"){
-                                    if(val>6){
+                                    || mensur.getAttributeNS(null, 'modusminor')==="2")
+                                {
+                                    if(val>6)
+                                    {
                                         if(!mensur.getAttributeNS(null, 'modusmaior')
-                                            || mensur.getAttributeNS(null, 'modusmaior')==="2"){
+                                            || mensur.getAttributeNS(null, 'modusmaior')==="2")
+                                        {
                                             return false;
                                         } else return true;
                                     } else return false
@@ -180,7 +188,8 @@
                         } else return true;
                     } else return false;
                 } else return true;
-            } else {
+            } 
+            else {
                 return false;
             }
         },

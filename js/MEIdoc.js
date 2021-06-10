@@ -167,6 +167,7 @@ var MEIdoc = (() => {
 			this.idDict = {};
 			this.eventIdDict = {};
             this.sectionBlocks;
+			this.annots = {};
 			if(this.doc) this.initEventDict();
 			this.meiBlob = this.meiDoc ? new Blob([this.text], {type: 'text/xml'}) : null;
 			if(this.doc) this.getBlocksFromSections();
@@ -272,6 +273,49 @@ var MEIdoc = (() => {
 				this.eventIdDict[id] = element;
 			}
 		}
+		
+		/**
+		 * Creates a new mei element with the given name and registers
+		 * it in the eventDict.
+		 * @param {string} elName 
+		 * @returns {DOMElement} created element
+		 */
+		addMeiElement(elName) {
+			let el = this.doc.createElementNS(nsResolver("mei"), elName);
+			let id = "ID" + uuidv4();
+			el.setAttribute("xml:id", id);
+			this.eventIdDict[id] = el;
+
+			return el;
+		}
+
+		/** @property {Object.<string,Object>} annotations event id to annotations */
+		get annotations () {
+			return this.annots;
+		}
+
+		/**
+		 * Retrieves the annotation control event for the event with the given id.
+		 * @param {string} eventID xml:id of MEI event
+		 * @returns {DOMElement} <annot>
+		 */
+		getAnnotation (eventID) {
+			return this.annotations[eventID];
+		}
+		addAnnotation (eventID) {
+			let annot = this.addMeiElement("annot");
+			annot.setAttribute("startid", "#" + eventID);
+			annot.setAttribute("type", "#mensural-interpreter");
+
+			let staff = this.doc.evaluate("./ancestor::mei:staff[1]", this.eventDict[eventID], nsResolver, 9).singleNodeValue;
+
+			staff.appendChild(annot);
+
+			this.annots[eventID] = annot;
+			return annot;
+		}
+
+		/** non-property related methods */
         
 		/**
 		 * Build mensurally coherent blocks from current document
@@ -337,6 +381,19 @@ var MEIdoc = (() => {
 				mergeAdjacentMensProp(staff);
 			}
 
+		}
+
+		/**
+		 * A convenient way to pipe XPath queries to the meiDoc.
+		 * Uses the internal ns-resolver.
+		 * @param {string} expression XPath expression
+		 * @param {DOMElement|Document} context context element or document
+		 * @param {integer} resultType https://developer.mozilla.org/en-US/docs/Web/API/Document/evaluate#result_types
+		 * @returns {XPathResult} result
+		 */
+		doXPathOnDoc(expression, context, resultType)
+		{
+			return this.doc.evaluate(expression, context, nsResolver, resultType);
 		}
         
     }  
