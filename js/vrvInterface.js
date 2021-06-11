@@ -151,7 +151,7 @@ var vrvInterface = (function () {
         $(eventEl).attr("fill", red);
 
         let thisID = $(eventEl).attr("id");
-        let attributes = durIO.readAllAttrs(thisID);
+        let attributes = ioHandler.getPropertyByID(thisID);
         if (attributes)
         {
             let elementInfo = $("<dl id='attList' class='row'></dl>");

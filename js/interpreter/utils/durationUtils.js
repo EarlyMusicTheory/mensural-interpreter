@@ -53,86 +53,6 @@ var durIO = (function() {
         return minims/MiB;
     }
 
-    /** instead of attributes, annotations could be used for custom MEI export */
-
-    /**
-     * Reads the <annot> control event for an event and returns
-     * the sub-annotation for the given annotation type.
-     * @param {string} eventID xml:id of MEI event
-     * @param {string} attrName type of annotation
-     * @returns {DOMElement} annotation element
-     */
-    function getAnnot(eventID, attrName) {
-        var attrEl = null;
-        
-        // pulling the gobal document like a bunny out of the hat is bad, 
-        // but just live with it in this one case...
-        if(meiFile.annotations[eventID])
-        {
-            let annot = meiFile.annotations[eventID];
-            attrEl = meiFile.doXPathOnDoc("./mei:annot[@type='" + attrName + "']", annot, 9).singleNodeValue;
-        }
-        
-        return attrEl;
-    }
-
-    /**
-     * Creates an <annot> control event connected to the given eventID.
-     * Adds sub-annotations for each key-value pair in the dictionary.
-     * Key will be the annotation type and value the annotation content.
-     * @param {string} eventID xml:id of MEI event
-     * @param {Object<string,string>} dictObj dictionary of key-value pairs
-     */
-    function setAnnot(eventID, dictObj) {
-        var annot;
-
-        // pulling the gobal document like a bunny out of the hat is bad, 
-        // but just live with it in this one case...
-        if(meiFile.annotations[eventID])
-        {
-            annot = meiFile.annotations[eventID];
-        }
-        else 
-        {
-            annot = meiFile.addAnnotation(eventID);
-        }
-
-        for (let attr in dictObj)
-        {
-            let attrAnnot = getAnnot(eventID, attr);
-            if(attrAnnot===null)
-            {
-                attrAnnot = meiFile.addMeiElement("annot");
-                attrAnnot.setAttribute("type", attr);
-            }
-            attrAnnot.innerHTML = dictObj[attr];
-            annot.appendChild(attrAnnot);
-        }
-    }
-
-    /**
-     * Takes a dictionary and adds xml attributes for each key value pair.
-     * Key is used as attribute name.
-     * @param {DOMElement} eventEl 
-     * @param {Object<string,string>} dictObj 
-     */
-    function writeAttr(eventEl, dictObj) {
-        for(let attr in dictObj)
-        {
-            eventEl.setAttributeNS(null, attr, dictObj[attr]);
-        }
-    }
-
-    /**
-     * Reads the value of a defined xml attribute from the given element
-     * @param {DOMElement} eventEl 
-     * @param {string} attrName 
-     * @returns the value of the defined attribute or null
-     */
-    function readAttr(eventEl, attrName) {
-        return eventEl ? eventEl.getAttributeNS(null, attrName) : null;
-    }
-
     return {
         /** public */
 
@@ -147,7 +67,7 @@ var durIO = (function() {
             /*if(dot) {
                 num = num*1.5;
             }*/
-            writeAttr(el, {'dur.ppq': num});
+            ioHandler.setProperty(el, {'dur.ppq': num});
         },
 
         /**
@@ -162,7 +82,7 @@ var durIO = (function() {
             var scaledDur = dur * propMultiplier;
             if(dur)
             {
-                writeAttr(el, {'dur.ges': scaledDur});
+                ioHandler.setProperty(el, {'dur.ges': scaledDur});
             }
         },
         
@@ -189,10 +109,10 @@ var durIO = (function() {
             
             let modifier = modNum / modDenom;
             this.writeDur(rm.simpleMinims(el, mens) * modifier, el);
-            setAnnot(el.getAttribute("xml:id"), {"rule": rule});
+            ioHandler.setProperty(el, {"rule": rule});
             if (modNum !== 1 || modDenom !== 1)
             {
-                writeAttr(el, {"num": modDenom, "numbase": modNum});
+                ioHandler.setProperty(el, {"num": modDenom, "numbase": modNum});
             }
         },
         
@@ -211,12 +131,12 @@ var durIO = (function() {
         writeSimpleImperfection : function (el, mens, rule) {
             //	el.setAttributeNS(null, 'dur.ges', (2 * simpleMinims(el, mens) / 3) + 'b');
             this.writeDur((2 * rm.simpleMinims(el, mens) / 3), el);
-            writeAttr(el, 
-                {"num": "3", 
+            ioHandler.setProperty(el, 
+                {"rule":rule,
+                "num": "3", 
                 "numbase": "2", 
                 'dur.quality': 'imperfecta'
             });
-            setAnnot(el.getAttribute("xml:id"), {"rule": rule});
         },
         
         /**
@@ -235,15 +155,15 @@ var durIO = (function() {
             var factor = gcd(defaultDur, reduceBy);
             var finalDur = defaultDur - reduceBy;
             this.writeDur(finalDur, el);
-            writeAttr(el, 
-                {'num': finalDur / factor,
+            ioHandler.setProperty(el,  
+                {'rule': rule,
+                'num': finalDur / factor,
                 'numbase': defaultDur / factor,
                 'dur.quality': 'imperfecta'
             });
-            setAnnot(el.getAttribute("xml:id"), {"rule": rule});
             if (defaultMinims === true)
             {
-                setAnnot(el.getAttribute("xml:id"), {'defaultminims': rm.simpleMinims(el, mens)});
+                ioHandler.setProperty(el, {'defaultminims': rm.simpleMinims(el, mens)});
             }
         },
         
@@ -259,12 +179,12 @@ var durIO = (function() {
         writeAlteration : function (el, mens, rule) {
             //	el.setAttributeNS(null, 'dur.ges', (2 * simpleMinims(el, mens)) + 'b');
             this.writeDur((2 * rm.simpleMinims(el, mens)), el);
-            writeAttr(el, {
+            ioHandler.setProperty(el, {
+                "rule": rule,
                 "num": "1",
                 "numbase": "2",
                 "dur.quality": "altera"
             });
-            setAnnot(el.getAttribute("xml:id"), {"rule": rule});
         },
 
         /**
@@ -278,17 +198,17 @@ var durIO = (function() {
          */
         writePerfection : function (el, mens, rule, defaultMinims = false) {
             durIO.writeDur(rm.simpleMinims(el, mens), el);
-            writeAttr(el, {
+            ioHandler.setProperty(el, {
+                "rule": rule,
                 'dur.quality': 'perfecta',
                 'num': '2',
                 'numbase': '3'
             });
-            setAnnot(el.getAttribute("xml:id"), {"rule": rule});
             // it doesn't make sense, but maybe Verovio seems to need num/numbase
             
             if (defaultMinims === true)
             {
-                setAnnot(el.getAttribute("xml:id"), {'defaultminims': rm.simpleMinims(el, mens)});
+                ioHandler.setProperty(el, {'defaultminims': rm.simpleMinims(el, mens)});
             }
         },
         
@@ -300,7 +220,7 @@ var durIO = (function() {
          * @memberof durIO
          */
         readDur : function (el) {
-            var str = readAttr(el, 'dur.ppq');
+            var str = ioHandler.getProperty(el, 'dur.ppq');
             return str ? Number(str) : false;
         },
 
@@ -312,7 +232,7 @@ var durIO = (function() {
          * @memberof durIO
          */
         readDurGes : function (el) {
-            var str = readAttr(el, 'dur.ges');
+            var str = ioHandler.getProperty(el, 'dur.ges');
             return str ? Number(str) : false;
         },
 
@@ -357,7 +277,7 @@ var durIO = (function() {
          * @memberof durIO
          */
         writeComment : function (el, comment) {
-            setAnnot(el.getAttribute("xml:id"), {'comment': comment});
+            ioHandler.setProperty(el, {'comment': comment});
         },
         
         /**
@@ -369,7 +289,7 @@ var durIO = (function() {
          * @memberof durIO
          */
         setStartsAt : function (el, blockFrom, startsAt) {
-            setAnnot(el.getAttribute("xml:id"), {
+            ioHandler.setProperty(el, {
                 'mensurBlockStartsAt': blockFrom,
                 'startsAt': startsAt
             });
@@ -382,8 +302,8 @@ var durIO = (function() {
          * @memberof durIO
          */
         readStartsAt : function (el) {
-            var startsAt = getAnnot(el.getAttribute("xml:id"), "startsAt");
-            return startsAt ? Number(startsAt.innerHTML) : false;
+            var startsAt = ioHandler.getProperty(el, "startsAt");
+            return startsAt ? Number(startsAt) : false;
         },
 
         /**
@@ -393,8 +313,8 @@ var durIO = (function() {
          * @memberof durIO
          */
         readBlockFrom : function (el) {
-            var blockFrom = getAnnot(el.getAttribute("xml:id"), "mensurBlockStartsAt");
-            return blockFrom ? Number(blockFrom.innerHTML) : false;
+            var blockFrom = ioHandler.getProperty(el, "mensurBlockStartsAt");
+            return blockFrom ? Number(blockFrom) : false;
         },
         
         /**
@@ -407,7 +327,7 @@ var durIO = (function() {
          */
         setBeatPos : function (el, blockPos, mens) {
             var beatStructure = rm.beatUnitStructure(blockPos, mens);
-            setAnnot(el.getAttribute("xml:id"), {'beatPos': beatStructure.join(', ')});
+            ioHandler.setProperty(el, {'beatPos': beatStructure.join(', ')});
 
             return beatStructure;
         },
@@ -424,13 +344,13 @@ var durIO = (function() {
         setBreveBoundaries : function (el, prevBeatStructure, beatStructure, minimStruct) {
             if(beatStructure[0]===0 && beatStructure[1]===0 && beatStructure[2]===0)
             {
-                setAnnot(el.getAttribute("xml:id"), {'onTheBreveBeat': beatStructure[3]});
+                ioHandler.setProperty(el, {'onTheBreveBeat': beatStructure[3]});
             } 
             else if(!(beatStructure[5]===prevBeatStructure[5]
                     && beatStructure[4]===prevBeatStructure[4]
                     && beatStructure[3]===prevBeatStructure[3]))
             {
-                setAnnot(el.getAttribute("xml:id"), 
+                ioHandler.setProperty(el,  
                     {'crossedABreveBeat': breveDifference(beatStructure, prevBeatStructure, minimStruct)}
                 );
             }
@@ -457,39 +377,6 @@ var durIO = (function() {
                 }
             }
         },
-
-        /**
-         * Retrieves all xml attributes of the MEI event with the
-         * given xml:id and all annotations.
-         * @param {string} eventID xml:id of MEI event
-         * @returns object with attributes and anotations
-         */
-        readAllAttrs : function (eventID) {
-            let currentElement = meiFile.eventDict[eventID];
-            let currentAnnotations = meiFile.annotations[eventID];
-
-            var eventInfo = {};
-
-            eventInfo["elementName"] = currentElement.nodeName;
-
-            for (let attr of currentElement.attributes)
-            {
-                eventInfo[attr.nodeName] = attr.value;
-            }
-
-            // there are no annotations before the interpreter has run!
-            if (currentAnnotations)
-            {
-                for (let annot of currentAnnotations.children)
-                {
-                    let annotType = annot.getAttribute("type");
-                    let annotValue = annot.innerHTML;
-                    eventInfo[annotType] = annotValue;
-                }
-            }
-            
-            return eventInfo;
-        }
     
     };
 })();
