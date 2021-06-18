@@ -1,0 +1,117 @@
+<div id="side" class="col-lg-2 col-md-4 bg-light">
+    <button id='hideInfo' class='btn btn-secondary btn-sm float-right mt-1' disabled>Clear</button>
+    <div id="elementInfo">
+        <h3>Element info</h3>
+        <div hidden>
+            <h4>Basic info</h4>
+            <dl id='attList' class='row'>
+                <!-- insert pname, oct, dur for notes/rests, everything except xml:id for dots, mensur & proport -->
+            </dl>
+            <div class="dropdown-divider"></div>
+        </div>
+        <div id="interpreterResult" hidden>
+            <button id='help' class='btn btn-outline-info btn-sm float-right mt-1' data-toggle="modal" data-target="#interpreterHelp">?</button>
+            <h4>Interpreter modification</h4>
+            <div class="input-group">
+                <label class="col-sm-3 col-form-label">Quality</label>
+                <input type="text" class="form-control" placeholder="imperfecta" readonly/>
+                <select id="dur.quality" class="form-control">
+                    <option disabled selected>choose...</option>
+                    <option>imperfecta</option>
+                    <option>perfecta</option>
+                    <option>altera</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <label class="col-sm-3 col-form-label">Rule</label>
+                <input type="text" class="form-control" placeholder="simpleRule" readonly/>
+                <select id="rule" class="form-control">
+                    <option disabled selected>choose...</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <label class="col-sm-3 col-form-label">Dur in minims</label>
+                <input id="dur.ppq" type="text" class="form-control" placeholder="2" readonly/>
+                <input type="number" class="form-control" placeholder="user input" />
+            </div>
+            <div class="input-group my-sm-2">
+                <input id="userName" type="text" class="form-control" placeholder="Your name" />
+                <input id="userInitials" type="text" class="form-control" placeholder="initials" />
+                <div class="input-group-append">
+                    <button type="button" class="btn btn-info" disabled>Save</button>
+                </div>  
+            </div>
+            <div class="dropdown-divider"></div>
+            <button id='pos' class='btn btn-outline-info btn-sm float-right mt-1' data-toggle="modal" data-target="#positioning">?</button>
+            <h4>Position within blocks</h4>
+            <dl id='attList' class='row'>
+                <dt class='col-4 text-truncate'>blockpos</dt>
+                <dd class='col-8'>
+                    <table>
+                        <thead>
+                            <tr>
+                                <td>&#x1D1BD;</td>
+                                <td>&#x1D1BC;</td>
+                                <td>&#x1D1BB;</td>
+                                <td>&#x1D1B9;</td>
+                                <td>&#x1D1B8;</td>
+                                <td>&#x1D1B7;</td>
+                                <td>&#x1D1B6;</td>
+                            </tr>
+                        </thead>
+                        <tr>
+                            <td>F</td>
+                            <td>SM</td>
+                            <td>M</td>
+                            <td>SB</td>
+                            <td>B</td>
+                            <td>L</td>
+                            <td>Mx</td>
+                        </tr>
+                    </table>
+                </dd>
+                <dt class='col-4 text-truncate'>startsAt</dt>
+                <dd id="startsAt" class='col-8'></dd>
+                <dt class='col-4 text-truncate'>mensurBlockStartsAt</dt>
+                <dd id="mensurBlockStartsAt" class='col-8'></dd>
+            </dl>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="interpreterHelp" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalLabel">Help</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>To evaluate the interpreter results, please add quality, rule and duration in minims.</p>
+          <p>Make sure to have added your name and initials before saving. Thanks!</p>
+        </div>  
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+</div>
+<div class="modal fade" id="positioning" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalLabel">Help</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>I explain the content!</p>
+        </div>  
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+</div>

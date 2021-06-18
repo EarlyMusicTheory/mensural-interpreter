@@ -166,7 +166,7 @@ var vrvInterface = (function () {
             let elCode = makeXmlCode(meiFile.eventDict[thisID].outerHTML);
             
             let heading = $("<h3>Element info</h3>");
-            let hideButton = $("<button id='hideInfo' class='btn btn-secondary btn-sm float-right mt-1'>X</button>");
+            //let hideButton = $("<button id='hideInfo' class='btn btn-secondary btn-sm float-right mt-1'>X</button>");
             
             $("#elementInfo").html(elementInfo);
             $(elementInfo).before(heading);
