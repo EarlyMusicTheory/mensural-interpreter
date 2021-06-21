@@ -3,7 +3,7 @@
 <head>
     
     <meta charset="utf-8">
-    <title>interpreter/complexBeatAnalysis.js - Documentation</title>
+    <title>ioHandler.js - Documentation</title>
     
     
     <script src="scripts/prettify/prettify.js"></script>
@@ -34,7 +34,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">interpreter/complexBeatAnalysis.js</h1>
+    <h1 class="page-title">ioHandler.js</h1>
     
 
     
@@ -44,273 +44,172 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>/** @fileoverview  */
-"use strict";
+            <pre class="prettyprint source linenums"><code>"use strict";
 
 /** 
- * @namespace complexBeats
- * @desc Functionality to add start times and run analysis depending on beat positions
-*/
+ * @fileoverview 
+ * The ioHandler is the connecting layer between the meiFile and the interpreter or the user interface.
+ * The interpreter writes and reads it's output through ioHandler.
+ * The user interface retrieves data from the meiFile through ioHandler and writes user input to the meiFile.
+ */
 
-var complexBeats = (function() {
+/** 
+ * @namespace ioHandler
+ * @desc The ioHandler is the connecting layer between the meiFile and the interpreter or the user interface.
+ */
+
+var ioHandler = (function() {
+    // private
 
     /**
-     * If event[n] has both a duration assigned to it and a start time,
-     * adds a start time for event[n+1]
-     * @param {Array} sectionBlocks Array of all the coherent areas of
-     * mensurations in a section
-     * @memberof complexBeats
-     * @inner
+     * determine data storage in MEIdoc
      */
-    function addAllStartTimes(sectionBlocks){
-        var nextStart = 0;
-        var prevPartNum = sectionBlocks[0].part;
-        for(var b=0; b&lt;sectionBlocks.length; b++){
-            let partNum = sectionBlocks[b].part;
-            // startsAt should be resetted at the beginning of a new part
-            if (prevPartNum!==partNum)
+    const attributes = ["num", "numbase", "dur.quality", "dur.ppq"];
+
+        function setAttr(element, propObject) {
+            for(let attr in propObject)
             {
-                nextStart = 0;
-                prevPartNum = partNum;
+                element.setAttributeNS(null, attr, propObject[attr]);
             }
-            addStartTimesForBlock(sectionBlocks[b], nextStart);
-            addBreveBoundariesForBlock(sectionBlocks[b]);
-            let lastEvent = sectionBlocks[b].events[sectionBlocks[b].events.length-1];
-            let lastDur = durIO.readDur(lastEvent);
-            let lastStartsAt = durIO.readStartsAt(lastEvent);
-            nextStart = lastStartsAt + lastDur;
         }
-    }
 
-    /**
-     * More complex stages, for where knowledge is partial and patchy
-     * @param {Array} sectionBlocks Array of all the coherent areas of
-     * mensurations in a section
-     * @memberof complexBeats
-     * @inner
-     */
-    function afterTheEasyBits(sectionBlocks){
-        // Now we know many durations and starting points, but not all,
-        // iterate through, looking for more context-dependent resolutions.
-        var unresolved = 0;
-        var nextStart = 0;
-        var prevPartNum = sectionBlocks[0].part;
-        for(var b=0; b&lt;sectionBlocks.length; b++){
-            let partNum = sectionBlocks[b].part;
-            // startsAt should be resetted at the beginning of a new part
-            if (prevPartNum!==partNum)
+        function getAttr(element, propName) {
+            var attr;
+            
+            if(propName)
             {
-                nextStart = 0;
-                prevPartNum = partNum;
+                attr = element.getAttributeNS(null, propName);
             }
-            var events = sectionBlocks[b].events;
-            var mens = sectionBlocks[b].mens;
-            var menssum = rm.mensurSummary(mens);
-            var alterableLevels = [2, 2, 2].concat(menssum).concat([2]); //&lt;-- not used?
-            var firstPerfect = rm.firstPerfectLevel(mens);
-            for(var e=0; e&lt;events.length; e++){
-                var event = events[e];
-                if(rm.isNote(event) &amp;&amp; !durIO.readDur(event)){
-                    // duration needs to be resolved
-                    if(durIO.readBlockFrom(event)!==false){
-                        // Most cases that are resolvable need beat numbers
-                        var level = rm.noteInt(event);
-                        var blockFrom = durIO.readBlockFrom(event);
-                        var beatStructure = rm.beatUnitStructure(blockFrom, mens);
-                        var beatOfUnit = beatStructure[level-3];
-                        if(e &amp;&amp; rm.divisionDot(events[e-1])){
-                            // Division dot
-                            beatOfUnit = 0;
-                        }
-                        if(level>firstPerfect){
-                            // Potentially imperfectable
-                            switch (beatOfUnit) {
-                                case 0:
-                                    imperfect.firstBeatImperfection(event, e, events, mens);
-                                    break;
-                                case 1:
-                                    imperfect.secondBeatImperfection(event, e, events, mens);
-                                    break;
-                                case 2:
-                                    imperfect.thirdBeatImperfection(event, e, events, mens);
-                                    break;
-                                default:
-                                    imperfect.midBeatImperfection(event, e, events, mens);
-                            }
-                        }
-                        if(!durIO.readDur(event) &amp;&amp; rm.isAlterable(event, mens)) {
-                            // Alterable? If not, why is this still here?
-                            switch (beatStructure[level-2]) {
-                                case 0:
-                                    alterate.firstBeatAlteration(event, e, events, mens);
-                                    break;
-                                case 1:
-                                    alterate.secondBeatAlteration(event, e, events, mens);
-                                    break;
-                                case 2:
-                                    alterate.thirdBeatAlteration(event, e, events, mens);
-                                    break;
-                                default:
-                                    alterate.midBeatAlteration(event, e, events, mens);
-                            }
-                        }
-                        //
-                        if(durIO.readDur(event)) {
-                            // We've got a new duration, so need to update start times
-                            addStartTimesForBlock(sectionBlocks[b], nextStart);
-                        }
-                    } else {
-                        // We may be able to do *something*
-                        if(rm.isNote(events[e-1]) &amp;&amp; rm.noteInt(events[e-1])>level){
-                            // An note after a longer note is likely to
-                            // start on the first beat of its unit. We can put
-                            // exception logic in here, but for now
-                            if(level>=firstPerfect){
-                                imperfect.firstBeatImperfection(event, e, events, mens);
-                            } else if(menssum[level-3]===3){
-                                // alterable
-                                alterate.firstBeatAlteration(event, e, events, mens);
-                            } else {
-                                // Why are we here?
-                                console.log("Warning: Found an event that isn't alterable or imperfectable:", event);
-                            }
-                        }
-                    }
-                    if(!durIO.readDur(event)) {
-                        // We've got a new duration, so need to update start times
-                        unresolved += 1;
-                    }
+            else
+            {
+                attr = {};
+
+                for (let attribute of element.attributes)
+                {
+                    attr[attribute.nodeName] = attribute.value;
                 }
             }
-            //if nothing within a block has been resolved, update start times
-            // to make sure that preceding blocks get resolved properly
-            addStartTimesForBlock(sectionBlocks[b], nextStart);
-            let lastEvent = sectionBlocks[b].events[sectionBlocks[b].events.length-1];
-            let lastDur = durIO.readDur(lastEvent);
-            let lastStartsAt = durIO.readStartsAt(lastEvent);
-            nextStart = lastStartsAt + lastDur;
-            addBreveBoundariesForBlock(sectionBlocks[b]);
-        }
-        return unresolved;
-    }
 
-    /**
-     * Add start times for all events in block for which that's possible
-     * (i.e. where the start and duration of the previous note is known).
-     * @param {Object} block Object with attributes for events and
-     * mensuration sign
-     * @param {Number} startsAtValue manually set starting position
-     * @returns {Number} last starting position
-     * @memberof complexBeats
-     * @inner
-     */
-    function addStartTimesForBlock(block, startsAtValue){
-        var blockFrom = 0;
-        var mens = block.mens;
-        var events = block.events;
-        // this extra step can be used to do some stuff
-        var startsAt = startsAtValue; 
-        for(var e=0; e&lt;events.length; e++){
-            var event = events[e];
-            if(rm.noteOrRest(event)){
-                durIO.setStartsAt(event, blockFrom, startsAt);
-                var dur = durIO.readDur(event);
-                if(dur){
-                    blockFrom += dur;
-                    startsAt += dur;
+            return attr;
+        }
+
+        function getAnnot(elementID, propName) {
+            var annotations = meiFile.getAnnotation(elementID);
+
+            var annots = null;
+
+            // there are no annotations before the interpreter has run!
+            if(annotations)
+            {
+                annots = {};
+                for (let annot of annotations.children)
+                {
+                    let annotType = annot.getAttribute("type");
+                    let annotValue = annot.innerHTML;
+                    annots[annotType] = annotValue;
                 }
             }
-        }
-    }
 
-    /**
-     * Indicates where an event falls in larger-scale mensural structures,
-     * also singling out which breve beat an event falls on and whether it
-     * crosses one (adds @beatPos, @onTheBreveBeat and @crossedABreveBeat)
-     * @param {Object} block 
-     * @memberof complexBeats
-     * @inner
-     */ 
-    function addBreveBoundariesForBlock(block){
-        var blockFrom = 0; // &lt;- unused?
-        var mens = block.mens;
-        var events = block.events;
-        var prevBeatStructure = false;
-        for(var e=0; e&lt;events.length; e++){
-            var event = events[e];
-            if(rm.noteOrRest(event)){
-                var tpos = durIO.readBlockFrom(event);
-                if(tpos!==false){
-                    var beatStructure = durIO.setBeatPos(event, tpos, mens);
-                    var minimStruct = rm.minimStructures(rm.mensurSummary(mens));
-                    durIO.setBreveBoundaries(event, prevBeatStructure, beatStructure, minimStruct);
-                    prevBeatStructure = beatStructure;
-                } else {
-                    return;
-                }
+            // if a propName is given, we retrieve only the defined property
+            if(propName)
+            {
+                annots = annots[propName];
             }
-        }
-    }
 
-    /**
-     * Updates block info with durations
-     * @param {Array&lt;Object>} sectionBlocks 
-     * @memberof complexBeats
-     * @inner
-     */
-    function updateBlocks(sectionBlocks)
-    {
-        // update block info
-        for (let block of sectionBlocks)
-        {
-            let evLength = block.events.length;
-            let lastEvent = block.events[evLength-1];
-            let lastDur = durIO.readDur(lastEvent);
-            block.dur = durIO.readBlockFrom(lastEvent) + lastDur;
-            block.totaldur = durIO.readStartsAt(lastEvent) + lastDur;
+            return annots;
         }
-    }
+
+        function setAnnot(elementID, propObject) {
+            var annot;
+
+            // pulling the gobal document like a bunny out of the hat is bad, 
+            // but just live with it in this one case...
+            if(meiFile.annotations[elementID])
+            {
+                annot = meiFile.getAnnotation(elementID);
+            }
+            else 
+            {
+                annot = meiFile.addAnnotation(elementID);
+            }
+
+            for (let attr in propObject)
+            {
+                let attrAnnot = getAnnotElement(elementID, attr);
+                if(attrAnnot==null)
+                {
+                    attrAnnot = meiFile.addMeiElement("annot");
+                    attrAnnot.setAttribute("type", attr);
+                }
+                attrAnnot.innerHTML = propObject[attr];
+                annot.appendChild(attrAnnot);
+            }
+
+        }
+
+        function getAnnotElement(elementID, propName) {
+            var attrEl = null;
+
+            if(meiFile.getAnnotation(elementID))
+            {
+                let annot = meiFile.annotations[elementID];
+                attrEl = meiFile.doXPathOnDoc("./mei:annot[@type='" + propName + "']", annot, 9).singleNodeValue;
+            }
+
+            return attrEl;
+        }
 
     return {
-        
-        /**
-         * Adds start times to blocks, e.g. after a simple analysis.
-         * @param {MEIdoc} meiDoc 
-         * @memberof complexBeats
-         */
-        addStartTimes : function(meiDoc) {
-            var sectionBlocks = meiDoc.blocks;
-            // add start times as far as possible
-            addAllStartTimes(sectionBlocks);
+        //public
 
-            updateBlocks(sectionBlocks);
+        getProperty : function (element, propName) {
+            var property = {};
+
+            let attrs = getAttr(element);
+            let annots = getAnnot(element.getAttribute("xml:id"));
+
+            property = {...attrs, ...annots};
+
+            if(propName)
+            {
+                property = property[propName];
+            }
+                        
+            return property;
         },
 
-        /**
-         * Runs complex analysis depending of beat positions
-         * @param {MEIdoc} meiDoc  
-         * @memberof complexBeats
-         */
-        complexAnalysis : function(meiDoc) {
-            var sectionBlocks = meiDoc.blocks;
+        getPropertyByID : function (elementID, propName) {
+            let element = meiFile.eventDict[elementID];
 
-            // run complex imperfection / alteration analysis
-            var remaining = 100000000;
-            var nextRemaining = afterTheEasyBits(sectionBlocks);
-            while(nextRemaining != 0 &amp;&amp; remaining!=nextRemaining){
-                // Rerun this for as long as it makes a difference
-                // (i.e. resolves unsolved durations/start times)
-                console.log("unresolved count", remaining, nextRemaining);
-                remaining=nextRemaining;
-                nextRemaining = afterTheEasyBits(sectionBlocks);
+            return this.getProperty(element, propName);
+        },
+
+        setProperty : function (element, propObject) {
+            var annots = {};
+            var attrs = {};
+
+            for(const [key, value] of Object.entries(propObject))
+            {
+                if(attributes.find(item => item === key))
+                {
+                    attrs[key] = value;
+                }
+                else
+                {
+                    annots[key] = value;
+                }
             }
 
-            //durIO.setDurGesPerBlock(sectionBlocks);
+            if(Object.entries(attrs)) setAttr(element, attrs);
+            if(Object.entries(annots)) setAnnot(element.getAttribute("xml:id"), annots);
+        },
 
-            updateBlocks(sectionBlocks);
+        setPropertyByID : function (elementID, propObject) {
+            let element = meiFile.eventDict[elementID];
 
-            console.log(remaining);
+            this.setProperty(element, propObject);
         }
+
     }
 })();</code></pre>
         </article>
