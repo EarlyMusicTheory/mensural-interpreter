@@ -13,28 +13,40 @@
             <button id='help' class='btn btn-outline-info btn-sm float-right mt-1' data-toggle="modal" data-target="#interpreterHelp">?</button>
             <h4>Interpreter modification</h4>
             <div class="input-group">
+                <label class="col-sm-3 col-form-label">Rule</label>
+                <input id="ruleOutput" type="text" class="form-control dyValuePlaceholder" data-toggle="tooltip"
+                    title="" placeholder="" readonly disabled/>
+                <select id="ruleInput" class="form-control interpreterInput">
+                    <option disabled selected>...</option>
+                </select>
+            </div>
+            <div class="input-group">
                 <label class="col-sm-3 col-form-label">Quality</label>
                 <input id="durqualityOutput" type="text" class="form-control dyValuePlaceholder" data-toggle="tooltip"
-                title="" placeholder="" readonly/>
+                title="" placeholder="" disabled readonly/>
                 <select id="durqualityInput" class="form-control interpreterInput">
-                    <option disabled selected>choose...</option>
+                    <option disabled selected>...</option>
                     <option>imperfecta</option>
                     <option>perfecta</option>
                     <option>altera</option>
                 </select>
             </div>
-            <div class="input-group">
-                <label class="col-sm-3 col-form-label">Rule</label>
-                <input id="ruleOutput" type="text" class="form-control dyValuePlaceholder" data-toggle="tooltip"
-                    title="" placeholder="" readonly/>
-                <select id="ruleInput" class="form-control interpreterInput">
-                    <option disabled selected>choose...</option>
-                </select>
+            <div class="form-row justify-content-end">
+                <div class="input-group input-group-sm col-sm-4">
+                    <label class="col-form-label col-form-label-sm">num</label>
+                    <input id="numOutput" type="text" class="form-control dyValuePlaceholder" placeholder="" disabled readonly/>
+                    <input id="numInput" type="text" class="form-control interpreterInput" />
+                </div>
+                <div class="input-group input-group-sm col-sm-5">
+                    <label class="col-form-label col-form-label-sm">numbase</label>
+                    <input id="numbaseOutput" type="text" class="form-control dyValuePlaceholder" placeholder="" disabled readonly/>
+                    <input id="numbaseInput" type="text" class="form-control interpreterInput" />
+                </div>
             </div>
             <div class="input-group">
                 <label class="col-sm-3 col-form-label">Dur in minims</label>
-                <input id="durppqOutput" type="text" class="form-control dyValuePlaceholder" placeholder="" readonly/>
-                <input id="durppqInput" type="number" min="0" max="122" class="form-control interpreterInput" placeholder="user input" />
+                <input id="durppqOutput" type="text" class="form-control dyValuePlaceholder" placeholder="" disabled readonly/>
+                <input id="durppqInput" type="text" class="form-control interpreterInput" placeholder="user input" />
             </div>
             <div class="input-group my-sm-2">
                 <input id="userName" type="text" class="form-control" placeholder="Your name" />
