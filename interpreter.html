@@ -6,10 +6,7 @@ title: Interpreter
 <!-- Content -->
 <div class="container-fluid">
    <div class="row">
-        <div id="side" class="col-lg-2 col-md-4 bg-light">
-            {% include interpreterSettings.html %}
-            <div id="elementInfo"></div>
-        </div>
+        {% include elementInfoBar.html %}
         <div class="col-lg-10 col-md-8">
             <div id="vrvOutput"></div>
         </div>
@@ -19,6 +16,7 @@ title: Interpreter
 
 <script src="./js/vrvInterface.js"></script>
 <script src="./js/MEIdoc.js"></script>
+<script src="./js/ioHandler.js"></script>
 <script src="./js/interpreter/utils/durationUtils.js"></script>
 <script src="./js/interpreter/utils/rhythmMensUtils.js"></script>
 <script src="./js/interpreter/imperfection.js"></script>

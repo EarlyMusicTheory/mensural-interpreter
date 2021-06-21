@@ -1,0 +1,125 @@
+<div id="side" class="col-lg-2 col-md-4 bg-light">
+    <button id="hideInfo" class="btn btn-secondary btn-sm float-right mt-1" disabled>Clear</button>
+    <div id="elementInfo">
+        <h3>Element info</h3>
+        <div id="basic" hidden>
+            <h4>Basic info</h4>
+            <dl id='attList' class='row'>
+                <!-- insert pname, oct, dur for notes/rests, everything except xml:id for dots, mensur & proport -->
+            </dl>
+            <div class="dropdown-divider"></div>
+        </div>
+        <div id="interpreterResult" hidden>
+            <button id='help' class='btn btn-outline-info btn-sm float-right mt-1' data-toggle="modal" data-target="#interpreterHelp">?</button>
+            <h4>Interpreter modification</h4>
+            <div class="input-group">
+                <label class="col-sm-3 col-form-label">Rule</label>
+                <input id="ruleOutput" type="text" class="form-control dyValuePlaceholder" data-toggle="tooltip"
+                    title="" placeholder="" readonly disabled/>
+                <select id="ruleInput" class="form-control interpreterInput">
+                    <option disabled selected>...</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <label class="col-sm-3 col-form-label">Quality</label>
+                <input id="durqualityOutput" type="text" class="form-control dyValuePlaceholder" data-toggle="tooltip"
+                title="" placeholder="" disabled readonly/>
+                <select id="durqualityInput" class="form-control interpreterInput">
+                    <option disabled selected>...</option>
+                    <option>imperfecta</option>
+                    <option>perfecta</option>
+                    <option>altera</option>
+                </select>
+            </div>
+            <div class="form-row justify-content-end">
+                <div class="input-group input-group-sm col-sm-4">
+                    <label class="col-form-label col-form-label-sm">num</label>
+                    <input id="numOutput" type="text" class="form-control dyValuePlaceholder" placeholder="" disabled readonly/>
+                    <input id="numInput" type="text" class="form-control interpreterInput" />
+                </div>
+                <div class="input-group input-group-sm col-sm-5">
+                    <label class="col-form-label col-form-label-sm">numbase</label>
+                    <input id="numbaseOutput" type="text" class="form-control dyValuePlaceholder" placeholder="" disabled readonly/>
+                    <input id="numbaseInput" type="text" class="form-control interpreterInput" />
+                </div>
+            </div>
+            <div class="input-group">
+                <label class="col-sm-3 col-form-label">Dur in minims</label>
+                <input id="durppqOutput" type="text" class="form-control dyValuePlaceholder" placeholder="" disabled readonly/>
+                <input id="durppqInput" type="text" class="form-control interpreterInput" placeholder="user input" />
+            </div>
+            <div class="input-group my-sm-2">
+                <input id="userName" type="text" class="form-control" placeholder="Your name" />
+                <input id="userInitials" type="text" class="form-control" placeholder="initials" />
+                <div class="input-group-append">
+                    <button type="button" class="btn btn-info" disabled>Save</button>
+                </div>  
+            </div>
+            <div class="dropdown-divider"></div>
+            <button id='pos' class='btn btn-outline-info btn-sm float-right mt-1' data-toggle="modal" data-target="#positioning">?</button>
+            <h4>Position within blocks</h4>
+            <dl id='posAttList' class='row'>
+                <dt id="beatPosDt" class='col-4 text-truncate'>blockpos</dt>
+                <dd id="beatPosDd" class='col-8'>
+                    <table>
+                        <thead>
+                            <tr>
+                                <td>&#x1D1BC;</td>
+                                <td>&#x1D1BB;</td>
+                                <td>&#x1D1B9;</td>
+                                <td>&#x1D1B8;</td>
+                                <td>&#x1D1B7;</td>
+                                <td>&#x1D1B6;</td>
+                            </tr>
+                        </thead>
+                        <tr>
+                            <td class="dyValueContainer" id="beatPos0"></td>
+                            <td class="dyValueContainer" id="beatPos1"></td>
+                            <td class="dyValueContainer" id="beatPos2"></td>
+                            <td class="dyValueContainer" id="beatPos3"></td>
+                            <td class="dyValueContainer" id="beatPos4"></td>
+                            <td class="dyValueContainer" id="beatPos5"></td>
+                        </tr>
+                    </table>
+                </dd>
+            </dl>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="interpreterHelp" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalLabel">Help</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>To evaluate the interpreter results, please add quality, rule and duration in minims.</p>
+                <p>Make sure to have added your name and initials before saving. Thanks!</p>
+            </div>  
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="positioning" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalLabel">Help</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>I explain the content!</p>
+            </div>  
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</butto>
+            </div>
+        </div>
+    </div>
+</div>
