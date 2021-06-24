@@ -1,0 +1,40 @@
+---
+layout: home
+title: Explanation of rules
+permalink: /rules/
+---
+
+<div>
+    <h1>Explanation of rules</h1>
+    <h2>Beat independent rules</h2>
+    <p>In order of execution:</p>
+    <dl>
+        {% for bi in site.data.rules %}
+            {% if bi.type == "beatIndependent" %}
+                <dt>{{bi.rule}}</dt>
+                <dd>{{bi.definition}}</dd>
+            {% endif %}
+        {% endfor %}
+    </dl>
+    <h2>Compex analysis</h2>
+    <h3>Imperfection</h3>
+    <dl>
+        {% for imp in site.data.rules %}
+            {% if imp.type == "imperfection" %}
+                <dt>{{imp.rule}}</dt>
+                <dd>{{imp.definition}}</dd>
+            {% endif %}
+        {% endfor %}
+    </dl>
+    <h3>Alteration</h3>
+    <dl>
+        {% for alt in site.data.rules %}
+            {% if alt.type == "alteration" %}
+                <dt>{{alt.rule}}</dt>
+                <dd>{{alt.definition}}</dd>
+            {% endif %}
+        {% endfor %}
+    </dl>
+</div>
+
+

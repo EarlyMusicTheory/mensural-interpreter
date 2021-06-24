@@ -16,15 +16,36 @@
                 <label class="col-sm-3 col-form-label">Rule</label>
                 <input id="ruleOutput" type="text" class="form-control dyValuePlaceholder" data-toggle="tooltip"
                     title="" placeholder="" readonly disabled/>
-                <select id="ruleInput" class="form-control interpreterInput">
+                <select id="ruleInput" class="form-control interpreterInput custom-select">
                     <option disabled selected>...</option>
+                    <optgroup label="Imperfection">
+                    {% for rule in site.data.rules %}
+                        {% if rule.type == "imperfection" %}
+                            <option title="{{rule.definition}}"  data-toggle="tooltip">{{rule.rule}}</option>
+                        {% endif %}
+                    {% endfor %}
+                    </optgroup>
+                    <optgroup label="Alteration">
+                    {% for rule in site.data.rules %}
+                        {% if rule.type == "alteration" %}
+                            <option title="{{rule.definition}}"  data-toggle="tooltip">{{rule.rule}}</option>
+                        {% endif %}
+                    {% endfor %}
+                    </optgroup>
+                    <optgroup label="Beat independent">
+                    {% for rule in site.data.rules %}
+                        {% if rule.type == "beatIndependent" %}
+                            <option title="{{rule.definition}}"  data-toggle="tooltip">{{rule.rule}}</option>
+                        {% endif %}
+                    {% endfor %}
+                    </optgroup>
                 </select>
             </div>
             <div class="input-group">
                 <label class="col-sm-3 col-form-label">Quality</label>
                 <input id="durqualityOutput" type="text" class="form-control dyValuePlaceholder" data-toggle="tooltip"
                 title="" placeholder="" disabled readonly/>
-                <select id="durqualityInput" class="form-control interpreterInput">
+                <select id="durqualityInput" class="form-control interpreterInput custom-select">
                     <option disabled selected>...</option>
                     <option>imperfecta</option>
                     <option>perfecta</option>
