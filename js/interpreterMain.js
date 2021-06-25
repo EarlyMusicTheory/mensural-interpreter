@@ -272,6 +272,21 @@ $(document).ready(function(){
         vrvInterface.zoomOut();
     });
 
+    $("#submitFeedback").click(function() {
+        let usrInput = {
+            quality : $("#durqualityInput").val(),
+            rule : $("#ruleInput").val(),
+            num : $("#numInput").val(),
+            numbase: $("#numbaseInput").val(),
+            durppq : $("#durppqInput").val(),
+            username : $("#userName").val(),
+            initials : $("#userInitials").val()
+        };
+
+        ioHandler.submitFeedback(usrInput);
+        
+    });
+
     $(window).resize(function(){
         vrvInterface.applyZoom();
     });
