@@ -168,6 +168,20 @@ var ioHandler = (function() {
             let element = meiFile.eventDict[elementID];
 
             this.setProperty(element, propObject);
+        },
+
+        submitFeedback(feedbackObj, elementID) {
+            //get user credentials out of feedbackObj
+            var userName = feedbackObj["resp.name"];
+            var userIni = feedbackObj["resp.initials"];
+            delete feedbackObj["resp.name"];
+            delete feedbackObj["resp.initials"];
+
+            this.setPropertyByID(elementID, feedbackObj);
+        },
+
+        readFeedback() {
+            
         }
 
     }
