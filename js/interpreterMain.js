@@ -76,7 +76,12 @@ function getSectionBlocks() {
  * Loads meiFile with Verovio and adds MEI blob to download button
  */
 function loadData() {
+    updateBlob();
     vrvInterface.loadData(meiFile.text);
+}
+
+function updateBlob() {
+    meiFile.renewBlob();
     $("#download").attr("href", URL.createObjectURL(meiFile.blob));
 }
 
@@ -230,7 +235,6 @@ $(document).ready(function(){
         {
             basic.beatIndependentDurations(meiFile);
             complexBeats.addStartTimes(meiFile);
-            meiFile.renewBlob();
             basicAnalysisDone = true;
             $("#beatIndependent").prop('disabled', true);
             loadData();
@@ -250,7 +254,6 @@ $(document).ready(function(){
         {
             complexBeats.complexAnalysis(meiFile);
             post.run(meiFile);
-            meiFile.renewBlob();
             loadData();
             complexAnalysisDone = true;
             $("#complexBeatAnalysis").prop('disabled', true);
@@ -274,16 +277,17 @@ $(document).ready(function(){
 
     $("#submitFeedback").click(function() {
         let usrInput = {
-            quality : $("#durqualityInput").val(),
-            rule : $("#ruleInput").val(),
-            num : $("#numInput").val(),
-            numbase: $("#numbaseInput").val(),
-            durppq : $("#durppqInput").val(),
-            username : $("#userName").val(),
-            initials : $("#userInitials").val()
+            "dur.quality" : $("#durqualityInput").val(),
+            "rule" : $("#ruleInput").val(),
+            "num" : $("#numInput").val(),
+            "numbase": $("#numbaseInput").val(),
+            "dur.ppq" : $("#durppqInput").val(),
+            "resp.name" : $("#userName").val(),
+            "resp.initials" : $("#userInitials").val()
         };
 
-        ioHandler.submitFeedback(usrInput);
+        ioHandler.submitFeedback(usrInput, $(shownEvent).attr("id"));
+        updateBlob();
         
     });
 
