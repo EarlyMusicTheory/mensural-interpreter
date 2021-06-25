@@ -117,6 +117,10 @@ var ioHandler = (function() {
         //public
 
         getProperty : function (element, propName) {
+            // read properties from attrs and annots to handle non note-rest objects
+            // since annots get merged into attrs, annots overwrite attr values
+            // this is intended!
+            
             var property = {};
 
             let attrs = getAttr(element);
@@ -144,14 +148,16 @@ var ioHandler = (function() {
 
             for(const [key, value] of Object.entries(propObject))
             {
+                // attributes need to be set redundantly because 
+                // it's not possible to track corrections within attributes
                 if(attributes.find(item => item === key))
                 {
                     attrs[key] = value;
                 }
-                else
-                {
+                //else
+                //{
                     annots[key] = value;
-                }
+                //}
             }
 
             if(Object.entries(attrs)) setAttr(element, attrs);
