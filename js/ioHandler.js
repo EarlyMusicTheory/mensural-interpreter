@@ -59,7 +59,7 @@ var ioHandler = (function() {
                 for (let annot of annotations.children)
                 {
                     let annotType = annot.getAttribute("type");
-                    let annotValue = annot.innerHTML;
+                    let annotValue = getCorrValue(annot);
                     annots[annotType] = annotValue;
                 }
             }
@@ -110,6 +110,69 @@ var ioHandler = (function() {
             }
 
             return attrEl;
+        }
+
+        function addApp(elementID, propName)
+        {
+            var attrEl = getAnnotElement(elementID, propName);
+            if(attrEl)
+            {
+                if(attrEl.getElementsByTagName("choice").length===0)
+                {
+                    let oldValueNowSic = attrEl.textContent;
+                    attrEl.textContent = '';
+                    let choice = meiFile.addMeiElement("choice");
+                    attrEl.appendChild(choice);
+
+                    let sic = meiFile.addMeiElement("sic");
+                    choice.appendChild(sic);
+                    sic.textContent = oldValueNowSic;
+
+                    let corr = meiFile.addMeiElement("corr");
+                    choice.appendChild(corr);
+                }
+
+                return attrEl;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        function addCorr(elementID, propName, corrValue, resp) 
+        {
+            var oldValue = getAnnot(elementID, propName);
+
+            // add apparatus only if values differ
+            if (corrValue!==oldValue)
+            {
+                var attrEl = addApp(elementID, propName);
+
+                if(attrEl!==null)
+                {
+                    let corrEl = meiFile.doXPathOnDoc("//mei:corr", attrEl, 9).singleNodeValue;
+                    corrEl.textContent = corrValue;
+                    corrEl.setAttribute("resp", "#" + resp);
+                }
+            }
+        }
+
+        function getCorrValue(propAnnot)
+        {
+            var corrValue;
+            let corrEl = meiFile.doXPathOnDoc("//mei:corr", propAnnot, 9).singleNodeValue;
+
+            if(corrEl)
+            {
+                corrValue = corrEl.textContent;
+            }
+            else
+            {
+                corrValue = propAnnot.textContent;
+            }
+
+            return corrValue;
         }
 
     return {
@@ -176,11 +239,20 @@ var ioHandler = (function() {
             delete feedbackObj["resp.name"];
             delete feedbackObj["resp.initials"];
 
-            this.setPropertyByID(elementID, feedbackObj);
-        },
-
-        readFeedback() {
+            // create respStmt in Header if not done already
             
+            // check which values differ
+            // update values into sic/corr
+            var currentValues = getAnnot(elementID);
+
+            for(let fbValue in feedbackObj)
+            {
+                if(feedbackObj[fbValue]!=null && feedbackObj[fbValue]!==currentValues[fbValue])
+                {
+                    addCorr(elementID, fbValue, feedbackObj[fbValue], userIni);
+                }
+            }
+
         }
 
     }
