@@ -289,6 +289,12 @@ $(document).ready(function(){
             "resp.initials" : $("#userInitials").val()
         };
 
+        //make empty strings null
+        for (let prop in usrInput)
+        {
+            if(usrInput[prop] === '') usrInput[prop] = null;
+        }
+
         ioHandler.submitFeedback(usrInput, $(shownEvent).attr("id"));
         updateBlob();
         
