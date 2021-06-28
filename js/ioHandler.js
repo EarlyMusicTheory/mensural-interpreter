@@ -140,6 +140,9 @@ var ioHandler = (function() {
             }
         }
 
+        // don't implement this now: a value once set wil be set for eternity
+        // function setSic(elementID, propName, sicValue) {}
+        
         function addCorr(elementID, propName, corrValue, resp) 
         {
             var oldValue = getAnnot(elementID, propName);
@@ -173,6 +176,33 @@ var ioHandler = (function() {
             }
 
             return corrValue;
+        }
+
+        function getSicValue(propAnnot)
+        {
+            var sicValue;
+            let sicEl = meiFile.doXPathOnDoc("//mei:sic", propAnnot, 9).singleNodeValue;
+
+            if(corrEl)
+            {
+                sicValue = sicEl.textContent;
+            }
+            else
+            {
+                sicValue = propAnnot.textContent;
+            }
+
+            return sicValue;
+        }
+
+        function getSic(elementID, propName) 
+        {
+
+        }
+
+        function getCorr(elementID, propName)
+        {
+
         }
 
     return {
