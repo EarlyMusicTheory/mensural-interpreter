@@ -94,11 +94,10 @@ var ioHandler = (function() {
                 {
                     attrAnnot = meiFile.addMeiElement("annot");
                     attrAnnot.setAttribute("type", attr);
+                    annot.appendChild(attrAnnot);
                 }
-                attrAnnot.innerHTML = propObject[attr];
-                annot.appendChild(attrAnnot);
+                attrAnnot.textContent = propObject[attr];
             }
-
         }
 
         function getAnnotElement(elementID, propName) {
