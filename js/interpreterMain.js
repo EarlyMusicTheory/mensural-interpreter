@@ -119,6 +119,7 @@ function makeXmlCode(htmlString) {
     {
         for (let attr in attributes)
         {
+            // retrieve Values for interpreter modification form
             if(formAttrs.indexOf(attr)!=-1)
             {
                 //let attrMod = attr.replace(".","");
@@ -126,6 +127,7 @@ function makeXmlCode(htmlString) {
                 $(formID).attr("placeholder",attributes[attr]);
                 $(formID).attr("title",attributes[attr]);
             }
+            // beatPos is a readonly Extrawurst
             else if (attr==="beatPos")
             {
                 let beatPosArray = attributes[attr].split(", ");
@@ -135,6 +137,7 @@ function makeXmlCode(htmlString) {
                     $(cellID).text(beatPosArray[i]);
                 }
             }
+            // all other readonly attributes
             else
             {
                 let dt = $(dtTag).text(attr);
