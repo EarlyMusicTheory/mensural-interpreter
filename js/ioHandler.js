@@ -60,7 +60,15 @@ var ioHandler = (function() {
                 {
                     let annotType = annot.getAttribute("type");
                     let annotValue = getCorrValue(annot);
-                    annots[annotType] = annotValue;
+                    let annotSic = getSicValue(annot);
+                    if (annotSic)
+                    {
+                        annots[annotType] = {sic: annotSic, corr: annotValue};
+                    }
+                    else
+                    {
+                        annots[annotType] = annotValue;
+                    }
                 }
             }
 
@@ -154,7 +162,7 @@ var ioHandler = (function() {
 
                 if(attrEl!==null)
                 {
-                    let corrEl = meiFile.doXPathOnDoc("//mei:corr", attrEl, 9).singleNodeValue;
+                    let corrEl = meiFile.doXPathOnDoc("descendant::mei:corr", attrEl, 9).singleNodeValue;
                     corrEl.textContent = corrValue;
                     corrEl.setAttribute("resp", "#" + resp);
                 }
@@ -164,7 +172,7 @@ var ioHandler = (function() {
         function getCorrValue(propAnnot)
         {
             var corrValue;
-            let corrEl = meiFile.doXPathOnDoc("//mei:corr", propAnnot, 9).singleNodeValue;
+            let corrEl = meiFile.doXPathOnDoc("descendant::mei:corr", propAnnot, 9).singleNodeValue;
 
             if(corrEl)
             {
@@ -180,16 +188,12 @@ var ioHandler = (function() {
 
         function getSicValue(propAnnot)
         {
-            var sicValue;
-            let sicEl = meiFile.doXPathOnDoc("//mei:sic", propAnnot, 9).singleNodeValue;
+            var sicValue = null;
+            let sicEl = meiFile.doXPathOnDoc("descendant::mei:sic", propAnnot, 9).singleNodeValue;
 
-            if(corrEl)
+            if(sicEl)
             {
                 sicValue = sicEl.textContent;
-            }
-            else
-            {
-                sicValue = propAnnot.textContent;
             }
 
             return sicValue;
@@ -289,8 +293,6 @@ var ioHandler = (function() {
                     }
                 }
             }
-
         }
-
     }
 })();

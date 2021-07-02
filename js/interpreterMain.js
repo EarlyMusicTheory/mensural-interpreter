@@ -124,8 +124,18 @@ function makeXmlCode(htmlString) {
             {
                 //let attrMod = attr.replace(".","");
                 let formID = "#" + attr.replace(".","") + "Output";
-                $(formID).attr("placeholder",attributes[attr]);
-                $(formID).attr("title",attributes[attr]);
+                let formInputID = "#" + attr.replace(".","") + "Input";
+                if(typeof attributes[attr]==="string")
+                {
+                    $(formID).attr("placeholder",attributes[attr]);
+                    $(formID).attr("title",attributes[attr]);
+                }
+                else
+                {
+                    $(formInputID).val(attributes[attr].corr);
+                    $(formID).attr("placeholder",attributes[attr].sic);
+                    $(formID).attr("title",attributes[attr].sic);
+                }                
             }
             // beatPos is a readonly Extrawurst
             else if (attr==="beatPos")
