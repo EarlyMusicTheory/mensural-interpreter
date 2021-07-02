@@ -275,11 +275,18 @@ var ioHandler = (function() {
             // update values into sic/corr
             var currentValues = getAnnot(elementID);
 
-            for(let fbValue in feedbackObj)
+            for(const [key, value] of Object.entries(feedbackObj))
             {
-                if(feedbackObj[fbValue]!=null && feedbackObj[fbValue]!==currentValues[fbValue])
+                if(value!=null && value!==currentValues[key])
                 {
-                    addCorr(elementID, fbValue, feedbackObj[fbValue], userIni);
+                    addCorr(elementID, key, feedbackObj[key], userIni);
+                    if(attributes.find(item => item === key))
+                    {
+                        let element = meiFile.eventDict[elementID];
+                        let attrObj = {};
+                        attrObj[key] = value;
+                        setAttr(element, attrObj);
+                    }
                 }
             }
 
