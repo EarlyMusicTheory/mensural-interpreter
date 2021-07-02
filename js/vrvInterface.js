@@ -21,23 +21,12 @@ var vrvInterface = (function () {
     /** current svg to display */
     var svg;
 
-    /** elements for interaction */
-    const elsToSelect = ".note,.rest,.dot,.mensur";
-    /** Bootstrap blue to highlight events */
-    const blue = "#007bff";
-    /** Bootstrap red to highlight events */
-    const red = "#dc3545";
-
     /** is a keyup event in progress? */
     var keyUpInProgress = false;
     /** are events currently bound? */
     var eventsBinded = false;
-    /** event that is currently shown in detail */
-    var shownEvent = null;
-    /** event preceding the currently shown event */
-    var prevEvent = null;
-    /** event that follows the currently shown event */
-    var nextEvent = null;
+    /** elements for interaction */
+    const elsToSelect = ".note,.rest,.dot,.mensur";
     
 
     /**
@@ -138,96 +127,6 @@ var vrvInterface = (function () {
         {
             $(eventEl).removeAttr("fill");
         }
-    }
-
-    /**
-     * Shows event details of chosen element
-     * @param {DOMObject} eventEl 
-     * @memberof vrvInterface
-     * @inner
-     */
-    function showDetails(eventEl) {
-        const formAttrs = ["dur.quality", "rule", "dur.ppq", "num", "numbase"];
-        const additionalAttrs = ["defaultminims", "comment"];
-        const positionAttrs = ["startsAt", "mensurBlockStartsAt", "beatPos", "onTheBreveBeat", "crossedABreveBeat"];
-
-        const dtTag = "<dt class='col-4 text-truncate dyAttTerm' data-toggle='tooltip'></dt>";
-        const ddTag = "<dd class='col-8 dyAttValue'></dd>";
-
-        hideDetails();
-        $(eventEl).attr("fill", red);
-
-        let thisID = $(eventEl).attr("id");
-        let attributes = ioHandler.getPropertyByID(thisID);
-        if (attributes)
-        {
-            for (let attr in attributes)
-            {
-                if(formAttrs.indexOf(attr)!=-1)
-                {
-                    //let attrMod = attr.replace(".","");
-                    let formID = "#" + attr.replace(".","") + "Output";
-                    $(formID).attr("placeholder",attributes[attr]);
-                    $(formID).attr("title",attributes[attr]);
-                }
-                else if (attr==="beatPos")
-                {
-                    let beatPosArray = attributes[attr].split(", ");
-                    for(let i = 0; i < beatPosArray.length; i++)
-                    {
-                        let cellID = "#beatPos" + i;
-                        $(cellID).text(beatPosArray[i]);
-                    }
-                }
-                else
-                {
-                    let dt = $(dtTag).text(attr);
-                    let dd = $(ddTag).text(attributes[attr]);
-                    $(dt).attr("title",attr);
-                    if(positionAttrs.indexOf(attr)!=-1)
-                    {
-                        $("#posAttList").append(dt);
-                        $("#posAttList").append(dd);
-                    }
-                    else if(attr!=="xml:id" && additionalAttrs.indexOf(attr)==-1)
-                    {
-                        $("#attList").append(dt);
-                        $("#attList").append(dd);
-                    }
-                }
-            }
-            
-            shownEvent = eventEl;
-            nextEvent = $(eventEl).next();
-            prevEvent = $(eventEl).prev();
-
-            $("#basic").prop("hidden", false);
-            if(basicAnalysisDone) $("#interpreterResult").prop("hidden", false);
-            $("#hideInfo").prop("disabled", false);
-            $("#hideInfo").click(function() {
-                hideDetails();
-            });
-        }
-    }
-
-    /**
-     * Remove details of the currently shown event
-     * @memberof vrvInterface
-     * @inner
-     */
-    function hideDetails() {
-        const killRed = "[fill='" + red + "']";
-        $(killRed).removeAttr("fill");
-        shownEvent = null;
-        nextEvent = null;
-        prevEvent = null;
-        $("#hideInfo").prop("disabled", true);
-        $("#basic").prop("hidden", true);
-        $("#interpreterResult").prop("hidden", true);
-        $(".dyAttTerm, .dyAttValue").remove();
-        $(".dyValueContainer").empty();
-        $(".dyValuePlaceholder").attr("placeholder","");
-        $(".interpreterInput").val("");
     }
 
     /* public */

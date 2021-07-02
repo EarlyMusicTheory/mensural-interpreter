@@ -1,5 +1,6 @@
-<div id="side" class="col-lg-2 col-md-4 bg-light">
-    <button id="hideInfo" class="btn btn-secondary btn-sm float-right mt-1" disabled>Clear</button>
+<div id="side" class="col-xl-2 col-lg-3 col-md-4 bg-light">
+    <button id="hideInfo" class="btn btn-secondary btn-sm float-right m-1" disabled>Clear</button>
+    <button class='btn btn-outline-info btn-sm float-right mt-1' data-toggle="modal" data-target="#help">?</button>
     <div id="elementInfo">
         <h3>Element info</h3>
         <div id="basic" hidden>
@@ -10,21 +11,42 @@
             <div class="dropdown-divider"></div>
         </div>
         <div id="interpreterResult" hidden>
-            <button id='help' class='btn btn-outline-info btn-sm float-right mt-1' data-toggle="modal" data-target="#interpreterHelp">?</button>
+            <button id='formHelp' class='btn btn-outline-info btn-sm float-right mt-1' data-toggle="modal" data-target="#interpreterHelp">?</button>
             <h4>Interpreter modification</h4>
             <div class="input-group">
                 <label class="col-sm-3 col-form-label">Rule</label>
                 <input id="ruleOutput" type="text" class="form-control dyValuePlaceholder" data-toggle="tooltip"
                     title="" placeholder="" readonly disabled/>
-                <select id="ruleInput" class="form-control interpreterInput">
+                <select id="ruleInput" class="form-control interpreterInput custom-select">
                     <option disabled selected>...</option>
+                    <optgroup label="Imperfection">
+                    {% for rule in site.data.rules %}
+                        {% if rule.type == "imperfection" %}
+                            <option title="{{rule.definition}}"  data-toggle="tooltip">{{rule.rule}}</option>
+                        {% endif %}
+                    {% endfor %}
+                    </optgroup>
+                    <optgroup label="Alteration">
+                    {% for rule in site.data.rules %}
+                        {% if rule.type == "alteration" %}
+                            <option title="{{rule.definition}}"  data-toggle="tooltip">{{rule.rule}}</option>
+                        {% endif %}
+                    {% endfor %}
+                    </optgroup>
+                    <optgroup label="Beat independent">
+                    {% for rule in site.data.rules %}
+                        {% if rule.type == "beatIndependent" %}
+                            <option title="{{rule.definition}}"  data-toggle="tooltip">{{rule.rule}}</option>
+                        {% endif %}
+                    {% endfor %}
+                    </optgroup>
                 </select>
             </div>
             <div class="input-group">
                 <label class="col-sm-3 col-form-label">Quality</label>
                 <input id="durqualityOutput" type="text" class="form-control dyValuePlaceholder" data-toggle="tooltip"
                 title="" placeholder="" disabled readonly/>
-                <select id="durqualityInput" class="form-control interpreterInput">
+                <select id="durqualityInput" class="form-control interpreterInput custom-select">
                     <option disabled selected>...</option>
                     <option>imperfecta</option>
                     <option>perfecta</option>
@@ -52,7 +74,7 @@
                 <input id="userName" type="text" class="form-control" placeholder="Your name" />
                 <input id="userInitials" type="text" class="form-control" placeholder="initials" />
                 <div class="input-group-append">
-                    <button type="button" class="btn btn-info" disabled>Save</button>
+                    <button id="submitFeedback" type="button" class="btn btn-info">Save</button>
                 </div>  
             </div>
             <div class="dropdown-divider"></div>
@@ -116,6 +138,33 @@
             </div>
             <div class="modal-body">
                 <p>I explain the content!</p>
+            </div>  
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</butto>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="help" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalLabel">Help</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>To run the complete interpreter analysis, click on "Run"
+                    ("Basic") will only run the beat independent analysis.
+                </p>
+                <p>
+                    "Blocks" will show you the detected mensurally coherent blocks.
+                </p>
+                <p>
+                    To inspect the interpreter analysis, click on a note within the rendered music.<br />
+                    You may navigate (within bar lines) with <kbd>←</kbd> and <kbd>→</kbd>.
+                </p>
             </div>  
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</butto>

@@ -1,0 +1,90 @@
+- rule: rest
+  type: beatIndependent
+  definition: Rests can't be altered or imperfected.
+
+- rule: coloration
+  type: beatIndependent
+  definition: Colored notation is assumed to be simple duple and labelled accordingly.
+
+- rule: I.2.a.PerfDot
+  type: beatIndependent
+  definition: Dot of augmentation following a regularly perfect note.
+
+- rule: simpleDot
+  type: beatIndependent
+  definition: Simple dot of augmentation.
+
+- rule: unalterableImperfect
+  type: beatIndependent
+  definition: Any note that is not regularly perfect and that is not a direct part of a ternary note is unalterable imperfect.
+
+- rule: unalteredImperfectAfterLarger
+  type: beatIndependent
+  definition: An alterable note preceded by a larger note is followed by a larger note and regularly imperfect.
+
+- rule: A.2b
+  type: beatIndependent
+
+- rule: unalteredImperfect
+  type: beatIndependent
+  definition: A regularly imperfect alterable note that is not followed by a larger note.
+
+- rule: I.2.b.antesim
+  type: beatIndependent
+  definition: If a regularly perfect note is followed immediately by a note or rest at the same level, the former cannot be imperfected.
+
+- rule: I.3
+  type: imperfection
+  definition: A regularly perfect note that falls on the first subunit of its own unit and is followed by any larger note or rest is ipso facto perfect.
+
+- rule: I.4a
+  type: imperfection
+
+- rule: I.4b
+  type: imperfection
+
+- rule: I.4bi
+  type: imperfection
+
+- rule: I.4bii
+  type: imperfection
+
+- rule: I.5
+  type: imperfection
+
+- rule: I.5-add
+  type: imperfection
+
+- rule: I.5-literalunits
+  type: imperfection
+
+- rule: I.6
+  type: imperfection
+
+- rule: I.6-literalunits
+  type: imperfection
+  definition: Trusting in alteration
+
+- rule: I.8
+  type: imperfection
+  definition: A regularly perfect note that falls on the second subunit of its own unit is imperfected from ahead by what would imperfect it, either immediately or by syncope.
+
+- rule: I.9a
+  type: imperfection
+
+- rule: I.9b
+  type: imperfection
+
+- rule: A.1
+  type: alteration
+  definition: An alterable note on the second beat gets altered.
+
+- rule: A.2
+  type: alteration
+  definition: An alterable note that is preceded by a dot of division followed by the equivalent of its own regular value and followed by a note or rest of the perfect unit next larger is altered.
+
+- rule: A.xxx
+  type: alteration
+
+- rule: A.xxz
+  type: alteration

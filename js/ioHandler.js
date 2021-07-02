@@ -59,8 +59,16 @@ var ioHandler = (function() {
                 for (let annot of annotations.children)
                 {
                     let annotType = annot.getAttribute("type");
-                    let annotValue = annot.innerHTML;
-                    annots[annotType] = annotValue;
+                    let annotValue = getCorrValue(annot);
+                    let annotSic = getSicValue(annot);
+                    if (annotSic)
+                    {
+                        annots[annotType] = {sic: annotSic, corr: annotValue};
+                    }
+                    else
+                    {
+                        annots[annotType] = annotValue;
+                    }
                 }
             }
 
@@ -94,11 +102,10 @@ var ioHandler = (function() {
                 {
                     attrAnnot = meiFile.addMeiElement("annot");
                     attrAnnot.setAttribute("type", attr);
+                    annot.appendChild(attrAnnot);
                 }
-                attrAnnot.innerHTML = propObject[attr];
-                annot.appendChild(attrAnnot);
+                attrAnnot.textContent = propObject[attr];
             }
-
         }
 
         function getAnnotElement(elementID, propName) {
@@ -113,10 +120,103 @@ var ioHandler = (function() {
             return attrEl;
         }
 
+        function addApp(elementID, propName)
+        {
+            var attrEl = getAnnotElement(elementID, propName);
+            if(attrEl)
+            {
+                if(attrEl.getElementsByTagName("choice").length===0)
+                {
+                    let oldValueNowSic = attrEl.textContent;
+                    attrEl.textContent = '';
+                    let choice = meiFile.addMeiElement("choice");
+                    attrEl.appendChild(choice);
+
+                    let sic = meiFile.addMeiElement("sic");
+                    choice.appendChild(sic);
+                    sic.textContent = oldValueNowSic;
+
+                    let corr = meiFile.addMeiElement("corr");
+                    choice.appendChild(corr);
+                }
+
+                return attrEl;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        // don't implement this now: a value once set wil be set for eternity
+        // function setSic(elementID, propName, sicValue) {}
+        
+        function addCorr(elementID, propName, corrValue, resp) 
+        {
+            var oldValue = getAnnot(elementID, propName);
+
+            // add apparatus only if values differ
+            if (corrValue!==oldValue)
+            {
+                var attrEl = addApp(elementID, propName);
+
+                if(attrEl!==null)
+                {
+                    let corrEl = meiFile.doXPathOnDoc("descendant::mei:corr", attrEl, 9).singleNodeValue;
+                    corrEl.textContent = corrValue;
+                    corrEl.setAttribute("resp", "#" + resp);
+                }
+            }
+        }
+
+        function getCorrValue(propAnnot)
+        {
+            var corrValue;
+            let corrEl = meiFile.doXPathOnDoc("descendant::mei:corr", propAnnot, 9).singleNodeValue;
+
+            if(corrEl)
+            {
+                corrValue = corrEl.textContent;
+            }
+            else
+            {
+                corrValue = propAnnot.textContent;
+            }
+
+            return corrValue;
+        }
+
+        function getSicValue(propAnnot)
+        {
+            var sicValue = null;
+            let sicEl = meiFile.doXPathOnDoc("descendant::mei:sic", propAnnot, 9).singleNodeValue;
+
+            if(sicEl)
+            {
+                sicValue = sicEl.textContent;
+            }
+
+            return sicValue;
+        }
+
+        function getSic(elementID, propName) 
+        {
+
+        }
+
+        function getCorr(elementID, propName)
+        {
+
+        }
+
     return {
         //public
 
         getProperty : function (element, propName) {
+            // read properties from attrs and annots to handle non note-rest objects
+            // since annots get merged into attrs, annots overwrite attr values
+            // this is intended!
+            
             var property = {};
 
             let attrs = getAttr(element);
@@ -144,14 +244,16 @@ var ioHandler = (function() {
 
             for(const [key, value] of Object.entries(propObject))
             {
+                // attributes need to be set redundantly because 
+                // it's not possible to track corrections within attributes
                 if(attributes.find(item => item === key))
                 {
                     attrs[key] = value;
                 }
-                else
-                {
+                //else
+                //{
                     annots[key] = value;
-                }
+                //}
             }
 
             if(Object.entries(attrs)) setAttr(element, attrs);
@@ -162,7 +264,35 @@ var ioHandler = (function() {
             let element = meiFile.eventDict[elementID];
 
             this.setProperty(element, propObject);
-        }
+        },
 
+        submitFeedback(feedbackObj, elementID) {
+            //get user credentials out of feedbackObj
+            var userName = feedbackObj["resp.name"];
+            var userIni = feedbackObj["resp.initials"];
+            delete feedbackObj["resp.name"];
+            delete feedbackObj["resp.initials"];
+
+            // create respStmt in Header if not done already
+            
+            // check which values differ
+            // update values into sic/corr
+            var currentValues = getAnnot(elementID);
+
+            for(const [key, value] of Object.entries(feedbackObj))
+            {
+                if(value!=null && value!==currentValues[key])
+                {
+                    addCorr(elementID, key, feedbackObj[key], userIni);
+                    if(attributes.find(item => item === key))
+                    {
+                        let element = meiFile.eventDict[elementID];
+                        let attrObj = {};
+                        attrObj[key] = value;
+                        setAttr(element, attrObj);
+                    }
+                }
+            }
+        }
     }
 })();
