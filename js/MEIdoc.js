@@ -305,7 +305,8 @@ var MEIdoc = (() => {
 		addAnnotation (eventID) {
 			let annot = this.addMeiElement("annot");
 			annot.setAttribute("startid", "#" + eventID);
-			annot.setAttribute("type", "#mensural-interpreter");
+			annot.setAttribute("resp", "#mensural-interpreter");
+			annot.setAttribute("audience", "private");
 
 			let staff = this.doc.evaluate("./ancestor::mei:staff[1]", this.eventDict[eventID], nsResolver, 9).singleNodeValue;
 
