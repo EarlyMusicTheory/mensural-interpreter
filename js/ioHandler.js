@@ -209,6 +209,48 @@ var ioHandler = (function() {
 
         }
 
+        function addRespStmt(respTxt, name, initials)
+        {
+            var titleStmt = meiFile.doXPathOnDoc("//mei:fileDesc/mei:titleStmt", meiFile.doc, 9).singleNodeValue;
+            var respStmt = meiFile.addMeiElement("respStmt");
+            titleStmt.append(respStmt);
+            var resp = meiFile.addMeiElement("resp");
+            resp.textContent = respTxt;
+            respStmt.append(resp);
+            var persName = meiFile.addMeiElement("persName", initials);
+            persName.textContent = name;
+            respStmt.append(persName);
+        }
+
+        function addRevision(initials)
+        {
+            var revisionDesc = meiFile.doXPathOnDoc("//mei:revisionDesc", meiFile.doc, 9).singleNodeValue;
+
+            let checkForExistingChange = "//mei:change[@resp='#" + initials + 
+                                        "' and .//mei:p[contains(text(),'Evaluated interpreter results.')]]";
+            var existingChange = meiFile.doXPathOnDoc(checkForExistingChange, revisionDesc, 9).singleNodeValue;
+            var date = new Date();
+            if(existingChange==null)
+            {  
+                // add change as last child
+                var change = meiFile.addMeiElement("change");
+                revisionDesc.append(change);
+                // add isodate and resp
+                change.setAttribute("resp", "#" + initials);
+                change.setAttribute("isodate", date.toISOString());
+                // add changeDesc and p
+                let p = meiFile.addMeiElement("p");
+                p.textContent = "Evaluated interpreter results.";
+                let changeDesc = meiFile.addMeiElement("changeDesc");
+                changeDesc.append(p);
+                change.append(changeDesc);
+            }
+            else
+            {
+                existingChange.setAttribute("isodate", date.toISOString());
+            }
+        }
+
     return {
         //public
 
@@ -274,6 +316,8 @@ var ioHandler = (function() {
             delete feedbackObj["resp.initials"];
 
             // create respStmt in Header if not done already
+            addRespStmt("evaluated by", userName, userIni);
+            addRevision(userIni);
             
             // check which values differ
             // update values into sic/corr

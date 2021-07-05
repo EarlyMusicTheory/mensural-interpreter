@@ -280,9 +280,12 @@ var MEIdoc = (() => {
 		 * @param {string} elName 
 		 * @returns {DOMElement} created element
 		 */
-		addMeiElement(elName) {
+		addMeiElement(elName, id) {
 			let el = this.doc.createElementNS(nsResolver("mei"), elName);
-			let id = "ID" + uuidv4();
+			if (!id)
+			{
+				id = "ID" + uuidv4();
+			}
 			el.setAttribute("xml:id", id);
 			this.eventIdDict[id] = el;
 
@@ -305,7 +308,8 @@ var MEIdoc = (() => {
 		addAnnotation (eventID) {
 			let annot = this.addMeiElement("annot");
 			annot.setAttribute("startid", "#" + eventID);
-			annot.setAttribute("type", "#mensural-interpreter");
+			annot.setAttribute("resp", "#mensural-interpreter");
+			annot.setAttribute("audience", "private");
 
 			let staff = this.doc.evaluate("./ancestor::mei:staff[1]", this.eventDict[eventID], nsResolver, 9).singleNodeValue;
 
