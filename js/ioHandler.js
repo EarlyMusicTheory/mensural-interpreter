@@ -104,7 +104,16 @@ var ioHandler = (function() {
                     attrAnnot.setAttribute("type", attr);
                     annot.appendChild(attrAnnot);
                 }
-                attrAnnot.textContent = propObject[attr];
+
+                // set value as standard if there is no value there or the interpreter isn't finished
+                if (complexAnalysisDone===false || attrAnnot.textContent==="")
+                {
+                    attrAnnot.textContent = propObject[attr];
+                }
+                else
+                {
+                    addCorr(elementID, attr, propObject[attr]);
+                }
             }
         }
 
@@ -156,7 +165,7 @@ var ioHandler = (function() {
             var oldValue = getAnnot(elementID, propName);
 
             // add apparatus only if values differ
-            if (corrValue!==oldValue)
+            if (corrValue!=oldValue)
             {
                 var attrEl = addApp(elementID, propName);
 
@@ -164,7 +173,10 @@ var ioHandler = (function() {
                 {
                     let corrEl = meiFile.doXPathOnDoc("descendant::mei:corr", attrEl, 9).singleNodeValue;
                     corrEl.textContent = corrValue;
-                    corrEl.setAttribute("resp", "#" + resp);
+                    if(resp)
+                    {
+                        corrEl.setAttribute("resp", "#" + resp);
+                    }
                 }
             }
         }
@@ -201,12 +213,12 @@ var ioHandler = (function() {
 
         function getSic(elementID, propName) 
         {
-
+            return meiFile.doXPathOnDoc("descendant::mei:sic", propAnnot, 9).singleNodeValue;
         }
 
         function getCorr(elementID, propName)
         {
-
+            return meiFile.doXPathOnDoc("descendant::mei:corr", propAnnot, 9).singleNodeValue
         }
 
         function addRespStmt(respTxt, name, initials)

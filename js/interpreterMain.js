@@ -140,19 +140,54 @@ function makeXmlCode(htmlString) {
             // beatPos is a readonly Extrawurst
             else if (attr==="beatPos")
             {
-                let beatPosArray = attributes[attr].split(", ");
+                var beatPosArray;
+                var beatPosCorrArray;
+
+                if(typeof attributes[attr] === "string")
+                {
+                    beatPosArray = attributes[attr].split(", ");
+                }
+                else
+                {
+                    beatPosArray = attributes[attr].sic.split(", ");
+                    beatPosCorrArray = attributes[attr].corr.split(", ");
+                }
+
                 for(let i = 0; i < beatPosArray.length; i++)
                 {
                     let cellID = "#beatPos" + i;
                     $(cellID).text(beatPosArray[i]);
+
+                    if(beatPosCorrArray!=null)
+                    {
+                        $(cellID).contents().wrap("<s></s>");
+                        let corrID = "#beatPosCorr" + i;
+                        $(corrID).append($("<strong></strong>").text(beatPosCorrArray[i]));
+    
+                    }
                 }
+                
             }
             // all other readonly attributes
             else
             {
                 let dt = $(dtTag).text(attr);
-                let dd = $(ddTag).text(attributes[attr]);
                 $(dt).attr("title",attr);
+                let dd = $(ddTag);
+
+                if(typeof attributes[attr] === "string")
+                {
+                    dd.text(attributes[attr]);
+                }
+                else
+                {
+                    let sic = $("<s></s>").text(attributes[attr].sic);
+                    let corr = $("<strong></strong>").text(attributes[attr].corr);
+
+                    dd.append(sic);
+                    dd.append(corr);
+                }
+
                 if(positionAttrs.indexOf(attr)!=-1)
                 {
                     $("#posAttList").append(dt);
@@ -306,7 +341,12 @@ $(document).ready(function(){
         }
 
         ioHandler.submitFeedback(usrInput, $(shownEvent).attr("id"));
-        updateBlob();
+        
+        // calculate corrected startTimes
+        startTimes.addStartTimes(meiFile);
+
+        //updateBlob();
+        loadData();
         
     });
 
