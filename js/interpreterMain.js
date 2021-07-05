@@ -114,7 +114,7 @@ function makeXmlCode(htmlString) {
     $(eventEl).attr("fill", red);
 
     let thisID = $(eventEl).attr("id");
-    let attributes = ioHandler.getPropertyByID(thisID);
+    let attributes = ioHandler.getPropertyByID(thisID, null, true);
     if (attributes)
     {
         for (let attr in attributes)

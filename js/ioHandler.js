@@ -266,7 +266,7 @@ var ioHandler = (function() {
     return {
         //public
 
-        getProperty : function (element, propName) {
+        getProperty : function (element, propName, app = false) {
             // read properties from attrs and annots to handle non note-rest objects
             // since annots get merged into attrs, annots overwrite attr values
             // this is intended!
@@ -275,6 +275,18 @@ var ioHandler = (function() {
 
             let attrs = getAttr(element);
             let annots = getAnnot(element.getAttribute("xml:id"));
+
+            // if we don't need apparati (most cases), just return corrected values
+            if(app===false)
+            {
+                for (let attr in annots)
+                {
+                    if(typeof annots[attr] !== "string")
+                    {
+                        annots[attr] = annots[attr].corr;
+                    }
+                }
+            }
 
             property = {...attrs, ...annots};
 
@@ -286,10 +298,10 @@ var ioHandler = (function() {
             return property;
         },
 
-        getPropertyByID : function (elementID, propName) {
+        getPropertyByID : function (elementID, propName, app = false) {
             let element = meiFile.eventDict[elementID];
 
-            return this.getProperty(element, propName);
+            return this.getProperty(element, propName, app);
         },
 
         setProperty : function (element, propObject) {

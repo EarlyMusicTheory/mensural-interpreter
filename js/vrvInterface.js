@@ -41,6 +41,7 @@ var vrvInterface = (function () {
                     pageHeight: pageHeight,
                     pageWidth: pageWidth,
                     scale: zoom,
+                    // header: "none" (would turn off header)
                     adjustPageHeight: true
                 };
         vrv.setOptions(options);
