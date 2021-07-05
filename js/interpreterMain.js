@@ -42,8 +42,7 @@ function fetchMEI(meiUrl) {
         .then(function(text) {
             meiFile.text = text;
             loadData();
-            basicAnalysisDone = false;
-            complexAnalysisDone = false;
+            checkIfAlreadyRun();
         });
     }
 }
@@ -232,6 +231,22 @@ function hideDetails() {
     $(".interpreterInput").val("");
 }
 
+function checkIfAlreadyRun() {
+    var change = meiFile.doXPathOnDoc("//mei:change[@resp='#mensural-interpreter']", meiFile.doc, 3).booleanValue;
+    if(change)
+    {
+        basicAnalysisDone = true;
+        complexAnalysisDone = true;
+        $("#beatIndependent").prop('disabled', true);
+        $("#complexBeatAnalysis").prop('disabled', true);
+    }
+    else
+    {
+        basicAnalysisDone = false;
+        complexAnalysisDone = false;
+    }
+}
+
 
 $(document).ready(function(){
 
@@ -254,10 +269,8 @@ $(document).ready(function(){
             meiFile.text = event.target.result;
             currentParams.set("url", null);
             window.history.pushState({}, "Mensural interpreter", `${baseUrl}`);
-            $("#elementInfo").empty();
             loadData();
-            basicAnalysisDone = false;
-            complexAnalysisDone = false;
+            checkIfAlreadyRun();
         };    
     });
 
