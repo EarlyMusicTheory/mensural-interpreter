@@ -29,9 +29,9 @@ var post = (function() {
                 var event = blocks[b].events[e];
                 var previousSibling = event.previousElementSibling;
                 // it needs to be decided when a barline gets drawn
-                if (event.getAttributeNS(null, "onTheBreveBeat") && previousSibling) 
+                if (ioHandler.getProperty(event,"onTheBreveBeat") && previousSibling) 
                 {
-                    let line = meiDoc.doc.createElementNS(meiNS, "barLine");
+                    let line = meiDoc.addMeiElement("barLine");
                     
                         
                     if (previousSibling.tagName==="note"||previousSibling.tagName==="rest"||previousSibling.tagName==="dot")
