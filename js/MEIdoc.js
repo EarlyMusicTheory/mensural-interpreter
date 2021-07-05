@@ -280,9 +280,12 @@ var MEIdoc = (() => {
 		 * @param {string} elName 
 		 * @returns {DOMElement} created element
 		 */
-		addMeiElement(elName) {
+		addMeiElement(elName, id) {
 			let el = this.doc.createElementNS(nsResolver("mei"), elName);
-			let id = "ID" + uuidv4();
+			if (!id)
+			{
+				id = "ID" + uuidv4();
+			}
 			el.setAttribute("xml:id", id);
 			this.eventIdDict[id] = el;
 

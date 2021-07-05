@@ -97,8 +97,7 @@ var post = (function() {
         }
 
         // add application as last child of appInfo
-        var app = meiDoc.addMeiElement("application");
-        app.setAttribute("xml:id", "mensural-interpreter");
+        var app = meiDoc.addMeiElement("application", "mensural-interpreter");
         appInfo.append(app);
         let name = meiDoc.addMeiElement("name");
         name.textContent = "Mensural interpreter";
