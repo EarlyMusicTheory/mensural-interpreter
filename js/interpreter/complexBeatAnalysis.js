@@ -9,34 +9,6 @@
 var complexBeats = (function() {
 
     /**
-     * If event[n] has both a duration assigned to it and a start time,
-     * adds a start time for event[n+1]
-     * @param {Array} sectionBlocks Array of all the coherent areas of
-     * mensurations in a section
-     * @memberof complexBeats
-     * @inner
-     */
-    function addAllStartTimes(sectionBlocks){
-        var nextStart = 0;
-        var prevPartNum = sectionBlocks[0].part;
-        for(var b=0; b<sectionBlocks.length; b++){
-            let partNum = sectionBlocks[b].part;
-            // startsAt should be resetted at the beginning of a new part
-            if (prevPartNum!==partNum)
-            {
-                nextStart = 0;
-                prevPartNum = partNum;
-            }
-            addStartTimesForBlock(sectionBlocks[b], nextStart);
-            addBreveBoundariesForBlock(sectionBlocks[b]);
-            let lastEvent = sectionBlocks[b].events[sectionBlocks[b].events.length-1];
-            let lastDur = durIO.readDur(lastEvent);
-            let lastStartsAt = durIO.readStartsAt(lastEvent);
-            nextStart = lastStartsAt + lastDur;
-        }
-    }
-
-    /**
      * More complex stages, for where knowledge is partial and patchy
      * @param {Array} sectionBlocks Array of all the coherent areas of
      * mensurations in a section
@@ -111,7 +83,7 @@ var complexBeats = (function() {
                         //
                         if(durIO.readDur(event)) {
                             // We've got a new duration, so need to update start times
-                            addStartTimesForBlock(sectionBlocks[b], nextStart);
+                            startTimes.addStartTimesForBlock(sectionBlocks[b], nextStart);
                         }
                     } else {
                         // We may be able to do *something*
@@ -138,108 +110,17 @@ var complexBeats = (function() {
             }
             //if nothing within a block has been resolved, update start times
             // to make sure that preceding blocks get resolved properly
-            addStartTimesForBlock(sectionBlocks[b], nextStart);
+            startTimes.addStartTimesForBlock(sectionBlocks[b], nextStart);
+            startTimes.addBreveBoundariesForBlock(sectionBlocks[b]);
             let lastEvent = sectionBlocks[b].events[sectionBlocks[b].events.length-1];
             let lastDur = durIO.readDur(lastEvent);
             let lastStartsAt = durIO.readStartsAt(lastEvent);
             nextStart = lastStartsAt + lastDur;
-            addBreveBoundariesForBlock(sectionBlocks[b]);
         }
         return unresolved;
     }
 
-    /**
-     * Add start times for all events in block for which that's possible
-     * (i.e. where the start and duration of the previous note is known).
-     * @param {Object} block Object with attributes for events and
-     * mensuration sign
-     * @param {Number} startsAtValue manually set starting position
-     * @returns {Number} last starting position
-     * @memberof complexBeats
-     * @inner
-     */
-    function addStartTimesForBlock(block, startsAtValue){
-        var blockFrom = 0;
-        var mens = block.mens;
-        var events = block.events;
-        // this extra step can be used to do some stuff
-        var startsAt = startsAtValue; 
-        for(var e=0; e<events.length; e++){
-            var event = events[e];
-            if(rm.noteOrRest(event)){
-                durIO.setStartsAt(event, blockFrom, startsAt);
-                var dur = durIO.readDur(event);
-                if(dur){
-                    blockFrom += dur;
-                    startsAt += dur;
-                }
-            }
-        }
-    }
-
-    /**
-     * Indicates where an event falls in larger-scale mensural structures,
-     * also singling out which breve beat an event falls on and whether it
-     * crosses one (adds @beatPos, @onTheBreveBeat and @crossedABreveBeat)
-     * @param {Object} block 
-     * @memberof complexBeats
-     * @inner
-     */ 
-    function addBreveBoundariesForBlock(block){
-        var blockFrom = 0; // <- unused?
-        var mens = block.mens;
-        var events = block.events;
-        var prevBeatStructure = false;
-        for(var e=0; e<events.length; e++){
-            var event = events[e];
-            if(rm.noteOrRest(event)){
-                var tpos = durIO.readBlockFrom(event);
-                if(tpos!==false){
-                    var beatStructure = durIO.setBeatPos(event, tpos, mens);
-                    var minimStruct = rm.minimStructures(rm.mensurSummary(mens));
-                    durIO.setBreveBoundaries(event, prevBeatStructure, beatStructure, minimStruct);
-                    prevBeatStructure = beatStructure;
-                } else {
-                    return;
-                }
-            }
-        }
-    }
-
-    /**
-     * Updates block info with durations
-     * @param {Array<Object>} sectionBlocks 
-     * @memberof complexBeats
-     * @inner
-     */
-    function updateBlocks(sectionBlocks)
-    {
-        // update block info
-        for (let block of sectionBlocks)
-        {
-            let evLength = block.events.length;
-            let lastEvent = block.events[evLength-1];
-            let lastDur = durIO.readDur(lastEvent);
-            block.dur = durIO.readBlockFrom(lastEvent) + lastDur;
-            block.totaldur = durIO.readStartsAt(lastEvent) + lastDur;
-        }
-    }
-
     return {
-        
-        /**
-         * Adds start times to blocks, e.g. after a simple analysis.
-         * @param {MEIdoc} meiDoc 
-         * @memberof complexBeats
-         */
-        addStartTimes : function(meiDoc) {
-            var sectionBlocks = meiDoc.blocks;
-            // add start times as far as possible
-            addAllStartTimes(sectionBlocks);
-
-            updateBlocks(sectionBlocks);
-        },
-
         /**
          * Runs complex analysis depending of beat positions
          * @param {MEIdoc} meiDoc  
@@ -261,7 +142,7 @@ var complexBeats = (function() {
 
             //durIO.setDurGesPerBlock(sectionBlocks);
 
-            updateBlocks(sectionBlocks);
+            startTimes.updateBlocks(sectionBlocks);
 
             console.log(remaining);
         }

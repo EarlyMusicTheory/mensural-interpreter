@@ -247,7 +247,7 @@ $(document).ready(function(){
         if (basicAnalysisDone===false)
         {
             basic.beatIndependentDurations(meiFile);
-            complexBeats.addStartTimes(meiFile);
+            startTimes.addStartTimes(meiFile);
             basicAnalysisDone = true;
             $("#beatIndependent").prop('disabled', true);
             loadData();
@@ -258,7 +258,7 @@ $(document).ready(function(){
         if(basicAnalysisDone===false)
         {
             basic.beatIndependentDurations(meiFile);
-            complexBeats.addStartTimes(meiFile);
+            startTimes.addStartTimes(meiFile);
             basicAnalysisDone = true;
             $("#beatIndependent").prop('disabled', true);
         }
