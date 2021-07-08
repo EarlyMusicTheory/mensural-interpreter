@@ -104,7 +104,16 @@ var ioHandler = (function() {
                     attrAnnot.setAttribute("type", attr);
                     annot.appendChild(attrAnnot);
                 }
-                attrAnnot.textContent = propObject[attr];
+
+                // set value as standard if there is no value there or the interpreter isn't finished
+                if (complexAnalysisDone===false || attrAnnot.textContent==="")
+                {
+                    attrAnnot.textContent = propObject[attr];
+                }
+                else
+                {
+                    addCorr(elementID, attr, propObject[attr]);
+                }
             }
         }
 
@@ -156,7 +165,7 @@ var ioHandler = (function() {
             var oldValue = getAnnot(elementID, propName);
 
             // add apparatus only if values differ
-            if (corrValue!==oldValue)
+            if (corrValue!=oldValue)
             {
                 var attrEl = addApp(elementID, propName);
 
@@ -164,7 +173,10 @@ var ioHandler = (function() {
                 {
                     let corrEl = meiFile.doXPathOnDoc("descendant::mei:corr", attrEl, 9).singleNodeValue;
                     corrEl.textContent = corrValue;
-                    corrEl.setAttribute("resp", "#" + resp);
+                    if(resp)
+                    {
+                        corrEl.setAttribute("resp", "#" + resp);
+                    }
                 }
             }
         }
@@ -201,25 +213,41 @@ var ioHandler = (function() {
 
         function getSic(elementID, propName) 
         {
-
+            return meiFile.doXPathOnDoc("descendant::mei:sic", propAnnot, 9).singleNodeValue;
         }
 
         function getCorr(elementID, propName)
         {
-
+            return meiFile.doXPathOnDoc("descendant::mei:corr", propAnnot, 9).singleNodeValue
         }
 
         function addRespStmt(respTxt, name, initials)
         {
             var titleStmt = meiFile.doXPathOnDoc("//mei:fileDesc/mei:titleStmt", meiFile.doc, 9).singleNodeValue;
-            var respStmt = meiFile.addMeiElement("respStmt");
-            titleStmt.append(respStmt);
-            var resp = meiFile.addMeiElement("resp");
-            resp.textContent = respTxt;
-            respStmt.append(resp);
-            var persName = meiFile.addMeiElement("persName", initials);
-            persName.textContent = name;
-            respStmt.append(persName);
+            var respRes = meiFile.doXPathOnDoc("./mei:respStmt[./mei:resp='"+respTxt+"']", titleStmt, 5);
+            var respStmt = respRes.iterateNext();
+
+            var respPersNames = [];
+
+            while (respStmt)
+            {
+                let persName = respStmt.getElementsByTagName("persName")[0];
+                respPersNames.push(persName.textContent);
+
+                respStmt = respRes.iterateNext();
+            }
+
+            if(respStmt == null && respPersNames.indexOf(name)===-1) 
+            {
+                respStmt = meiFile.addMeiElement("respStmt");
+                titleStmt.append(respStmt);
+                let resp = meiFile.addMeiElement("resp");
+                resp.textContent = respTxt;
+                respStmt.append(resp);
+                let persName = meiFile.addMeiElement("persName", initials);
+                persName.textContent = name;
+                respStmt.append(persName);
+            }
         }
 
         function addRevision(initials)
@@ -247,6 +275,10 @@ var ioHandler = (function() {
             }
             else
             {
+                if(!existingChange.attributes["startdate"])
+                {
+                    existingChange.setAttribute("startdate", existingChange.getAttribute("isodate"));
+                }
                 existingChange.setAttribute("isodate", date.toISOString());
             }
         }
@@ -254,7 +286,7 @@ var ioHandler = (function() {
     return {
         //public
 
-        getProperty : function (element, propName) {
+        getProperty : function (element, propName, app = false) {
             // read properties from attrs and annots to handle non note-rest objects
             // since annots get merged into attrs, annots overwrite attr values
             // this is intended!
@@ -263,6 +295,18 @@ var ioHandler = (function() {
 
             let attrs = getAttr(element);
             let annots = getAnnot(element.getAttribute("xml:id"));
+
+            // if we don't need apparati (most cases), just return corrected values
+            if(app===false)
+            {
+                for (let attr in annots)
+                {
+                    if(typeof annots[attr] !== "string")
+                    {
+                        annots[attr] = annots[attr].corr;
+                    }
+                }
+            }
 
             property = {...attrs, ...annots};
 
@@ -274,10 +318,10 @@ var ioHandler = (function() {
             return property;
         },
 
-        getPropertyByID : function (elementID, propName) {
+        getPropertyByID : function (elementID, propName, app = false) {
             let element = meiFile.eventDict[elementID];
 
-            return this.getProperty(element, propName);
+            return this.getProperty(element, propName, app);
         },
 
         setProperty : function (element, propObject) {

@@ -193,6 +193,7 @@ var MEIdoc = (() => {
 			this.preprocess();
 			if(this.meiDoc) this.getBlocksFromSections();
 			if(this.meiDoc) this.initEventDict();
+			if(this.meiDoc) this.initAnnotations();
 			if(this.meiDoc) this.meiBlob = new Blob([this.text], {type: 'text/xml'});
         }
 
@@ -295,6 +296,19 @@ var MEIdoc = (() => {
 		/** @property {Object.<string,Object>} annotations event id to annotations */
 		get annotations () {
 			return this.annots;
+		}
+
+		initAnnotations() {
+			var annotationsFromFile = this.doXPathOnDoc("//mei:annot[@resp='#mensural-interpreter']", this.doc, 5);
+
+			var loadedAnnotation = annotationsFromFile.iterateNext();
+
+			while(loadedAnnotation)
+			{
+				let eventID = loadedAnnotation.getAttribute("startid").substring(1);
+				this.annots[eventID] = loadedAnnotation;
+				loadedAnnotation = annotationsFromFile.iterateNext();
+			}
 		}
 
 		/**

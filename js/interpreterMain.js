@@ -42,8 +42,7 @@ function fetchMEI(meiUrl) {
         .then(function(text) {
             meiFile.text = text;
             loadData();
-            basicAnalysisDone = false;
-            complexAnalysisDone = false;
+            checkIfAlreadyRun();
         });
     }
 }
@@ -114,7 +113,7 @@ function makeXmlCode(htmlString) {
     $(eventEl).attr("fill", red);
 
     let thisID = $(eventEl).attr("id");
-    let attributes = ioHandler.getPropertyByID(thisID);
+    let attributes = ioHandler.getPropertyByID(thisID, null, true);
     if (attributes)
     {
         for (let attr in attributes)
@@ -140,19 +139,54 @@ function makeXmlCode(htmlString) {
             // beatPos is a readonly Extrawurst
             else if (attr==="beatPos")
             {
-                let beatPosArray = attributes[attr].split(", ");
+                var beatPosArray;
+                var beatPosCorrArray;
+
+                if(typeof attributes[attr] === "string")
+                {
+                    beatPosArray = attributes[attr].split(", ");
+                }
+                else
+                {
+                    beatPosArray = attributes[attr].sic.split(", ");
+                    beatPosCorrArray = attributes[attr].corr.split(", ");
+                }
+
                 for(let i = 0; i < beatPosArray.length; i++)
                 {
                     let cellID = "#beatPos" + i;
                     $(cellID).text(beatPosArray[i]);
+
+                    if(beatPosCorrArray!=null)
+                    {
+                        $(cellID).contents().wrap("<s></s>");
+                        let corrID = "#beatPosCorr" + i;
+                        $(corrID).append($("<strong></strong>").text(beatPosCorrArray[i]));
+    
+                    }
                 }
+                
             }
             // all other readonly attributes
             else
             {
                 let dt = $(dtTag).text(attr);
-                let dd = $(ddTag).text(attributes[attr]);
                 $(dt).attr("title",attr);
+                let dd = $(ddTag);
+
+                if(typeof attributes[attr] === "string")
+                {
+                    dd.text(attributes[attr]);
+                }
+                else
+                {
+                    let sic = $("<s></s>").text(attributes[attr].sic);
+                    let corr = $("<strong></strong>").text(attributes[attr].corr);
+
+                    dd.append(sic);
+                    dd.append(corr);
+                }
+
                 if(positionAttrs.indexOf(attr)!=-1)
                 {
                     $("#posAttList").append(dt);
@@ -197,6 +231,22 @@ function hideDetails() {
     $(".interpreterInput").val("");
 }
 
+function checkIfAlreadyRun() {
+    var change = meiFile.doXPathOnDoc("//mei:change[@resp='#mensural-interpreter']", meiFile.doc, 3).booleanValue;
+    if(change)
+    {
+        basicAnalysisDone = true;
+        complexAnalysisDone = true;
+        $("#beatIndependent").prop('disabled', true);
+        $("#complexBeatAnalysis").prop('disabled', true);
+    }
+    else
+    {
+        basicAnalysisDone = false;
+        complexAnalysisDone = false;
+    }
+}
+
 
 $(document).ready(function(){
 
@@ -219,10 +269,8 @@ $(document).ready(function(){
             meiFile.text = event.target.result;
             currentParams.set("url", null);
             window.history.pushState({}, "Mensural interpreter", `${baseUrl}`);
-            $("#elementInfo").empty();
             loadData();
-            basicAnalysisDone = false;
-            complexAnalysisDone = false;
+            checkIfAlreadyRun();
         };    
     });
 
@@ -247,7 +295,7 @@ $(document).ready(function(){
         if (basicAnalysisDone===false)
         {
             basic.beatIndependentDurations(meiFile);
-            complexBeats.addStartTimes(meiFile);
+            startTimes.addStartTimes(meiFile);
             basicAnalysisDone = true;
             $("#beatIndependent").prop('disabled', true);
             loadData();
@@ -258,7 +306,7 @@ $(document).ready(function(){
         if(basicAnalysisDone===false)
         {
             basic.beatIndependentDurations(meiFile);
-            complexBeats.addStartTimes(meiFile);
+            startTimes.addStartTimes(meiFile);
             basicAnalysisDone = true;
             $("#beatIndependent").prop('disabled', true);
         }
@@ -306,7 +354,12 @@ $(document).ready(function(){
         }
 
         ioHandler.submitFeedback(usrInput, $(shownEvent).attr("id"));
-        updateBlob();
+        
+        // calculate corrected startTimes
+        startTimes.addStartTimes(meiFile);
+
+        //updateBlob();
+        loadData();
         
     });
 
