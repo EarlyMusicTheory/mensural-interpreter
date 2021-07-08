@@ -224,14 +224,30 @@ var ioHandler = (function() {
         function addRespStmt(respTxt, name, initials)
         {
             var titleStmt = meiFile.doXPathOnDoc("//mei:fileDesc/mei:titleStmt", meiFile.doc, 9).singleNodeValue;
-            var respStmt = meiFile.addMeiElement("respStmt");
-            titleStmt.append(respStmt);
-            var resp = meiFile.addMeiElement("resp");
-            resp.textContent = respTxt;
-            respStmt.append(resp);
-            var persName = meiFile.addMeiElement("persName", initials);
-            persName.textContent = name;
-            respStmt.append(persName);
+            var respRes = meiFile.doXPathOnDoc("./mei:respStmt[./mei:resp='"+respTxt+"']", titleStmt, 5);
+            var respStmt = respRes.iterateNext();
+
+            var respPersNames = [];
+
+            while (respStmt)
+            {
+                let persName = respStmt.getElementsByTagName("persName")[0];
+                respPersNames.push(persName.textContent);
+
+                respStmt = respRes.iterateNext();
+            }
+
+            if(respStmt == null && respPersNames.indexOf(name)===-1) 
+            {
+                respStmt = meiFile.addMeiElement("respStmt");
+                titleStmt.append(respStmt);
+                let resp = meiFile.addMeiElement("resp");
+                resp.textContent = respTxt;
+                respStmt.append(resp);
+                let persName = meiFile.addMeiElement("persName", initials);
+                persName.textContent = name;
+                respStmt.append(persName);
+            }
         }
 
         function addRevision(initials)
