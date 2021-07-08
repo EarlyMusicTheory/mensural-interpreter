@@ -3,7 +3,7 @@
 <head>
     
     <meta charset="utf-8">
-    <title>Home - Documentation</title>
+    <title>startTimes - Documentation</title>
     
     
     <script src="scripts/prettify/prettify.js"></script>
@@ -34,34 +34,10 @@
 
 <div id="main">
     
-
+    <h1 class="page-title">startTimes</h1>
     
 
-
-
     
-
-
-    <section class="package">
-        <h3> </h3>		
-    </section>
-
-
-
-
-
-
-
-
-
-    
-
-
-
-
-
-
-
 
 
 
@@ -71,7 +47,7 @@
 <header>
     
         <h2>
-        interpreter/alteration.js
+        startTimes
         </h2>
         
     
@@ -88,7 +64,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="interpreter_alteration.js.html">interpreter/alteration.js</a>, <a href="interpreter_alteration.js.html#line1">line 1</a>
+        <a href="interpreter_utils_startTimes.js.html">interpreter/utils/startTimes.js</a>, <a href="interpreter_utils_startTimes.js.html#line4">line 4</a>
     </li></ul></dd>
     
 
@@ -127,7 +103,7 @@
 
 
             
-                <div class="description usertext"><p>Gathers alteration functions</p></div>
+                <div class="description usertext"><p>Functionality to add start times</p></div>
             
 
             
@@ -150,43 +126,26 @@
     
 
     
+        <h3 class="subsection-title">Methods</h3>
 
-    
-
-    
-</article>
-
-</section>
-
-
-
-
-
-
-
-<section>
-
-<header>
-    
-        <h2>
-        interpreter/beatIndependentDurations.js
-        </h2>
-        
-    
-</header>
-
-<article>
-    
-        <div class="container-overview">
         
             
+
+    
+
+    <h4 class="name" id=".addAllStartTimes"><span class="type-signature">(static) </span>addAllStartTimes<span class="signature">(sectionBlocks)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
 
 <dl class="details">
 
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="interpreter_beatIndependentDurations.js.html">interpreter/beatIndependentDurations.js</a>, <a href="interpreter_beatIndependentDurations.js.html#line1">line 1</a>
+        <a href="interpreter_utils_startTimes.js.html">interpreter/utils/startTimes.js</a>, <a href="interpreter_utils_startTimes.js.html#line18">line 18</a>
     </li></ul></dd>
     
 
@@ -224,67 +183,107 @@
 
 
 
-            
-                <div class="description usertext"><p>Contains functionality to analyse durations that aren't dependant on any beat positions.</p></div>
-            
 
-            
+<div class="description usertext">
+    <p>If event[n] has both a duration assigned to it and a start time,
+adds a start time for event[n+1]</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
         
-        </div>
-    
-
-    
-
-    
-
-    
-    
-    
-
-     
-
-    
-
-    
-
-    
-
-    
-
-    
-</article>
-
-</section>
-
-
-
-
-
-
-
-<section>
-
-<header>
-    
-        <h2>
-        interpreter/complexBeatAnalysis.js
-        </h2>
+        <th>Name</th>
         
-    
-</header>
 
-<article>
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
     
-        <div class="container-overview">
+
+        <tr>
+            
+                <td class="name"><code>sectionBlocks</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Array of all the coherent areas of
+mensurations in a section</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         
             
+
+    
+
+    <h4 class="name" id=".addBreveBoundariesForBlock"><span class="type-signature">(static) </span>addBreveBoundariesForBlock<span class="signature">(block)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
 
 <dl class="details">
 
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="interpreter_complexBeatAnalysis.js.html">interpreter/complexBeatAnalysis.js</a>, <a href="interpreter_complexBeatAnalysis.js.html#line1">line 1</a>
+        <a href="interpreter_utils_startTimes.js.html">interpreter/utils/startTimes.js</a>, <a href="interpreter_utils_startTimes.js.html#line73">line 73</a>
     </li></ul></dd>
     
 
@@ -322,35 +321,70 @@
 
 
 
+
+<div class="description usertext">
+    <p>Indicates where an event falls in larger-scale mensural structures,
+also singling out which breve beat an event falls on and whether it
+crosses one (adds @beatPos, @onTheBreveBeat and @crossedABreveBeat)</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>block</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
             
 
             
-        
-        </div>
-    
+
+            <td class="description last"></td>
+        </tr>
 
     
-
-    
-
-    
-    
-    
-
-     
-
-    
-
-    
-
-    
-
-    
-
-    
-</article>
-
-</section>
+    </tbody>
+</table>
 
 
 
@@ -358,29 +392,36 @@
 
 
 
-<section>
 
-<header>
-    
-        <h2>
-        interpreter/imperfection.js
-        </h2>
-        
-    
-</header>
 
-<article>
-    
-        <div class="container-overview">
+
+
+
+
+
+
+
+
+
+
         
             
+
+    
+
+    <h4 class="name" id=".addStartTimes"><span class="type-signature">(static) </span>addStartTimes<span class="signature">(meiDoc)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
 
 <dl class="details">
 
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="interpreter_imperfection.js.html">interpreter/imperfection.js</a>, <a href="interpreter_imperfection.js.html#line1">line 1</a>
+        <a href="interpreter_utils_startTimes.js.html">interpreter/utils/startTimes.js</a>, <a href="interpreter_utils_startTimes.js.html#line117">line 117</a>
     </li></ul></dd>
     
 
@@ -418,67 +459,105 @@
 
 
 
-            
-                <div class="description usertext"><p>Check imperfection rules</p></div>
-            
 
-            
+<div class="description usertext">
+    <p>Adds start times to blocks, e.g. after a simple analysis.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
         
-        </div>
-    
-
-    
-
-    
-
-    
-    
-    
-
-     
-
-    
-
-    
-
-    
-
-    
-
-    
-</article>
-
-</section>
-
-
-
-
-
-
-
-<section>
-
-<header>
-    
-        <h2>
-        interpreter/utils/durationUtils.js
-        </h2>
+        <th>Name</th>
         
-    
-</header>
 
-<article>
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
     
-        <div class="container-overview">
+
+        <tr>
+            
+                <td class="name"><code>meiDoc</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="MEIdoc.html">MEIdoc</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         
             
+
+    
+
+    <h4 class="name" id=".addStartTimesForBlock"><span class="type-signature">(static) </span>addStartTimesForBlock<span class="signature">(block, startsAtValue)</span><span class="type-signature"> &rarr; {Number}</span></h4>
+
+    
+
+
+
 
 <dl class="details">
 
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="interpreter_utils_durationUtils.js.html">interpreter/utils/durationUtils.js</a>, <a href="interpreter_utils_durationUtils.js.html#line1">line 1</a>
+        <a href="interpreter_utils_startTimes.js.html">interpreter/utils/startTimes.js</a>, <a href="interpreter_utils_startTimes.js.html#line47">line 47</a>
     </li></ul></dd>
     
 
@@ -516,67 +595,152 @@
 
 
 
-            
-                <div class="description usertext"><p>Utility functions for duration I/O</p></div>
-            
 
-            
+<div class="description usertext">
+    <p>Add start times for all events in block for which that's possible
+(i.e. where the start and duration of the previous note is known).</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
         
-        </div>
-    
-
-    
-
-    
-
-    
-    
-    
-
-     
-
-    
-
-    
-
-    
-
-    
-
-    
-</article>
-
-</section>
-
-
-
-
-
-
-
-<section>
-
-<header>
-    
-        <h2>
-        interpreter/utils/rhythmMensUtils.js
-        </h2>
+        <th>Name</th>
         
-    
-</header>
 
-<article>
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
     
-        <div class="container-overview">
+
+        <tr>
+            
+                <td class="name"><code>block</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Object with attributes for events and
+mensuration sign</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>startsAtValue</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>manually set starting position</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>last starting position</p>
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Number</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
         
             
+
+    
+
+    <h4 class="name" id=".updateBlocks"><span class="type-signature">(static) </span>updateBlocks<span class="signature">(sectionBlocks)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
 
 <dl class="details">
 
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="interpreter_utils_rhythmMensUtils.js.html">interpreter/utils/rhythmMensUtils.js</a>, <a href="interpreter_utils_rhythmMensUtils.js.html#line1">line 1</a>
+        <a href="interpreter_utils_startTimes.js.html">interpreter/utils/startTimes.js</a>, <a href="interpreter_utils_startTimes.js.html#line99">line 99</a>
     </li></ul></dd>
     
 
@@ -614,134 +778,68 @@
 
 
 
-            
-                <div class="description usertext"><p>Utility functions IV and V
-Functions that know something about mensuration and simple rhythm functions</p></div>
-            
 
-            
+<div class="description usertext">
+    <p>Updates block info with durations</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
         
-        </div>
-    
-
-    
-
-    
-
-    
-    
-    
-
-     
-
-    
-
-    
-
-    
-
-    
-
-    
-</article>
-
-</section>
-
-
-
-
-
-
-
-<section>
-
-<header>
-    
-        <h2>
-        interpreter/utils/startTimes.js
-        </h2>
+        <th>Name</th>
         
-    
-</header>
 
-<article>
-    
-        <div class="container-overview">
+        <th>Type</th>
+
         
-            
 
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="interpreter_utils_startTimes.js.html">interpreter/utils/startTimes.js</a>, <a href="interpreter_utils_startTimes.js.html#line1">line 1</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-            
-
-            
         
-        </div>
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
     
 
-    
+        <tr>
+            
+                <td class="name"><code>sectionBlocks</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;Object></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
 
     
-
-    
-    
-    
-
-     
-
-    
-
-    
-
-    
-
-    
-
-    
-</article>
-
-</section>
+    </tbody>
+</table>
 
 
 
@@ -749,289 +847,19 @@ Functions that know something about mensuration and simple rhythm functions</p><
 
 
 
-<section>
 
-<header>
-    
-        <h2>
-        ioHandler.js
-        </h2>
+
+
+
+
+
+
+
+
+
+
+
         
-    
-</header>
-
-<article>
-    
-        <div class="container-overview">
-        
-            
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ioHandler.js.html">ioHandler.js</a>, <a href="ioHandler.js.html#line3">line 3</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-            
-                <div class="description usertext"><p>The ioHandler is the connecting layer between the meiFile and the interpreter or the user interface.
-The interpreter writes and reads it's output through ioHandler.
-The user interface retrieves data from the meiFile through ioHandler and writes user input to the meiFile.</p></div>
-            
-
-            
-        
-        </div>
-    
-
-    
-
-    
-
-    
-    
-    
-
-     
-
-    
-
-    
-
-    
-
-    
-
-    
-</article>
-
-</section>
-
-
-
-
-
-
-
-<section>
-
-<header>
-    
-        <h2>
-        MEIdoc.js
-        </h2>
-        
-    
-</header>
-
-<article>
-    
-        <div class="container-overview">
-        
-            
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="MEIdoc.js.html">MEIdoc.js</a>, <a href="MEIdoc.js.html#line3">line 3</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-            
-                <div class="description usertext"><p>This file contains the MEIdoc class</p>
-<p>Trying to fake some kind of private scope for the class.
-Used https://blog.bitsrc.io/doing-it-right-private-class-properties-in-javascript-cc74ef88682e</p></div>
-            
-
-            
-        
-        </div>
-    
-
-    
-
-    
-
-    
-    
-    
-
-     
-
-    
-
-    
-
-    
-
-    
-
-    
-</article>
-
-</section>
-
-
-
-
-
-
-
-<section>
-
-<header>
-    
-        <h2>
-        vrvInterface.js
-        </h2>
-        
-    
-</header>
-
-<article>
-    
-        <div class="container-overview">
-        
-            
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="vrvInterface.js.html">vrvInterface.js</a>, <a href="vrvInterface.js.html#line1">line 1</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-            
-                <div class="description usertext"><p>Contains interaction with Verovio toolkit and rendered music</p></div>
-            
-
-            
-        
-        </div>
-    
-
-    
-
-    
-
-    
-    
-    
-
-     
-
-    
-
-    
-
     
 
     

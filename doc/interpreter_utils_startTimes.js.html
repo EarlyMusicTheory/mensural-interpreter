@@ -3,7 +3,7 @@
 <head>
     
     <meta charset="utf-8">
-    <title>Home - Documentation</title>
+    <title>interpreter/utils/startTimes.js - Documentation</title>
     
     
     <script src="scripts/prettify/prettify.js"></script>
@@ -34,1012 +34,143 @@
 
 <div id="main">
     
+    <h1 class="page-title">interpreter/utils/startTimes.js</h1>
+    
 
     
 
 
 
     
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/** @fileoverview  */
+"use strict";
 
+/** 
+ * @namespace startTimes
+ * @desc Functionality to add start times
+*/
 
-    <section class="package">
-        <h3> </h3>		
+var startTimes = (function() {
+    return {
+        /**
+         * If event[n] has both a duration assigned to it and a start time,
+         * adds a start time for event[n+1]
+         * @param {Array} sectionBlocks Array of all the coherent areas of
+         * mensurations in a section
+         * @memberof startTimes
+         */
+        addAllStartTimes : function(sectionBlocks){
+            var nextStart = 0;
+            var prevPartNum = sectionBlocks[0].part;
+            for(var b=0; b&lt;sectionBlocks.length; b++){
+                let partNum = sectionBlocks[b].part;
+                // startsAt should be resetted at the beginning of a new part
+                if (prevPartNum!==partNum)
+                {
+                    nextStart = 0;
+                    prevPartNum = partNum;
+                }
+                this.addStartTimesForBlock(sectionBlocks[b], nextStart);
+                this.addBreveBoundariesForBlock(sectionBlocks[b]);
+                let lastEvent = sectionBlocks[b].events[sectionBlocks[b].events.length-1];
+                let lastDur = durIO.readDur(lastEvent);
+                let lastStartsAt = durIO.readStartsAt(lastEvent);
+                nextStart = lastStartsAt + lastDur;
+            }
+        },
+
+        /**
+         * Add start times for all events in block for which that's possible
+         * (i.e. where the start and duration of the previous note is known).
+         * @param {Object} block Object with attributes for events and
+         * mensuration sign
+         * @param {Number} startsAtValue manually set starting position
+         * @returns {Number} last starting position
+         * @memberof startTimes
+         */
+        addStartTimesForBlock : function(block, startsAtValue){
+            var blockFrom = 0;
+            var mens = block.mens;
+            var events = block.events;
+            // this extra step can be used to do some stuff
+            var startsAt = startsAtValue; 
+            for(var e=0; e&lt;events.length; e++){
+                var event = events[e];
+                if(rm.noteOrRest(event)){
+                    durIO.setStartsAt(event, blockFrom, startsAt);
+                    var dur = durIO.readDur(event);
+                    if(dur){
+                        blockFrom += dur;
+                        startsAt += dur;
+                    }
+                }
+            }
+        },
+
+        /**
+         * Indicates where an event falls in larger-scale mensural structures,
+         * also singling out which breve beat an event falls on and whether it
+         * crosses one (adds @beatPos, @onTheBreveBeat and @crossedABreveBeat)
+         * @param {Object} block 
+         * @memberof startTimes
+         */ 
+        addBreveBoundariesForBlock : function(block){
+            var blockFrom = 0; // &lt;- unused?
+            var mens = block.mens;
+            var events = block.events;
+            var prevBeatStructure = false;
+            for(var e=0; e&lt;events.length; e++){
+                var event = events[e];
+                if(rm.noteOrRest(event)){
+                    var tpos = durIO.readBlockFrom(event);
+                    if(tpos!==false){
+                        var beatStructure = durIO.setBeatPos(event, tpos, mens);
+                        var minimStruct = rm.minimStructures(rm.mensurSummary(mens));
+                        durIO.setBreveBoundaries(event, prevBeatStructure, beatStructure, minimStruct);
+                        prevBeatStructure = beatStructure;
+                    } else {
+                        return;
+                    }
+                }
+            }
+        },
+
+        /**
+         * Updates block info with durations
+         * @param {Array&lt;Object>} sectionBlocks 
+         * @memberof startTimes
+         */
+        updateBlocks : function(sectionBlocks)
+        {
+            // update block info
+            for (let block of sectionBlocks)
+            {
+                let evLength = block.events.length;
+                let lastEvent = block.events[evLength-1];
+                let lastDur = durIO.readDur(lastEvent);
+                block.dur = durIO.readBlockFrom(lastEvent) + lastDur;
+                block.totaldur = durIO.readStartsAt(lastEvent) + lastDur;
+            }
+        },
+        
+        /**
+         * Adds start times to blocks, e.g. after a simple analysis.
+         * @param {MEIdoc} meiDoc 
+         * @memberof startTimes
+         */
+        addStartTimes : function(meiDoc) {
+            var sectionBlocks = meiDoc.blocks;
+            // add start times as far as possible
+            this.addAllStartTimes(sectionBlocks);
+
+            this.updateBlocks(sectionBlocks);
+        }
+    }
+})();</code></pre>
+        </article>
     </section>
-
-
-
-
-
-
-
-
-
-    
-
-
-
-
-
-
-
-
-
-
-
-<section>
-
-<header>
-    
-        <h2>
-        interpreter/alteration.js
-        </h2>
-        
-    
-</header>
-
-<article>
-    
-        <div class="container-overview">
-        
-            
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="interpreter_alteration.js.html">interpreter/alteration.js</a>, <a href="interpreter_alteration.js.html#line1">line 1</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-            
-                <div class="description usertext"><p>Gathers alteration functions</p></div>
-            
-
-            
-        
-        </div>
-    
-
-    
-
-    
-
-    
-    
-    
-
-     
-
-    
-
-    
-
-    
-
-    
-
-    
-</article>
-
-</section>
-
-
-
-
-
-
-
-<section>
-
-<header>
-    
-        <h2>
-        interpreter/beatIndependentDurations.js
-        </h2>
-        
-    
-</header>
-
-<article>
-    
-        <div class="container-overview">
-        
-            
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="interpreter_beatIndependentDurations.js.html">interpreter/beatIndependentDurations.js</a>, <a href="interpreter_beatIndependentDurations.js.html#line1">line 1</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-            
-                <div class="description usertext"><p>Contains functionality to analyse durations that aren't dependant on any beat positions.</p></div>
-            
-
-            
-        
-        </div>
-    
-
-    
-
-    
-
-    
-    
-    
-
-     
-
-    
-
-    
-
-    
-
-    
-
-    
-</article>
-
-</section>
-
-
-
-
-
-
-
-<section>
-
-<header>
-    
-        <h2>
-        interpreter/complexBeatAnalysis.js
-        </h2>
-        
-    
-</header>
-
-<article>
-    
-        <div class="container-overview">
-        
-            
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="interpreter_complexBeatAnalysis.js.html">interpreter/complexBeatAnalysis.js</a>, <a href="interpreter_complexBeatAnalysis.js.html#line1">line 1</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-            
-
-            
-        
-        </div>
-    
-
-    
-
-    
-
-    
-    
-    
-
-     
-
-    
-
-    
-
-    
-
-    
-
-    
-</article>
-
-</section>
-
-
-
-
-
-
-
-<section>
-
-<header>
-    
-        <h2>
-        interpreter/imperfection.js
-        </h2>
-        
-    
-</header>
-
-<article>
-    
-        <div class="container-overview">
-        
-            
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="interpreter_imperfection.js.html">interpreter/imperfection.js</a>, <a href="interpreter_imperfection.js.html#line1">line 1</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-            
-                <div class="description usertext"><p>Check imperfection rules</p></div>
-            
-
-            
-        
-        </div>
-    
-
-    
-
-    
-
-    
-    
-    
-
-     
-
-    
-
-    
-
-    
-
-    
-
-    
-</article>
-
-</section>
-
-
-
-
-
-
-
-<section>
-
-<header>
-    
-        <h2>
-        interpreter/utils/durationUtils.js
-        </h2>
-        
-    
-</header>
-
-<article>
-    
-        <div class="container-overview">
-        
-            
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="interpreter_utils_durationUtils.js.html">interpreter/utils/durationUtils.js</a>, <a href="interpreter_utils_durationUtils.js.html#line1">line 1</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-            
-                <div class="description usertext"><p>Utility functions for duration I/O</p></div>
-            
-
-            
-        
-        </div>
-    
-
-    
-
-    
-
-    
-    
-    
-
-     
-
-    
-
-    
-
-    
-
-    
-
-    
-</article>
-
-</section>
-
-
-
-
-
-
-
-<section>
-
-<header>
-    
-        <h2>
-        interpreter/utils/rhythmMensUtils.js
-        </h2>
-        
-    
-</header>
-
-<article>
-    
-        <div class="container-overview">
-        
-            
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="interpreter_utils_rhythmMensUtils.js.html">interpreter/utils/rhythmMensUtils.js</a>, <a href="interpreter_utils_rhythmMensUtils.js.html#line1">line 1</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-            
-                <div class="description usertext"><p>Utility functions IV and V
-Functions that know something about mensuration and simple rhythm functions</p></div>
-            
-
-            
-        
-        </div>
-    
-
-    
-
-    
-
-    
-    
-    
-
-     
-
-    
-
-    
-
-    
-
-    
-
-    
-</article>
-
-</section>
-
-
-
-
-
-
-
-<section>
-
-<header>
-    
-        <h2>
-        interpreter/utils/startTimes.js
-        </h2>
-        
-    
-</header>
-
-<article>
-    
-        <div class="container-overview">
-        
-            
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="interpreter_utils_startTimes.js.html">interpreter/utils/startTimes.js</a>, <a href="interpreter_utils_startTimes.js.html#line1">line 1</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-            
-
-            
-        
-        </div>
-    
-
-    
-
-    
-
-    
-    
-    
-
-     
-
-    
-
-    
-
-    
-
-    
-
-    
-</article>
-
-</section>
-
-
-
-
-
-
-
-<section>
-
-<header>
-    
-        <h2>
-        ioHandler.js
-        </h2>
-        
-    
-</header>
-
-<article>
-    
-        <div class="container-overview">
-        
-            
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ioHandler.js.html">ioHandler.js</a>, <a href="ioHandler.js.html#line3">line 3</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-            
-                <div class="description usertext"><p>The ioHandler is the connecting layer between the meiFile and the interpreter or the user interface.
-The interpreter writes and reads it's output through ioHandler.
-The user interface retrieves data from the meiFile through ioHandler and writes user input to the meiFile.</p></div>
-            
-
-            
-        
-        </div>
-    
-
-    
-
-    
-
-    
-    
-    
-
-     
-
-    
-
-    
-
-    
-
-    
-
-    
-</article>
-
-</section>
-
-
-
-
-
-
-
-<section>
-
-<header>
-    
-        <h2>
-        MEIdoc.js
-        </h2>
-        
-    
-</header>
-
-<article>
-    
-        <div class="container-overview">
-        
-            
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="MEIdoc.js.html">MEIdoc.js</a>, <a href="MEIdoc.js.html#line3">line 3</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-            
-                <div class="description usertext"><p>This file contains the MEIdoc class</p>
-<p>Trying to fake some kind of private scope for the class.
-Used https://blog.bitsrc.io/doing-it-right-private-class-properties-in-javascript-cc74ef88682e</p></div>
-            
-
-            
-        
-        </div>
-    
-
-    
-
-    
-
-    
-    
-    
-
-     
-
-    
-
-    
-
-    
-
-    
-
-    
-</article>
-
-</section>
-
-
-
-
-
-
-
-<section>
-
-<header>
-    
-        <h2>
-        vrvInterface.js
-        </h2>
-        
-    
-</header>
-
-<article>
-    
-        <div class="container-overview">
-        
-            
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="vrvInterface.js.html">vrvInterface.js</a>, <a href="vrvInterface.js.html#line1">line 1</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-            
-                <div class="description usertext"><p>Contains interaction with Verovio toolkit and rendered music</p></div>
-            
-
-            
-        
-        </div>
-    
-
-    
-
-    
-
-    
-    
-    
-
-     
-
-    
-
-    
-
-    
-
-    
-
-    
-</article>
-
-</section>
 
 
 
