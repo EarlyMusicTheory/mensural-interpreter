@@ -259,6 +259,10 @@ var ioHandler = (function() {
             }
             else
             {
+                if(!existingChange.attributes["startdate"])
+                {
+                    existingChange.setAttribute("startdate", existingChange.getAttribute("isodate"));
+                }
                 existingChange.setAttribute("isodate", date.toISOString());
             }
         }
