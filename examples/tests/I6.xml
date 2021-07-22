@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="https://music-encoding.org/schema/4.0.1/mei-Mensural.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="https://music-encoding.org/schema/4.0.1/mei-Mensural.rng" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<mei meiversion="4.0.1" xmlns="http://www.music-encoding.org/ns/mei">
+    <meiHead meiversion="4.0.1">
+        <fileDesc>
+            <titleStmt>
+                <title>Test I.6 rule</title>
+                <editor>Anna Plaksin</editor>
+            </titleStmt>
+            <pubStmt>
+                <publisher>Early Music Theory</publisher>
+            </pubStmt>
+            <notesStmt>
+                <annot>
+                    A regularly perfect note that falls on the first subunit of its own unit and is followed, 
+                    before the next note or rest of its own value or larger or before a dot of division, by 
+                    the equivalent 3 or 6 notes that would imperfect it is perfect (even if the last note of 
+                    this series is potentially alterable), unless a dot of division forces it to be imperfected 
+                    (rule I.4).
+                </annot>
+            </notesStmt>
+        </fileDesc>
+    </meiHead>
+    <music meiversion="4.0.1">
+        <body>
+            <mdiv>
+                <score>
+                    <scoreDef>
+                        <staffGrp>
+                            <staffDef n="1" label="voice" notationtype="mensural.white" lines="5" clef.shape="G" clef.line="2" 
+                                tempus="3" prolatio="2" modusminor="2" modusmaior="2"/>
+                        </staffGrp>
+                    </scoreDef>
+                    <section>
+                        <staff n="1">
+                            <layer>
+                                <note dur="brevis" pname="a" oct="4"/>
+                                <note dur="semibrevis" pname="a" oct="4"/>
+                                <note dur="semibrevis" pname="a" oct="4"/>
+                                <note dur="semibrevis" pname="a" oct="4"/>
+                                <note dur="longa" pname="a" oct="4"/>
+                                <barLine form="dbl"/>
+                                <mensur tempus="3" prolatio="2" modusminor="2" modusmaior="2" />
+                                <note dur="brevis" pname="a" oct="4"/>
+                                <note dur="semibrevis" pname="a" oct="4"/>
+                                <note dur="semibrevis" pname="a" oct="4"/>
+                                <note dur="semibrevis" pname="a" oct="4"/>
+                                <note dur="semibrevis" pname="a" oct="4"/>
+                                <note dur="semibrevis" pname="a" oct="4"/>
+                                <note dur="semibrevis" pname="a" oct="4"/>
+                                <note dur="longa" pname="a" oct="4"/>
+                                <barLine form="dbl"/>
+                            </layer>
+                        </staff>
+                    </section>
+                </score>
+            </mdiv>
+        </body>
+    </music>
+</mei>
