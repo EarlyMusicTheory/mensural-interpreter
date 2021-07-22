@@ -465,7 +465,7 @@ var MEIdoc = (() => {
 		let staffDef = doc.evaluate("//mei:staffDef[@n='"+staffNum+"']", doc.childNodes[0], nsResolver).iterateNext();
 		let mensAttrStartList = ["mensur.", "poport.", "tempus", "prolatio", "modusminor", "modusmaior"];
 
-		if(!doc.evaluate('./mei:layer/mei:mensur', staffElement, nsResolver, 3).booleanValue)
+		if(doc.evaluate('./@tempus and ./@prolatio', staffDef, nsResolver, 3).booleanValue)
 		{
 			let layer = staffElement.getElementsByTagName("layer")[0];
 			let mensur = doc.createElementNS(nsResolver("mei"), "mensur");
