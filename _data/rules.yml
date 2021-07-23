@@ -74,6 +74,7 @@
 
 - rule: I.9a
   type: imperfection
+  definition: A regularly perfect note that falls on the third subunit of its own unit is imperfected from ahead by what would imperfect it, either immediately or by syncope, unless it is followed by what would imperfect it, immediately followed by a dot of division, in which case it is imperfected from behind.
 
 - rule: I.9b
   type: imperfection
