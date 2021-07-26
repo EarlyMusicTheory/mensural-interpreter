@@ -20,7 +20,9 @@
      * @inner
      */
      function noteIntFromDur(dur){
-        return ['semifusa', 'fusa', 'semiminima', 'minima', 'semibrevis', 'brevis', 'longa', 'maxima'].indexOf(dur);
+        var noteInt = ['semifusa', 'fusa', 'semiminima', 'minima', 'semibrevis', 'brevis', 'longa', 'maxima'].indexOf(dur);
+        if(dur==="2B"||dur==="3B") noteInt = 6;
+        return noteInt
     }
 
     return {

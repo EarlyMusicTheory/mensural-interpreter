@@ -39,6 +39,7 @@
 
 - rule: I.4a
   type: imperfection
+  definition: A regularly perfect note that falls on the first subunit of its own unit and is followed, before the next note or rest of its own value or larger or before a dot of division, by the equivalent of one note that would imperfect it is imperfected from behind by that note or equivalent.
 
 - rule: I.4b
   type: imperfection
@@ -51,6 +52,7 @@
 
 - rule: I.5
   type: imperfection
+  definition: A regularly perfect note that falls on the first subunit of its own unit and is followed, before the next note or rest of its own value or larger or before a dot of division, by the equivalent of two notes that would imperfect it is perfect, provided that the last of these can be altered.
 
 - rule: I.5-add
   type: imperfection
@@ -60,6 +62,7 @@
 
 - rule: I.6
   type: imperfection
+  definition: A regularly perfect note that falls on the first subunit of its own unit and is followed, before the next note or rest of its own value or larger or before a dot of division, by the equivalent 3 or 6 notes that would imperfect it is perfect (even if the last note of this series is potentially alterable), unless a dot of division forces it to be imperfected (rule I.4).
 
 - rule: I.6-literalunits
   type: imperfection
@@ -71,6 +74,7 @@
 
 - rule: I.9a
   type: imperfection
+  definition: A regularly perfect note that falls on the third subunit of its own unit is imperfected from ahead by what would imperfect it, either immediately or by syncope, unless it is followed by what would imperfect it, immediately followed by a dot of division, in which case it is imperfected from behind.
 
 - rule: I.9b
   type: imperfection

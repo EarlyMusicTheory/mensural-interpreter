@@ -61,7 +61,7 @@ var MEIdoc = (() => {
 	 */
 	function getEventsByMensurationForSection(section, meiDoc, prevMens){
 		if(meiDoc.doc.createNodeIterator){
-			var ni = meiDoc.doc.createNodeIterator(section, NodeFilter.SHOW_ALL);
+			var ni = meiDoc.doc.createNodeIterator(section, NodeFilter.SHOW_ELEMENT);
 			var next = ni.nextNode();
 		} else {
 			var bucket = section.getElementsByTagName('*');
@@ -72,7 +72,20 @@ var MEIdoc = (() => {
 		var partNum = section.parentElement.getAttribute("n");
 		var block = {part: partNum, mens: prevMens, events: foo, prevPropMultiplier: 1};
 		var blocks = [block];
+		var count2b = 0;
+		var count3b = 0;
 		while(next){
+			if(next.tagName!=='rest')
+			{
+				if(block.mens)
+				{
+					if(count2b===2 || count3b===2) block.mens.setAttributeNS(null, 'modusmaior', 2);
+					if(count2b===3 || count3b===3) block.mens.setAttributeNS(null, 'modusmaior', 3);
+				}
+				count2b = 0;
+				count3b = 0;
+			}
+						
 			switch(next.tagName){
 				case 'mensur':
 					if(foo.length){
@@ -107,10 +120,12 @@ var MEIdoc = (() => {
 					break				
 				case 'rest':
 					if(block.mens){
-						if(next.getAttributeNS(null, 'dur')==='maxima'){
-							if(next.getAttributeNS(null, 'maximaIsPerfect')==='true') block.mens.setAttributeNS(null, 'modusmaior', 3);
-							if(next.getAttributeNS(null, 'longaIsPerfect')==='true') block.mens.setAttributeNS(null, 'modusminor', 3);
-						} else if (next.getAttributeNS(null, 'dur')==='longa' && next.getAttributeNS(null, 'quality')=="p"){
+						if(next.getAttributeNS(null, 'dur')==='2B'){
+							count2b++;
+							block.mens.setAttributeNS(null, 'modusminor', 2);
+						} 
+						else if (next.getAttributeNS(null, 'dur')==='3B'){
+							count3b++;
 							block.mens.setAttributeNS(null, 'modusminor', 3);
 						}
 					}
@@ -450,7 +465,7 @@ var MEIdoc = (() => {
 		let staffDef = doc.evaluate("//mei:staffDef[@n='"+staffNum+"']", doc.childNodes[0], nsResolver).iterateNext();
 		let mensAttrStartList = ["mensur.", "poport.", "tempus", "prolatio", "modusminor", "modusmaior"];
 
-		if(!doc.evaluate('./mei:layer/mei:mensur', staffElement, nsResolver, 3).booleanValue)
+		if(doc.evaluate('./@tempus and ./@prolatio', staffDef, nsResolver, 3).booleanValue)
 		{
 			let layer = staffElement.getElementsByTagName("layer")[0];
 			let mensur = doc.createElementNS(nsResolver("mei"), "mensur");
