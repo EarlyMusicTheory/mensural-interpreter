@@ -244,6 +244,8 @@ function checkIfAlreadyRun() {
     {
         basicAnalysisDone = false;
         complexAnalysisDone = false;
+        $("#beatIndependent").prop('disabled', false);
+        $("#complexBeatAnalysis").prop('disabled', false);
     }
 }
 
