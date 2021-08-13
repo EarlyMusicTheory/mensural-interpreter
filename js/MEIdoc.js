@@ -57,9 +57,10 @@ var MEIdoc = (() => {
 	 * @param {Object} prevMens The last mensuration of the previous block
 	 * (this is the default for the first section of hte new block in some
 	 * cases, if none is specified).
+	 * @param {string} partNum Number of staff
 	 * @return {Array<Object>} Array of mensurally coherent blocks
 	 */
-	function getEventsByMensurationForSection(section, meiDoc, prevMens){
+	function getEventsByMensurationForSection(section, meiDoc, prevMens, partNum){
 		if(meiDoc.doc.createNodeIterator){
 			var ni = meiDoc.doc.createNodeIterator(section, NodeFilter.SHOW_ELEMENT);
 			var next = ni.nextNode();
@@ -69,8 +70,10 @@ var MEIdoc = (() => {
 			var next = bucket[pointer];
 		}
 		var foo = [];
-		var partNum = section.parentElement.getAttribute("n");
 		var block = {part: partNum, mens: prevMens, events: foo, prevPropMultiplier: 1};
+		// Assumed defaults (changed if evidence to the contrary)
+		block.mens.setAttributeNS(null, 'modusmaior', 2);
+		block.mens.setAttributeNS(null, 'modusminor', 2);
 		var blocks = [block];
 		var count2b = 0;
 		var count3b = 0;
@@ -365,13 +368,23 @@ var MEIdoc = (() => {
 				currentLayers.forEach(layer => layers.push(layer));
 			}
 
+			var prevPartNum = "0";
 			for (let i of layers)
 			{
-				let layerBlocks = getEventsByMensurationForSection(i, 
-					this, 
-					sectionBlocks.length > 0 ? sectionBlocks[sectionBlocks.length - 1].mens : false);
+				let staffNum = i.parentElement.getAttribute("n");
+				let prevMens = false;
+				if(prevPartNum !== staffNum)
+				{
+					prevMens = this.doXPathOnDoc("//mei:staffDef[@n='"+staffNum+"']/mei:mensur",i,9).singleNodeValue;
+				}
+				else
+				{
+					prevMens = sectionBlocks[sectionBlocks.length - 1].mens;
+				}
+				let layerBlocks = getEventsByMensurationForSection(i, this, prevMens, staffNum);
 				//layerMens[i] = layerBlocks[layerBlocks.length - 1].mens;
 				layerBlocks.forEach(lBlocks => sectionBlocks.push(lBlocks));
+				prevPartNum = staffNum;
 			}
 
 			this.blocks = sectionBlocks;
@@ -409,9 +422,10 @@ var MEIdoc = (() => {
 			for(let staff of this.doc.getElementsByTagName("staff") )
 			{
 				tidyClefKeySig(staff, this.doc);
-				getMensFromStaffDef(staff, this.doc);
-				removeLig(staff);
 				mergeAdjacentMensProp(staff);
+				putStartingMensToStaffDef(staff, this.doc)
+				removeLig(staff);
+				
 			}
 
 		}
@@ -435,6 +449,7 @@ var MEIdoc = (() => {
 	/**
 	 * If a staff starts with clef and keySig, move it to the staffDef
 	 * @param {DOMElement} staffElement 
+	 * @param {Document} doc
 	 */
 	function tidyClefKeySig(staffElement, doc)
 	{
@@ -455,21 +470,27 @@ var MEIdoc = (() => {
 		}
 	}
 
+
 	/**
-	 * Get the mensuration info from staffDef and put it into the layer
+	 * Gather first mensuration of a staff as <mensur> child element of staffDef
 	 * @param {DOMElement} staffElement 
+	 * @param {Document} doc
 	 */
-	function getMensFromStaffDef(staffElement, doc)
+	function putStartingMensToStaffDef(staffElement, doc)
 	{
 		let staffNum = staffElement.getAttribute("n");
 		let staffDef = doc.evaluate("//mei:staffDef[@n='"+staffNum+"']", doc.childNodes[0], nsResolver).iterateNext();
 		let mensAttrStartList = ["mensur.", "poport.", "tempus", "prolatio", "modusminor", "modusmaior"];
 
-		if(doc.evaluate('./@tempus and ./@prolatio', staffDef, nsResolver, 3).booleanValue)
+		if(doc.evaluate('./mei:layer/mei:mensur', staffElement, nsResolver, 3).booleanValue &&
+			doc.evaluate('count(./mei:layer/mei:mensur/preceding-sibling::mei:note)', staffElement, nsResolver).numberValue === 0)
 		{
-			let layer = staffElement.getElementsByTagName("layer")[0];
+			let firstMensur = staffElement.getElementsByTagName("mensur")[0];
+			staffDef.appendChild(firstMensur);
+		}
+		else if(doc.evaluate('./@tempus and ./@prolatio', staffDef, nsResolver, 3).booleanValue)
+		{
 			let mensur = doc.createElementNS(nsResolver("mei"), "mensur");
-
 			let staffDefAttrs = staffDef.attributes;
 
 			// because attributes get removed, start iterating from back to front
@@ -488,8 +509,7 @@ var MEIdoc = (() => {
 					}
 				}
 			}
-
-			layer.insertBefore(mensur, layer.childNodes[0]);
+			staffDef.appendChild(mensur);
 		}
 	}
 
