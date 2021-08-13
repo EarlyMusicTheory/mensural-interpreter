@@ -67,7 +67,7 @@ var durIO = (function() {
             /*if(dot) {
                 num = num*1.5;
             }*/
-            ioHandler.setProperty(el, {'dur.ppq': num});
+            ioHandler.setProperty(el, {'dur.metrical': num});
         },
 
         /**
@@ -220,7 +220,7 @@ var durIO = (function() {
          * @memberof durIO
          */
         readDur : function (el) {
-            var str = ioHandler.getProperty(el, 'dur.ppq');
+            var str = ioHandler.getProperty(el, 'dur.metrical');
             return str ? Number(str) : false;
         },
 

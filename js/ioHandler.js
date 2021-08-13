@@ -18,7 +18,7 @@ var ioHandler = (function() {
     /**
      * determine data storage in MEIdoc
      */
-    const attributes = ["num", "numbase", "dur.quality", "dur.ppq"];
+    const attributes = ["num", "numbase", "dur.quality", "dur.metrical"];
 
         function setAttr(element, propObject) {
             for(let attr in propObject)
