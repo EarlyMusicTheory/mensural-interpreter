@@ -133,8 +133,8 @@ var durIO = (function() {
             this.writeDur((2 * rm.simpleMinims(el, mens) / 3), el);
             ioHandler.setProperty(el, 
                 {"rule":rule,
-                "num": "3", 
-                "numbase": "2", 
+                //"num": "3", 
+                //"numbase": "2", 
                 'dur.quality': 'imperfecta'
             });
         },
@@ -159,7 +159,8 @@ var durIO = (function() {
                 {'rule': rule,
                 'num': finalDur / factor,
                 'numbase': defaultDur / factor,
-                'dur.quality': 'imperfecta'
+                //'dur.quality': 'imperfecta'
+                'comment':'partial or non-standard imperfection'
             });
             if (defaultMinims === true)
             {
@@ -181,8 +182,8 @@ var durIO = (function() {
             this.writeDur((2 * rm.simpleMinims(el, mens)), el);
             ioHandler.setProperty(el, {
                 "rule": rule,
-                "num": "1",
-                "numbase": "2",
+                //"num": "1",
+                //"numbase": "2",
                 "dur.quality": "altera"
             });
         },
@@ -200,11 +201,9 @@ var durIO = (function() {
             durIO.writeDur(rm.simpleMinims(el, mens), el);
             ioHandler.setProperty(el, {
                 "rule": rule,
-                'dur.quality': 'perfecta',
-                'num': '2',
-                'numbase': '3'
+                'dur.quality': 'perfecta'
             });
-            // it doesn't make sense, but maybe Verovio seems to need num/numbase
+            // Verovio interprets perfecta
             
             if (defaultMinims === true)
             {
