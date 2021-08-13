@@ -102,7 +102,7 @@ function makeXmlCode(htmlString) {
  * @param {DOMObject} eventEl 
  */
     function showDetails(eventEl) {
-    const formAttrs = ["dur.quality", "rule", "dur.ppq", "num", "numbase"];
+    const formAttrs = ["dur.quality", "rule", "dur.metrical", "num", "numbase"];
     const additionalAttrs = ["defaultminims", "comment"];
     const positionAttrs = ["startsAt", "mensurBlockStartsAt", "beatPos", "onTheBreveBeat", "crossedABreveBeat"];
 
@@ -244,6 +244,8 @@ function checkIfAlreadyRun() {
     {
         basicAnalysisDone = false;
         complexAnalysisDone = false;
+        $("#beatIndependent").prop('disabled', false);
+        $("#complexBeatAnalysis").prop('disabled', false);
     }
 }
 
@@ -342,7 +344,7 @@ $(document).ready(function(){
             "rule" : $("#ruleInput").val(),
             "num" : $("#numInput").val(),
             "numbase": $("#numbaseInput").val(),
-            "dur.ppq" : $("#durppqInput").val(),
+            "dur.metrical" : $("#durmetricalInput").val(),
             "resp.name" : $("#userName").val(),
             "resp.initials" : $("#userInitials").val()
         };
