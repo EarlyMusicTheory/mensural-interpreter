@@ -197,6 +197,12 @@ function makeXmlCode(htmlString) {
                     $("#attList").append(dt);
                     $("#attList").append(dd);
                 }
+                else if(additionalAttrs.indexOf(attr)!==-1)
+                {
+                    $("#addAttList").append(dt);
+                    $("#addAttList").append(dd);
+                    $("#additional").prop("hidden", false);
+                }
             }
         }
         
