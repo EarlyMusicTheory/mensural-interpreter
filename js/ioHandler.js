@@ -130,15 +130,23 @@ var ioHandler = (function() {
                 annot.appendChild(attrAnnot);
             }
 
-            // set value as standard if there is no value there or the interpreter isn't finished
-            /** @todo in instructor mode, a value must not be simply overwritten if resp is not identical!!! */
-            if (complexAnalysisDone===false || attrAnnot.textContent==="")
+            /** 
+             * Choose whether value is just added, or correction should be added:
+             * * If there is no value, just add value
+             * * In interpreter mode: After interpreter has finished, add corr
+             * * In instructor mode: If resp is not identical, add corr
+             */
+            if (
+                attrAnnot.textContent==="" ||
+                (instructor===false && complexAnalysisDone===false) ||
+                (instructor===true && attrAnnot.getAttribute("resp")===resp)
+                )
             {
                 attrAnnot.textContent = propObject[attr];
             }
             else
             {
-                addCorr(elementID, attr, propObject[attr]);
+                addCorr(elementID, attr, propObject[attr], resp);
             }
         }
     }
@@ -222,7 +230,7 @@ var ioHandler = (function() {
                 corrEl.textContent = corrValue;
                 if(resp && resp !== oldResp)
                 {
-                    corrEl.setAttribute("resp", "#" + resp);
+                    corrEl.setAttribute("resp", resp);
                     let sicEl = meiFile.doXPathOnDoc("descendant::mei:sic", attrEl, 9).singleNodeValue;
                     sicEl.setAttribute("resp", oldResp);
                     attrEl.removeAttribute("resp");
@@ -317,19 +325,6 @@ var ioHandler = (function() {
         }
     }
 
-    /**
-     * Adds a change to the revisionDesc of the file.
-     * If a change is already noted, the timestamp will be updated.
-     * (To make sure, that not every interaction with a single element causes a new change...)
-     * @param {string} initials of responsible agent
-     */
-    function addRevision(initials)
-    {
-        var text = "Evaluated interpreter results.";
-        var resp = "#" + initials;
-        meiFile.addRevision(resp, text);
-    }
-
     return {
         //public
 
@@ -391,8 +386,9 @@ var ioHandler = (function() {
          * Writes properties to attributes and annotations for the given element.
          * @param {Element} element 
          * @param {Object} propObject 
+         * @param {string} resp URI to responsible agent in header, default is interpreter
          */
-        setProperty : function (element, propObject) {
+        setProperty : function (element, propObject, resp = "#mensural-interpreter") {
             var annots = {};
             var attrs = {};
 
@@ -411,7 +407,7 @@ var ioHandler = (function() {
             }
 
             if(Object.entries(attrs)) setAttr(element, attrs);
-            if(Object.entries(annots)) setAnnot(element.getAttribute("xml:id"), annots);
+            if(Object.entries(annots)) setAnnot(element.getAttribute("xml:id"), annots, resp);
         },
 
         /**
@@ -419,11 +415,12 @@ var ioHandler = (function() {
          * Takes xml:id of affected element.
          * @param {string} elementID 
          * @param {Object} propObject 
+         * @param {string} resp URI to responsible agent in header, default is interpreter
          */
-        setPropertyByID : function (elementID, propObject) {
+        setPropertyByID : function (elementID, propObject, resp = "#mensural-interpreter") {
             let element = meiFile.eventDict[elementID];
 
-            this.setProperty(element, propObject);
+            this.setProperty(element, propObject, resp);
         },
 
         /**
@@ -435,13 +432,22 @@ var ioHandler = (function() {
         submitFeedback(feedbackObj, elementID) {
             //get user credentials out of feedbackObj
             var userName = feedbackObj["resp.name"];
-            var userIni = feedbackObj["resp.initials"];
+            var userIni = "#" + feedbackObj["resp.initials"];
             delete feedbackObj["resp.name"];
             delete feedbackObj["resp.initials"];
 
+            var text = "Evaluated interpreter results.";
+            var resp = "evaluated by";
+
+            if(instructor===true)
+            {
+                text = "Resolved durations in mensural instuctor mode";
+                resp = "resolved by";
+            }
+
             // create respStmt in Header if not done already
-            addRespStmt("evaluated by", userName, userIni);
-            addRevision(userIni);
+            addRespStmt(resp, userName, userIni);
+            meiFile.addRevision(userIni, text);
             
             // check which values differ
             // update values into sic/corr
@@ -449,18 +455,16 @@ var ioHandler = (function() {
 
             for(const [key, value] of Object.entries(feedbackObj))
             {
-                if(value!=null && value!==currentValues[key])
+                if(value==null || 
+                    (currentValues &&
+                        (currentValues[key] && value===currentValues[key]))
+                )
                 {
-                    addCorr(elementID, key, feedbackObj[key], userIni);
-                    if(attributes.find(item => item === key))
-                    {
-                        let element = meiFile.eventDict[elementID];
-                        let attrObj = {};
-                        attrObj[key] = value;
-                        setAttr(element, attrObj);
-                    }
+                    delete feedbackObj[key];
                 }
             }
+
+            this.setPropertyByID(elementID, feedbackObj, userIni);
         }
     }
 })();
