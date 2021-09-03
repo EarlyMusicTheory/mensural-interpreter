@@ -214,6 +214,7 @@ function makeXmlCode(htmlString) {
 
         $("#basic").prop("hidden", false);
         if(basicAnalysisDone || instructor) $("#interpreterResult").prop("hidden", false);
+        if(instructor && basicAnalysisDone) $("#submitFeedback").prop('disabled', true);
         $("#hideInfo").prop("disabled", false);
         $("#hideInfo").click(function() {
             hideDetails();
