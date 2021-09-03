@@ -13,6 +13,8 @@ var meiFile = new MEIdoc();
 var basicAnalysisDone = false;
 /** @var {Boolean} complexAnalysisDone if complex analysis is done */
 var complexAnalysisDone = false;
+/** @var {Boolean} instructor instructor mode */
+var instructor = false;
 
 
 /** Bootstrap blue to highlight events */
@@ -211,7 +213,7 @@ function makeXmlCode(htmlString) {
         prevEvent = $(eventEl).prev();
 
         $("#basic").prop("hidden", false);
-        if(basicAnalysisDone) $("#interpreterResult").prop("hidden", false);
+        if(basicAnalysisDone || instructor) $("#interpreterResult").prop("hidden", false);
         $("#hideInfo").prop("disabled", false);
         $("#hideInfo").click(function() {
             hideDetails();
@@ -259,6 +261,10 @@ function checkIfAlreadyRun() {
 $(document).ready(function(){
 
     var meiUrl = currentParams.get("url");
+    
+    // toggle instructor mode by url param
+    instructor = currentParams.get("mode")==="instructor" ? true : false;
+
     if(meiUrl) 
     {
         fetchMEI(meiUrl);
