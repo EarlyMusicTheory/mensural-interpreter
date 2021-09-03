@@ -421,6 +421,43 @@ var MEIdoc = (() => {
         }
 
 		/**
+		 * Adds a revision to the MEIhead at the current date
+		 * @param {string} resp URI to responsible agent
+		 * @param {string} text change description
+		 */
+		addRevision(resp, text) {
+			var revisionDesc = this.doXPathOnDoc("//mei:revisionDesc", meiFile.doc, 9).singleNodeValue;
+
+			let checkForExistingChange = "//mei:change[@resp='" + resp + 
+                                    "' and .//mei:p[contains(text(),'" + text + "')]]";
+			var existingChange = meiFile.doXPathOnDoc(checkForExistingChange, revisionDesc, 9).singleNodeValue;
+			var date = new Date();
+			if(existingChange==null)
+			{  
+				// add change as last child
+				var change = meiFile.addMeiElement("change");
+				revisionDesc.append(change);
+				// add isodate and resp
+				change.setAttribute("resp", resp);
+				change.setAttribute("isodate", date.toISOString());
+				// add changeDesc and p
+				let p = meiFile.addMeiElement("p");
+				p.textContent = text;
+				let changeDesc = meiFile.addMeiElement("changeDesc");
+				changeDesc.append(p);
+				change.append(changeDesc);
+			}
+			else
+			{
+				if(!existingChange.attributes["startdate"])
+				{
+					existingChange.setAttribute("startdate", existingChange.getAttribute("isodate"));
+				}
+				existingChange.setAttribute("isodate", date.toISOString());
+			}
+		}
+
+		/**
 		 * Preprocesses MEI file as a matter or normalization
 		 * * merge adjacent <mensur> and <proport> into <mensur> (to keep them together and avoid Verovio strangeness?)
 		 * 	 @todo adjust blockification
@@ -430,7 +467,16 @@ var MEIdoc = (() => {
 		 * * delete note/@lig if it is identical to ligature/@form
 		 */
 		preprocess(){
-			/** put first clef and keySig into staffDef */
+			
+			// add revisionDesc if not available
+			var meiHead = this.doXPathOnDoc("//mei:meiHead", this.doc, 9).singleNodeValue;
+			var revisionDesc = meiHead.getElementsByTagName("revisionDesc")[0];
+			if(!revisionDesc)
+			{
+				revisionDesc = this.addMeiElement("revisionDesc");
+				meiHead.append(revisionDesc);
+			}
+
 			for(let staff of this.doc.getElementsByTagName("staff") )
 			{
 				tidyClefKeySig(staff, this.doc);

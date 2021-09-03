@@ -104,45 +104,6 @@ var post = (function() {
         app.append(name);
     }
 
-    /**
-     * Add revisionDesc entry for interpreter
-     * <revisionDesc>
-            <change isodate="2021" resp="#mensural-interpreter">
-                <changeDesc>
-                    <p>Resolved mensural durations.</p>
-                </changeDesc>
-            </change>
-        </revisionDesc>
-     * @param {MEIdoc} meiDoc 
-     * @memberof post
-     * @inner
-     */
-    function addRevisionDesc (meiDoc){
-        // if there is no revisionDesc, add one as last child of meiHead
-        var meiHead = meiDoc.doXPathOnDoc("//mei:meiHead", meiDoc.doc, 9).singleNodeValue;
-        var revisionDesc = meiHead.getElementsByTagName("revisionDesc")[0];
-
-        if(!revisionDesc)
-        {
-            revisionDesc = meiDoc.addMeiElement("revisionDesc");
-            meiHead.append(revisionDesc);
-        }
-
-        // add change as last child
-        var change = meiDoc.addMeiElement("change");
-        revisionDesc.append(change);
-        // add isodate and resp
-        change.setAttribute("resp", "#mensural-interpreter");
-        let date = new Date();
-        change.setAttribute("isodate", date.toISOString());
-        // add changeDesc and p
-        let p = meiDoc.addMeiElement("p");
-        p.textContent = "Resolved mensural durations.";
-        let changeDesc = meiDoc.addMeiElement("changeDesc");
-        changeDesc.append(p);
-        change.append(changeDesc);
-    }
-
     return{
         
         /**
@@ -153,7 +114,8 @@ var post = (function() {
         run : function (meiDoc) {
             addBarLines(meiDoc);
             addAppInfo(meiDoc);
-            addRevisionDesc(meiDoc);
+            //addRevisionDesc(meiDoc);
+            meiDoc.addRevision("#mensural-interpreter", "Resolved mensural durations.");
         }
     }
 })();

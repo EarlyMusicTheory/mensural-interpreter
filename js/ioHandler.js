@@ -325,35 +325,9 @@ var ioHandler = (function() {
      */
     function addRevision(initials)
     {
-        var revisionDesc = meiFile.doXPathOnDoc("//mei:revisionDesc", meiFile.doc, 9).singleNodeValue;
-
-        let checkForExistingChange = "//mei:change[@resp='#" + initials + 
-                                    "' and .//mei:p[contains(text(),'Evaluated interpreter results.')]]";
-        var existingChange = meiFile.doXPathOnDoc(checkForExistingChange, revisionDesc, 9).singleNodeValue;
-        var date = new Date();
-        if(existingChange==null)
-        {  
-            // add change as last child
-            var change = meiFile.addMeiElement("change");
-            revisionDesc.append(change);
-            // add isodate and resp
-            change.setAttribute("resp", "#" + initials);
-            change.setAttribute("isodate", date.toISOString());
-            // add changeDesc and p
-            let p = meiFile.addMeiElement("p");
-            p.textContent = "Evaluated interpreter results.";
-            let changeDesc = meiFile.addMeiElement("changeDesc");
-            changeDesc.append(p);
-            change.append(changeDesc);
-        }
-        else
-        {
-            if(!existingChange.attributes["startdate"])
-            {
-                existingChange.setAttribute("startdate", existingChange.getAttribute("isodate"));
-            }
-            existingChange.setAttribute("isodate", date.toISOString());
-        }
+        var text = "Evaluated interpreter results.";
+        var resp = "#" + initials;
+        meiFile.addRevision(resp, text);
     }
 
     return {
