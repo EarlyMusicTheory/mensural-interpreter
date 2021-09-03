@@ -20,277 +20,351 @@ var ioHandler = (function() {
      */
     const attributes = ["num", "numbase", "dur.quality", "dur.metrical"];
 
-        function setAttr(element, propObject) {
-            for(let attr in propObject)
+    /**
+     * Writes attributes from a dictonary object to the element.
+     * Dictionary keys contain attribute names.
+     * @param {Element} element 
+     * @param {Object<string,string>} propObject 
+     */
+    function setAttr(element, propObject) {
+        for(let attr in propObject)
+        {
+            element.setAttributeNS(null, attr, propObject[attr]);
+        }
+    }
+
+    /**
+     * Retrieves the value of a specified attribute or a dictionary of attribute values.
+     * @param {Element} element 
+     * @param {Object<string,string>} propObject 
+     * @returns {string|Object<string,string>} attribute value(s)
+     */
+    function getAttr(element, propName) {
+        var attr;
+        
+        if(propName)
+        {
+            attr = element.getAttributeNS(null, propName);
+        }
+        else
+        {
+            attr = {};
+
+            for (let attribute of element.attributes)
             {
-                element.setAttributeNS(null, attr, propObject[attr]);
+                attr[attribute.nodeName] = attribute.value;
             }
         }
 
-        function getAttr(element, propName) {
-            var attr;
-            
-            if(propName)
-            {
-                attr = element.getAttributeNS(null, propName);
-            }
-            else
-            {
-                attr = {};
+        return attr;
+    }
 
-                for (let attribute of element.attributes)
+    /**
+     * Retrieves either a dictionary of annotation values for an element or the value of one property.
+     * @param {string} elementID xml:id of element
+     * @param {string} propName 
+     * @returns {string|Object<string,string>} annotation value(s)
+     */
+    function getAnnot(elementID, propName) {
+        var annotations = meiFile.getAnnotation(elementID);
+
+        var annots = null;
+
+        // there are no annotations before the interpreter has run!
+        if(annotations)
+        {
+            annots = {};
+            for (let annot of annotations.children)
+            {
+                let annotType = annot.getAttribute("type");
+                let annotValue = getCorrValue(annot);
+                let annotSic = getSicValue(annot);
+                if (annotSic)
                 {
-                    attr[attribute.nodeName] = attribute.value;
-                }
-            }
-
-            return attr;
-        }
-
-        function getAnnot(elementID, propName) {
-            var annotations = meiFile.getAnnotation(elementID);
-
-            var annots = null;
-
-            // there are no annotations before the interpreter has run!
-            if(annotations)
-            {
-                annots = {};
-                for (let annot of annotations.children)
-                {
-                    let annotType = annot.getAttribute("type");
-                    let annotValue = getCorrValue(annot);
-                    let annotSic = getSicValue(annot);
-                    if (annotSic)
-                    {
-                        annots[annotType] = {sic: annotSic, corr: annotValue};
-                    }
-                    else
-                    {
-                        annots[annotType] = annotValue;
-                    }
-                }
-            }
-
-            // if a propName is given, we retrieve only the defined property
-            if(propName)
-            {
-                annots = annots[propName];
-            }
-
-            return annots;
-        }
-
-        function setAnnot(elementID, propObject, resp = "#mensural-interpreter") {
-            var annot;
-
-            // pulling the gobal document like a bunny out of the hat is bad, 
-            // but just live with it in this one case...
-            if(meiFile.annotations[elementID])
-            {
-                annot = meiFile.getAnnotation(elementID);
-            }
-            else 
-            {
-                annot = meiFile.addAnnotation(elementID);
-            }
-
-            for (let attr in propObject)
-            {
-                let attrAnnot = getAnnotElement(elementID, attr);
-                if(attrAnnot==null)
-                {
-                    attrAnnot = meiFile.addMeiElement("annot");
-                    attrAnnot.setAttribute("type", attr);
-                    attrAnnot.setAttribute("resp", resp);
-                    annot.appendChild(attrAnnot);
-                }
-
-                // set value as standard if there is no value there or the interpreter isn't finished
-                if (complexAnalysisDone===false || attrAnnot.textContent==="")
-                {
-                    attrAnnot.textContent = propObject[attr];
+                    annots[annotType] = {sic: annotSic, corr: annotValue};
                 }
                 else
                 {
-                    addCorr(elementID, attr, propObject[attr]);
+                    annots[annotType] = annotValue;
                 }
             }
         }
 
-        function getAnnotElement(elementID, propName) {
-            var attrEl = null;
+        // if a propName is given, we retrieve only the defined property
+        if(propName)
+        {
+            annots = annots[propName];
+        }
 
-            if(meiFile.getAnnotation(elementID))
+        return annots;
+    }
+
+    /**
+     * Modifies or add annotations for the defined element
+     * @param {string} elementID xml:id of element
+     * @param {Object<string,string>} propObject 
+     * @param {string} resp URI to responsible agent in header, default is interpreter
+     */
+    function setAnnot(elementID, propObject, resp = "#mensural-interpreter") {
+        var annot;
+
+        // pulling the gobal document like a bunny out of the hat is bad, 
+        // but just live with it in this one case...
+        if(meiFile.annotations[elementID])
+        {
+            annot = meiFile.getAnnotation(elementID);
+        }
+        else 
+        {
+            annot = meiFile.addAnnotation(elementID);
+        }
+
+        for (let attr in propObject)
+        {
+            let attrAnnot = getAnnotElement(elementID, attr);
+            if(attrAnnot==null)
             {
-                let annot = meiFile.annotations[elementID];
-                attrEl = meiFile.doXPathOnDoc("./mei:annot[@type='" + propName + "']", annot, 9).singleNodeValue;
+                attrAnnot = meiFile.addMeiElement("annot");
+                attrAnnot.setAttribute("type", attr);
+                attrAnnot.setAttribute("resp", resp);
+                annot.appendChild(attrAnnot);
+            }
+
+            // set value as standard if there is no value there or the interpreter isn't finished
+            /** @todo in instructor mode, a value must not be simply overwritten if resp is not identical!!! */
+            if (complexAnalysisDone===false || attrAnnot.textContent==="")
+            {
+                attrAnnot.textContent = propObject[attr];
+            }
+            else
+            {
+                addCorr(elementID, attr, propObject[attr]);
+            }
+        }
+    }
+
+    /**
+     * Returns the annot element for a described element and a given property name.
+     * @param {string} elementID 
+     * @param {string} propName 
+     * @returns {Element} annot element
+     */
+    function getAnnotElement(elementID, propName) {
+        var attrEl = null;
+
+        if(meiFile.getAnnotation(elementID))
+        {
+            let annot = meiFile.annotations[elementID];
+            attrEl = meiFile.doXPathOnDoc("./mei:annot[@type='" + propName + "']", annot, 9).singleNodeValue;
+        }
+
+        return attrEl;
+    }
+
+    /**
+     * Adds a choice with sic/corr to an inner anotation
+     * @param {string} elementID 
+     * @param {string} propName 
+     * @returns {Element} annot element with choice
+     */
+    function addApp(elementID, propName)
+    {
+        var attrEl = getAnnotElement(elementID, propName);
+        if(attrEl)
+        {
+            if(attrEl.getElementsByTagName("choice").length===0)
+            {
+                let oldValueNowSic = attrEl.textContent;
+                attrEl.textContent = '';
+                let choice = meiFile.addMeiElement("choice");
+                attrEl.appendChild(choice);
+
+                let sic = meiFile.addMeiElement("sic");
+                choice.appendChild(sic);
+                sic.textContent = oldValueNowSic;
+
+                let corr = meiFile.addMeiElement("corr");
+                choice.appendChild(corr);
             }
 
             return attrEl;
         }
-
-        function addApp(elementID, propName)
+        else
         {
-            var attrEl = getAnnotElement(elementID, propName);
-            if(attrEl)
-            {
-                if(attrEl.getElementsByTagName("choice").length===0)
-                {
-                    let oldValueNowSic = attrEl.textContent;
-                    attrEl.textContent = '';
-                    let choice = meiFile.addMeiElement("choice");
-                    attrEl.appendChild(choice);
-
-                    let sic = meiFile.addMeiElement("sic");
-                    choice.appendChild(sic);
-                    sic.textContent = oldValueNowSic;
-
-                    let corr = meiFile.addMeiElement("corr");
-                    choice.appendChild(corr);
-                }
-
-                return attrEl;
-            }
-            else
-            {
-                return null;
-            }
+            return null;
         }
+    }
 
-        // don't implement this now: a value once set wil be set for eternity
-        // function setSic(elementID, propName, sicValue) {}
-        
-        function addCorr(elementID, propName, corrValue, resp) 
+    // don't implement this now: a value once set wil be set for eternity
+    // function setSic(elementID, propName, sicValue) {}
+    
+    /**
+     * Add a correction of an annotation if the value differs
+     * @param {string} elementID xml:id of element
+     * @param {string} propName property name
+     * @param {string} corrValue new correct value
+     * @param {string} resp responsible agent for the new value
+     */
+    function addCorr(elementID, propName, corrValue, resp) 
+    {
+        var oldValue = getAnnot(elementID, propName);
+
+        // add apparatus only if values differ
+        if (corrValue!=oldValue)
         {
-            var oldValue = getAnnot(elementID, propName);
+            var attrEl = addApp(elementID, propName);
 
-            // add apparatus only if values differ
-            if (corrValue!=oldValue)
+            if(attrEl!==null)
             {
-                var attrEl = addApp(elementID, propName);
-
-                if(attrEl!==null)
+                let corrEl = meiFile.doXPathOnDoc("descendant::mei:corr", attrEl, 9).singleNodeValue;
+                corrEl.textContent = corrValue;
+                if(resp)
                 {
-                    let corrEl = meiFile.doXPathOnDoc("descendant::mei:corr", attrEl, 9).singleNodeValue;
-                    corrEl.textContent = corrValue;
-                    if(resp)
-                    {
-                        corrEl.setAttribute("resp", "#" + resp);
-                    }
+                    corrEl.setAttribute("resp", "#" + resp);
                 }
             }
         }
+    }
 
-        function getCorrValue(propAnnot)
+    /**
+     * Retrieves the (correct) valid value of an annot.
+     * @param {Element} propAnnot 
+     * @returns {string}
+     */
+    function getCorrValue(propAnnot)
+    {
+        var corrValue;
+        let corrEl = meiFile.doXPathOnDoc("descendant::mei:corr", propAnnot, 9).singleNodeValue;
+
+        if(corrEl)
         {
-            var corrValue;
-            let corrEl = meiFile.doXPathOnDoc("descendant::mei:corr", propAnnot, 9).singleNodeValue;
-
-            if(corrEl)
-            {
-                corrValue = corrEl.textContent;
-            }
-            else
-            {
-                corrValue = propAnnot.textContent;
-            }
-
-            return corrValue;
+            corrValue = corrEl.textContent;
+        }
+        else
+        {
+            corrValue = propAnnot.textContent;
         }
 
-        function getSicValue(propAnnot)
-        {
-            var sicValue = null;
-            let sicEl = meiFile.doXPathOnDoc("descendant::mei:sic", propAnnot, 9).singleNodeValue;
+        return corrValue;
+    }
 
-            if(sicEl)
+    /**
+     * Retrieves the (wrong) non-valid value of an annot.
+     * @param {Element} propAnnot 
+     * @returns {string}
+     */
+    function getSicValue(propAnnot)
+    {
+        var sicValue = null;
+        let sicEl = meiFile.doXPathOnDoc("descendant::mei:sic", propAnnot, 9).singleNodeValue;
+
+        if(sicEl)
+        {
+            sicValue = sicEl.textContent;
+        }
+
+        return sicValue;
+    }
+
+    /*function getSic(elementID, propName) 
+    {
+        return meiFile.doXPathOnDoc("descendant::mei:sic", propAnnot, 9).singleNodeValue;
+    }
+
+    function getCorr(elementID, propName)
+    {
+        return meiFile.doXPathOnDoc("descendant::mei:corr", propAnnot, 9).singleNodeValue
+    }*/
+
+    /**
+     * Adds a <respStmt> to the title statement of the file description.
+     * Will only be added for names that aren't contained in a <respStmt> yet.
+     * @param {string} respTxt role of responsibility
+     * @param {*} name name of responsible agent
+     * @param {*} initials initials of respinsible agent
+     */
+    function addRespStmt(respTxt, name, initials)
+    {
+        var titleStmt = meiFile.doXPathOnDoc("//mei:fileDesc/mei:titleStmt", meiFile.doc, 9).singleNodeValue;
+        var respRes = meiFile.doXPathOnDoc("./mei:respStmt[./mei:resp='"+respTxt+"']", titleStmt, 5);
+        var respStmt = respRes.iterateNext();
+
+        var respPersNames = [];
+
+        while (respStmt)
+        {
+            let persName = respStmt.getElementsByTagName("persName")[0];
+            respPersNames.push(persName.textContent);
+
+            respStmt = respRes.iterateNext();
+        }
+
+        if(respStmt == null && respPersNames.indexOf(name)===-1) 
+        {
+            respStmt = meiFile.addMeiElement("respStmt");
+            titleStmt.append(respStmt);
+            let resp = meiFile.addMeiElement("resp");
+            resp.textContent = respTxt;
+            respStmt.append(resp);
+            let persName = meiFile.addMeiElement("persName", initials);
+            persName.textContent = name;
+            respStmt.append(persName);
+        }
+    }
+
+    /**
+     * Adds a change to the revisionDesc of the file.
+     * If a change is already noted, the timestamp will be updated.
+     * (To make sure, that not every interaction with a single element causes a new change...)
+     * @param {string} initials of responsible agent
+     */
+    function addRevision(initials)
+    {
+        var revisionDesc = meiFile.doXPathOnDoc("//mei:revisionDesc", meiFile.doc, 9).singleNodeValue;
+
+        let checkForExistingChange = "//mei:change[@resp='#" + initials + 
+                                    "' and .//mei:p[contains(text(),'Evaluated interpreter results.')]]";
+        var existingChange = meiFile.doXPathOnDoc(checkForExistingChange, revisionDesc, 9).singleNodeValue;
+        var date = new Date();
+        if(existingChange==null)
+        {  
+            // add change as last child
+            var change = meiFile.addMeiElement("change");
+            revisionDesc.append(change);
+            // add isodate and resp
+            change.setAttribute("resp", "#" + initials);
+            change.setAttribute("isodate", date.toISOString());
+            // add changeDesc and p
+            let p = meiFile.addMeiElement("p");
+            p.textContent = "Evaluated interpreter results.";
+            let changeDesc = meiFile.addMeiElement("changeDesc");
+            changeDesc.append(p);
+            change.append(changeDesc);
+        }
+        else
+        {
+            if(!existingChange.attributes["startdate"])
             {
-                sicValue = sicEl.textContent;
+                existingChange.setAttribute("startdate", existingChange.getAttribute("isodate"));
             }
-
-            return sicValue;
+            existingChange.setAttribute("isodate", date.toISOString());
         }
-
-        function getSic(elementID, propName) 
-        {
-            return meiFile.doXPathOnDoc("descendant::mei:sic", propAnnot, 9).singleNodeValue;
-        }
-
-        function getCorr(elementID, propName)
-        {
-            return meiFile.doXPathOnDoc("descendant::mei:corr", propAnnot, 9).singleNodeValue
-        }
-
-        function addRespStmt(respTxt, name, initials)
-        {
-            var titleStmt = meiFile.doXPathOnDoc("//mei:fileDesc/mei:titleStmt", meiFile.doc, 9).singleNodeValue;
-            var respRes = meiFile.doXPathOnDoc("./mei:respStmt[./mei:resp='"+respTxt+"']", titleStmt, 5);
-            var respStmt = respRes.iterateNext();
-
-            var respPersNames = [];
-
-            while (respStmt)
-            {
-                let persName = respStmt.getElementsByTagName("persName")[0];
-                respPersNames.push(persName.textContent);
-
-                respStmt = respRes.iterateNext();
-            }
-
-            if(respStmt == null && respPersNames.indexOf(name)===-1) 
-            {
-                respStmt = meiFile.addMeiElement("respStmt");
-                titleStmt.append(respStmt);
-                let resp = meiFile.addMeiElement("resp");
-                resp.textContent = respTxt;
-                respStmt.append(resp);
-                let persName = meiFile.addMeiElement("persName", initials);
-                persName.textContent = name;
-                respStmt.append(persName);
-            }
-        }
-
-        function addRevision(initials)
-        {
-            var revisionDesc = meiFile.doXPathOnDoc("//mei:revisionDesc", meiFile.doc, 9).singleNodeValue;
-
-            let checkForExistingChange = "//mei:change[@resp='#" + initials + 
-                                        "' and .//mei:p[contains(text(),'Evaluated interpreter results.')]]";
-            var existingChange = meiFile.doXPathOnDoc(checkForExistingChange, revisionDesc, 9).singleNodeValue;
-            var date = new Date();
-            if(existingChange==null)
-            {  
-                // add change as last child
-                var change = meiFile.addMeiElement("change");
-                revisionDesc.append(change);
-                // add isodate and resp
-                change.setAttribute("resp", "#" + initials);
-                change.setAttribute("isodate", date.toISOString());
-                // add changeDesc and p
-                let p = meiFile.addMeiElement("p");
-                p.textContent = "Evaluated interpreter results.";
-                let changeDesc = meiFile.addMeiElement("changeDesc");
-                changeDesc.append(p);
-                change.append(changeDesc);
-            }
-            else
-            {
-                if(!existingChange.attributes["startdate"])
-                {
-                    existingChange.setAttribute("startdate", existingChange.getAttribute("isodate"));
-                }
-                existingChange.setAttribute("isodate", date.toISOString());
-            }
-        }
+    }
 
     return {
         //public
 
+        /**
+         * Read properties from attrs and annots to handle non note-rest objects.
+         * Since annots get merged into attrs, annots overwrite attr values,
+         * this is intended!
+         * @param {Element} element 
+         * @param {string} propName 
+         * @param {boolean} app True if sic and corr should be returned
+         * @returns {string|Object}
+         */
         getProperty : function (element, propName, app = false) {
-            // read properties from attrs and annots to handle non note-rest objects
-            // since annots get merged into attrs, annots overwrite attr values
-            // this is intended!
+            // 
             
             var property = {};
 
@@ -319,12 +393,26 @@ var ioHandler = (function() {
             return property;
         },
 
+        /**
+         * Read properties from attrs and annots to handle non note-rest objects.
+         * Since annots get merged into attrs, annots overwrite attr values,
+         * this is intended!
+         * @param {string} elementID 
+         * @param {string} propName 
+         * @param {boolean} app True if sic and corr should be returned
+         * @returns {string|Object}
+         */
         getPropertyByID : function (elementID, propName, app = false) {
             let element = meiFile.eventDict[elementID];
 
             return this.getProperty(element, propName, app);
         },
 
+        /**
+         * Writes properties to attributes and annotations for the given element.
+         * @param {Element} element 
+         * @param {Object} propObject 
+         */
         setProperty : function (element, propObject) {
             var annots = {};
             var attrs = {};
@@ -347,12 +435,24 @@ var ioHandler = (function() {
             if(Object.entries(annots)) setAnnot(element.getAttribute("xml:id"), annots);
         },
 
+        /**
+         * Writes properties to attributes and annotations for the given element.
+         * Takes xml:id of affected element.
+         * @param {string} elementID 
+         * @param {Object} propObject 
+         */
         setPropertyByID : function (elementID, propObject) {
             let element = meiFile.eventDict[elementID];
 
             this.setProperty(element, propObject);
         },
 
+        /**
+         * Writes the user input about a certain element.
+         * Addresses the affected element by xml:id.
+         * @param {Object} feedbackObj 
+         * @param {string} elementID 
+         */
         submitFeedback(feedbackObj, elementID) {
             //get user credentials out of feedbackObj
             var userName = feedbackObj["resp.name"];
