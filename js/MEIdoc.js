@@ -8,6 +8,10 @@
  * 
  */
 
+/**
+ * @namespace MEIdoc
+ * @desc Contains MEIdoc class and private MEIdoc functions
+ */
 var MEIdoc = (() => {
     const parser = new DOMParser();
     const serializer = new XMLSerializer();
@@ -229,7 +233,7 @@ var MEIdoc = (() => {
 		}
 
 		/**
-		 * @property {Array<Object>} blocks
+		 * @property {Array<Object>} blocks Mensurally coherent blocks
 		 */
         get blocks() {
             return this.sectionBlocks;
@@ -316,6 +320,9 @@ var MEIdoc = (() => {
 			return this.annots;
 		}
 
+		/**
+		 * Initializes the annotations dictionary of the current MEI file.
+		 */
 		initAnnotations() {
 			var annotationsFromFile = this.doXPathOnDoc("//mei:annot[@type='mensural-interpreter']", this.doc, 5);
 
@@ -337,6 +344,11 @@ var MEIdoc = (() => {
 		getAnnotation (eventID) {
 			return this.annotations[eventID];
 		}
+		/**
+		 * Creates an interpreter-related annotation about a certain element.
+		 * @param {string} eventID 
+		 * @returns {Element} newly created annot
+		 */
 		addAnnotation (eventID) {
 			let annot = this.addMeiElement("annot");
 			annot.setAttribute("startid", "#" + eventID);
