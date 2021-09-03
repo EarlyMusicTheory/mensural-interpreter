@@ -81,7 +81,7 @@ var ioHandler = (function() {
             return annots;
         }
 
-        function setAnnot(elementID, propObject) {
+        function setAnnot(elementID, propObject, resp = "#mensural-interpreter") {
             var annot;
 
             // pulling the gobal document like a bunny out of the hat is bad, 
@@ -102,6 +102,7 @@ var ioHandler = (function() {
                 {
                     attrAnnot = meiFile.addMeiElement("annot");
                     attrAnnot.setAttribute("type", attr);
+                    attrAnnot.setAttribute("resp", resp);
                     annot.appendChild(attrAnnot);
                 }
 

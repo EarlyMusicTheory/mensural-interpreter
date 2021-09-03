@@ -317,7 +317,7 @@ var MEIdoc = (() => {
 		}
 
 		initAnnotations() {
-			var annotationsFromFile = this.doXPathOnDoc("//mei:annot[@resp='#mensural-interpreter']", this.doc, 5);
+			var annotationsFromFile = this.doXPathOnDoc("//mei:annot[@type='mensural-interpreter']", this.doc, 5);
 
 			var loadedAnnotation = annotationsFromFile.iterateNext();
 
@@ -340,7 +340,7 @@ var MEIdoc = (() => {
 		addAnnotation (eventID) {
 			let annot = this.addMeiElement("annot");
 			annot.setAttribute("startid", "#" + eventID);
-			annot.setAttribute("resp", "#mensural-interpreter");
+			annot.setAttribute("type", "mensural-interpreter");
 			annot.setAttribute("audience", "private");
 
 			let staff = this.doc.evaluate("./ancestor::mei:staff[1]", this.eventDict[eventID], nsResolver, 9).singleNodeValue;
