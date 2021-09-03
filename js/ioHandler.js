@@ -216,11 +216,16 @@ var ioHandler = (function() {
 
             if(attrEl!==null)
             {
+                let oldResp = attrEl.getAttribute("resp");
+            
                 let corrEl = meiFile.doXPathOnDoc("descendant::mei:corr", attrEl, 9).singleNodeValue;
                 corrEl.textContent = corrValue;
-                if(resp)
+                if(resp && resp !== oldResp)
                 {
                     corrEl.setAttribute("resp", "#" + resp);
+                    let sicEl = meiFile.doXPathOnDoc("descendant::mei:sic", attrEl, 9).singleNodeValue;
+                    sicEl.setAttribute("resp", oldResp);
+                    attrEl.removeAttribute("resp");
                 }
             }
         }
