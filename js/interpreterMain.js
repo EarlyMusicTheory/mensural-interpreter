@@ -74,6 +74,9 @@ function loadData() {
     vrvInterface.loadData(meiFile.text);
 }
 
+/**
+ * Updates the MEI blob and serve it
+ */
 function updateBlob() {
     meiFile.renewBlob();
     $("#download").attr("href", URL.createObjectURL(meiFile.blob));
@@ -233,6 +236,9 @@ function hideDetails() {
     $(".interpreterInput").val("");
 }
 
+/**
+ * Checks if the current file has already been modified by the interpreter
+ */
 function checkIfAlreadyRun() {
     var change = meiFile.doXPathOnDoc("//mei:change[@resp='#mensural-interpreter']", meiFile.doc, 3).booleanValue;
     if(change)
