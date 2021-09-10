@@ -16,13 +16,6 @@ var complexAnalysisDone = false;
 /** @var {Boolean} instructor instructor mode */
 var instructor = false;
 
-
-/** Bootstrap blue to highlight events */
-const blue = "#007bff";
-/** Bootstrap red to highlight events */
-const red = "#dc3545";
-
-
 /** event that is currently shown in detail */
 var shownEvent = null;
 /** event preceding the currently shown event */
@@ -112,7 +105,7 @@ function makeXmlCode(htmlString) {
     const ddTag = "<dd class='col-8 dyAttValue'></dd>";
 
     hideDetails();
-    $(eventEl).attr("fill", red);
+    $(eventEl).addClass("selected");
 
     let thisID = $(eventEl).attr("id");
     let attributes = ioHandler.getPropertyByID(thisID, null, true);
@@ -226,8 +219,8 @@ function makeXmlCode(htmlString) {
  * Remove details of the currently shown event
  */
 function hideDetails() {
-    const killRed = "[fill='" + red + "']";
-    $(killRed).removeAttr("fill");
+    //const killRed = "[fill='" + red + "']";
+    $(".selected").removeClass("selected");
     shownEvent = null;
     nextEvent = null;
     prevEvent = null;
