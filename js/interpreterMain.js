@@ -257,6 +257,44 @@ function checkIfAlreadyRun() {
     }
 }
 
+function evaluateResults(){
+    for (let [key, value] of Object.entries(meiFile.annotations))
+    {
+        let event = meiFile.eventDict[key];
+        if(meiFile.doXPathOnDoc("./mei:annot[@resp!='#mensural-interpreter']", value, 3).booleanValue)
+        {
+            //still a non-interpreter-resp within annot must be correct
+            event.setAttribute("type", "correct");
+        }
+        else
+        {
+            let choiceAnnots = meiFile.doXPathOnDoc("./mei:annot[mei:choice]/@type", value, 6);
+            let choices = [];
+            //let userValues = ["dur.quality", "num", "numbase", "rule", "dur.metrical"];
+        
+            // build an array with annot types that contain choices
+            for(let i=0; i < choiceAnnots.snapshotLength; i++)
+            {
+                choices.push(choiceAnnots.snapshotItem(i).value);
+            }
+            // don't evaluate elements without any choices
+            if(choices.length>0)
+            {
+                // As only cases with more than 0 choices are observed,
+                // there is only one possibilty for a wrong rule
+                // everything else at this point must be wrong
+                if(choices.length===1 && choices[0]==="rule")
+                {
+                    event.setAttribute("type", "wrongRule");
+                }
+                else
+                {
+                    event.setAttribute("type", "wrong");
+                }
+            }
+        }
+    }
+}
 
 $(document).ready(function(){
 
@@ -329,6 +367,10 @@ $(document).ready(function(){
         {
             complexBeats.complexAnalysis(meiFile);
             post.run(meiFile);
+            if(instructor===true)
+            {
+                evaluateResults();
+            }
             loadData();
             complexAnalysisDone = true;
             $("#complexBeatAnalysis").prop('disabled', true);
