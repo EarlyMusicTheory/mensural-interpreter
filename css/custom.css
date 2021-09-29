@@ -1,0 +1,19 @@
+.selected{
+    fill: #007bff !important
+}
+
+.highlighted{
+    fill: #17a2b8 !important
+}
+
+.correct{
+    fill: #28a745 !important
+}
+
+.wrong{
+    fill: #dc3545 !important
+}
+
+.wrongRule{
+    fill: #ffc107 !important
+}

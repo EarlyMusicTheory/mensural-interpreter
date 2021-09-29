@@ -8,6 +8,10 @@
  * 
  */
 
+/**
+ * @namespace MEIdoc
+ * @desc Contains MEIdoc class and private MEIdoc functions
+ */
 var MEIdoc = (() => {
     const parser = new DOMParser();
     const serializer = new XMLSerializer();
@@ -229,7 +233,7 @@ var MEIdoc = (() => {
 		}
 
 		/**
-		 * @property {Array<Object>} blocks
+		 * @property {Array<Object>} blocks Mensurally coherent blocks
 		 */
         get blocks() {
             return this.sectionBlocks;
@@ -316,8 +320,11 @@ var MEIdoc = (() => {
 			return this.annots;
 		}
 
+		/**
+		 * Initializes the annotations dictionary of the current MEI file.
+		 */
 		initAnnotations() {
-			var annotationsFromFile = this.doXPathOnDoc("//mei:annot[@resp='#mensural-interpreter']", this.doc, 5);
+			var annotationsFromFile = this.doXPathOnDoc("//mei:annot[@type='mensural-interpreter']", this.doc, 5);
 
 			var loadedAnnotation = annotationsFromFile.iterateNext();
 
@@ -337,10 +344,15 @@ var MEIdoc = (() => {
 		getAnnotation (eventID) {
 			return this.annotations[eventID];
 		}
+		/**
+		 * Creates an interpreter-related annotation about a certain element.
+		 * @param {string} eventID 
+		 * @returns {Element} newly created annot
+		 */
 		addAnnotation (eventID) {
 			let annot = this.addMeiElement("annot");
 			annot.setAttribute("startid", "#" + eventID);
-			annot.setAttribute("resp", "#mensural-interpreter");
+			annot.setAttribute("type", "mensural-interpreter");
 			annot.setAttribute("audience", "private");
 
 			let staff = this.doc.evaluate("./ancestor::mei:staff[1]", this.eventDict[eventID], nsResolver, 9).singleNodeValue;
@@ -409,6 +421,43 @@ var MEIdoc = (() => {
         }
 
 		/**
+		 * Adds a revision to the MEIhead at the current date
+		 * @param {string} resp URI to responsible agent
+		 * @param {string} text change description
+		 */
+		addRevision(resp, text) {
+			var revisionDesc = this.doXPathOnDoc("//mei:revisionDesc", meiFile.doc, 9).singleNodeValue;
+
+			let checkForExistingChange = "//mei:change[@resp='" + resp + 
+                                    "' and .//mei:p[contains(text(),'" + text + "')]]";
+			var existingChange = meiFile.doXPathOnDoc(checkForExistingChange, revisionDesc, 9).singleNodeValue;
+			var date = new Date();
+			if(existingChange==null)
+			{  
+				// add change as last child
+				var change = meiFile.addMeiElement("change");
+				revisionDesc.append(change);
+				// add isodate and resp
+				change.setAttribute("resp", resp);
+				change.setAttribute("isodate", date.toISOString());
+				// add changeDesc and p
+				let p = meiFile.addMeiElement("p");
+				p.textContent = text;
+				let changeDesc = meiFile.addMeiElement("changeDesc");
+				changeDesc.append(p);
+				change.append(changeDesc);
+			}
+			else
+			{
+				if(!existingChange.attributes["startdate"])
+				{
+					existingChange.setAttribute("startdate", existingChange.getAttribute("isodate"));
+				}
+				existingChange.setAttribute("isodate", date.toISOString());
+			}
+		}
+
+		/**
 		 * Preprocesses MEI file as a matter or normalization
 		 * * merge adjacent <mensur> and <proport> into <mensur> (to keep them together and avoid Verovio strangeness?)
 		 * 	 @todo adjust blockification
@@ -418,7 +467,16 @@ var MEIdoc = (() => {
 		 * * delete note/@lig if it is identical to ligature/@form
 		 */
 		preprocess(){
-			/** put first clef and keySig into staffDef */
+			
+			// add revisionDesc if not available
+			var meiHead = this.doXPathOnDoc("//mei:meiHead", this.doc, 9).singleNodeValue;
+			var revisionDesc = meiHead.getElementsByTagName("revisionDesc")[0];
+			if(!revisionDesc)
+			{
+				revisionDesc = this.addMeiElement("revisionDesc");
+				meiHead.append(revisionDesc);
+			}
+
 			for(let staff of this.doc.getElementsByTagName("staff") )
 			{
 				tidyClefKeySig(staff, this.doc);

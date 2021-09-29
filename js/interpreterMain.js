@@ -13,13 +13,8 @@ var meiFile = new MEIdoc();
 var basicAnalysisDone = false;
 /** @var {Boolean} complexAnalysisDone if complex analysis is done */
 var complexAnalysisDone = false;
-
-
-/** Bootstrap blue to highlight events */
-const blue = "#007bff";
-/** Bootstrap red to highlight events */
-const red = "#dc3545";
-
+/** @var {Boolean} instructor instructor mode */
+var instructor = false;
 
 /** event that is currently shown in detail */
 var shownEvent = null;
@@ -79,6 +74,9 @@ function loadData() {
     vrvInterface.loadData(meiFile.text);
 }
 
+/**
+ * Updates the MEI blob and serve it
+ */
 function updateBlob() {
     meiFile.renewBlob();
     $("#download").attr("href", URL.createObjectURL(meiFile.blob));
@@ -110,7 +108,7 @@ function makeXmlCode(htmlString) {
     const ddTag = "<dd class='col-8 dyAttValue'></dd>";
 
     hideDetails();
-    $(eventEl).attr("fill", red);
+    $(eventEl).addClass("selected");
 
     let thisID = $(eventEl).attr("id");
     let attributes = ioHandler.getPropertyByID(thisID, null, true);
@@ -211,7 +209,8 @@ function makeXmlCode(htmlString) {
         prevEvent = $(eventEl).prev();
 
         $("#basic").prop("hidden", false);
-        if(basicAnalysisDone) $("#interpreterResult").prop("hidden", false);
+        if(basicAnalysisDone || instructor) $("#interpreterResult").prop("hidden", false);
+        if(instructor && basicAnalysisDone) $("#submitFeedback").prop('disabled', true);
         $("#hideInfo").prop("disabled", false);
         $("#hideInfo").click(function() {
             hideDetails();
@@ -223,8 +222,8 @@ function makeXmlCode(htmlString) {
  * Remove details of the currently shown event
  */
 function hideDetails() {
-    const killRed = "[fill='" + red + "']";
-    $(killRed).removeAttr("fill");
+    //const killRed = "[fill='" + red + "']";
+    $(".selected").removeClass("selected");
     shownEvent = null;
     nextEvent = null;
     prevEvent = null;
@@ -237,6 +236,9 @@ function hideDetails() {
     $(".interpreterInput").val("");
 }
 
+/**
+ * Checks if the current file has already been modified by the interpreter
+ */
 function checkIfAlreadyRun() {
     var change = meiFile.doXPathOnDoc("//mei:change[@resp='#mensural-interpreter']", meiFile.doc, 3).booleanValue;
     if(change)
@@ -255,10 +257,52 @@ function checkIfAlreadyRun() {
     }
 }
 
+function evaluateResults(){
+    for (let [key, value] of Object.entries(meiFile.annotations))
+    {
+        let event = meiFile.eventDict[key];
+        if(meiFile.doXPathOnDoc("./mei:annot[@resp!='#mensural-interpreter']", value, 3).booleanValue)
+        {
+            //still a non-interpreter-resp within annot must be correct
+            event.setAttribute("type", "correct");
+        }
+        else
+        {
+            let choiceAnnots = meiFile.doXPathOnDoc("./mei:annot[mei:choice]/@type", value, 6);
+            let choices = [];
+            //let userValues = ["dur.quality", "num", "numbase", "rule", "dur.metrical"];
+        
+            // build an array with annot types that contain choices
+            for(let i=0; i < choiceAnnots.snapshotLength; i++)
+            {
+                choices.push(choiceAnnots.snapshotItem(i).value);
+            }
+            // don't evaluate elements without any choices
+            if(choices.length>0)
+            {
+                // As only cases with more than 0 choices are observed,
+                // there is only one possibilty for a wrong rule
+                // everything else at this point must be wrong
+                if(choices.length===1 && choices[0]==="rule")
+                {
+                    event.setAttribute("type", "wrongRule");
+                }
+                else
+                {
+                    event.setAttribute("type", "wrong");
+                }
+            }
+        }
+    }
+}
 
 $(document).ready(function(){
 
     var meiUrl = currentParams.get("url");
+    
+    // toggle instructor mode by url param
+    instructor = currentParams.get("mode")==="instructor" ? true : false;
+
     if(meiUrl) 
     {
         fetchMEI(meiUrl);
@@ -323,6 +367,10 @@ $(document).ready(function(){
         {
             complexBeats.complexAnalysis(meiFile);
             post.run(meiFile);
+            if(instructor===true)
+            {
+                evaluateResults();
+            }
             loadData();
             complexAnalysisDone = true;
             $("#complexBeatAnalysis").prop('disabled', true);

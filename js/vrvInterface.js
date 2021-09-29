@@ -114,7 +114,7 @@ var vrvInterface = (function () {
      * @inner
      */
     function selectEvent(eventEl) {
-        $(eventEl).attr("fill", blue);
+        $(eventEl).addClass("highlighted");
     }
 
     /**
@@ -124,10 +124,10 @@ var vrvInterface = (function () {
      * @inner
      */
     function deselectEvent(eventEl) {
-        if($(eventEl).attr("fill")!==red)
-        {
-            $(eventEl).removeAttr("fill");
-        }
+        //if($(eventEl).attr("fill")!==red)
+        //{
+            $(eventEl).removeClass("highlighted");
+        //}
     }
 
     /* public */
