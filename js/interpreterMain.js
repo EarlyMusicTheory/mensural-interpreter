@@ -15,6 +15,10 @@ var basicAnalysisDone = false;
 var complexAnalysisDone = false;
 /** @var {Boolean} instructor instructor mode */
 var instructor = false;
+/** @const {String} interpreter interpreter resp value */
+const interpreter = "mensural-interpreter";
+/** @const {String} intResp interpreter resp value */
+const intResp = "#" + interpreter;
 
 /** event that is currently shown in detail */
 var shownEvent = null;
@@ -240,7 +244,7 @@ function hideDetails() {
  * Checks if the current file has already been modified by the interpreter
  */
 function checkIfAlreadyRun() {
-    var change = meiFile.doXPathOnDoc("//mei:change[@resp='#mensural-interpreter']", meiFile.doc, 3).booleanValue;
+    var change = meiFile.doXPathOnDoc("//mei:change[@resp='" + intResp + "']", meiFile.doc, 3).booleanValue;
     if(change)
     {
         basicAnalysisDone = true;
@@ -271,12 +275,12 @@ function evaluateResults(){
         // check if there are choices
         if(meiFile.doXPathOnDoc("./mei:annot[mei:choice]", value, 3).booleanValue === false)
         {
-            if(meiFile.doXPathOnDoc("count(./mei:annot/@resp[.!='#mensural-interpreter'])", value, 1).numberValue >= 1)
+            if(meiFile.doXPathOnDoc("count(./mei:annot/@resp[.!='" + intResp + "'])", value, 1).numberValue >= 1)
             {
                 // a non-interpreter-resp within annot must be correct
                 event.setAttribute("type", "correct");
             }
-            else if(meiFile.doXPathOnDoc("./mei:annot[(@type='dur.quality' or @type='num' or @type='numbase') and @resp='#mensural-interpreter']", value, 3).booleanValue)
+            else if(meiFile.doXPathOnDoc("./mei:annot[(@type='dur.quality' or @type='num' or @type='numbase') and @resp='" + intResp + "']", value, 3).booleanValue)
             {
                 // a quality that has not been entered by the user is wrong
                 event.setAttribute("type", "wrong");

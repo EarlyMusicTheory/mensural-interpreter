@@ -105,7 +105,7 @@ var ioHandler = (function() {
      * @param {Object<string,string>} propObject 
      * @param {string} resp URI to responsible agent in header, default is interpreter
      */
-    function setAnnot(elementID, propObject, resp = "#mensural-interpreter") {
+    function setAnnot(elementID, propObject, resp = intResp) {
         var annot;
 
         // pulling the gobal document like a bunny out of the hat is bad, 
@@ -388,7 +388,7 @@ var ioHandler = (function() {
          * @param {Object} propObject 
          * @param {string} resp URI to responsible agent in header, default is interpreter
          */
-        setProperty : function (element, propObject, resp = "#mensural-interpreter") {
+        setProperty : function (element, propObject, resp = intResp) {
             var annots = {};
             var attrs = {};
 
@@ -417,7 +417,7 @@ var ioHandler = (function() {
          * @param {Object} propObject 
          * @param {string} resp URI to responsible agent in header, default is interpreter
          */
-        setPropertyByID : function (elementID, propObject, resp = "#mensural-interpreter") {
+        setPropertyByID : function (elementID, propObject, resp = intResp) {
             let element = meiFile.eventDict[elementID];
 
             this.setProperty(element, propObject, resp);
