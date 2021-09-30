@@ -8,7 +8,7 @@
             "type": "chrome",
             "request": "launch",
             "name": "Interpreter",
-            "url": "http://localhost:4000/interpreter",
+            "url": "http://localhost:4000/interpreter?url=examples/tests/I9.xml",
             "webRoot": "${workspaceFolder}",
             "sourceMaps": true
         },
@@ -16,7 +16,7 @@
             "type": "chrome",
             "request": "launch",
             "name": "Instructor",
-            "url": "http://localhost:4000/interpreter?url=examples/tests/Alt2.xml&mode=instructor",
+            "url": "http://localhost:4000/interpreter?url=examples/tests/I9.xml&mode=instructor",
             "webRoot": "${workspaceFolder}",
             "sourceMaps": true
         }
