@@ -120,8 +120,8 @@ function makeXmlCode(htmlString) {
             if(formAttrs.indexOf(attr)!=-1)
             {
                 //let attrMod = attr.replace(".","");
-                let formID = "#" + attr.replace(".","") + "Output";
-                let formInputID = "#" + attr.replace(".","") + "Input";
+                let formID = "#" + attr.replace(".","") + "Interpreter";
+                let formInputID = "#" + attr.replace(".","") + "User";
                 if(typeof attributes[attr]==="string")
                 {
                     $(formID).attr("placeholder",attributes[attr]);
@@ -257,17 +257,34 @@ function checkIfAlreadyRun() {
     }
 }
 
+/**
+ * Evaluates the differences of user feed and interpreter and adds a type to events:
+ * * correct: the user inserted a value that wasn't changed by the interpreter
+ * * wrongRule: only rule has been changed by the interpreter
+ * * wrong: Values other than rule differ or a modification has not been set by the user
+ * Events without modification and no user feed at all stay black!
+ */
 function evaluateResults(){
     for (let [key, value] of Object.entries(meiFile.annotations))
     {
         let event = meiFile.eventDict[key];
-        if(meiFile.doXPathOnDoc("./mei:annot[@resp!='#mensural-interpreter']", value, 3).booleanValue)
+        // check if there are choices
+        if(meiFile.doXPathOnDoc("./mei:annot[mei:choice]", value, 3).booleanValue === false)
         {
-            //still a non-interpreter-resp within annot must be correct
-            event.setAttribute("type", "correct");
+            if(meiFile.doXPathOnDoc("count(./mei:annot/@resp[.!='#mensural-interpreter'])", value, 1).numberValue >= 1)
+            {
+                // a non-interpreter-resp within annot must be correct
+                event.setAttribute("type", "correct");
+            }
+            else if(meiFile.doXPathOnDoc("./mei:annot[(@type='dur.quality' or @type='num' or @type='numbase') and @resp='#mensural-interpreter']", value, 3).booleanValue)
+            {
+                // a quality that has not been entered by the user is wrong
+                event.setAttribute("type", "wrong");
+            }
         }
         else
         {
+            // collect all choices
             let choiceAnnots = meiFile.doXPathOnDoc("./mei:annot[mei:choice]/@type", value, 6);
             let choices = [];
             //let userValues = ["dur.quality", "num", "numbase", "rule", "dur.metrical"];
@@ -394,11 +411,11 @@ $(document).ready(function(){
 
     $("#submitFeedback").click(function() {
         let usrInput = {
-            "dur.quality" : $("#durqualityInput").val(),
-            "rule" : $("#ruleInput").val(),
-            "num" : $("#numInput").val(),
-            "numbase": $("#numbaseInput").val(),
-            "dur.metrical" : $("#durmetricalInput").val(),
+            "dur.quality" : $("#durqualityUser").val(),
+            "rule" : $("#ruleUser").val(),
+            "num" : $("#numUser").val(),
+            "numbase": $("#numbaseUser").val(),
+            "dur.metrical" : $("#durmetricalUser").val(),
             "resp.name" : $("#userName").val(),
             "resp.initials" : $("#userInitials").val()
         };

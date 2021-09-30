@@ -157,11 +157,30 @@ var durIO = (function() {
             this.writeDur(finalDur, el);
             ioHandler.setProperty(el,  
                 {'rule': rule,
-                'num': finalDur / factor,
-                'numbase': defaultDur / factor,
+                //'num': defaultDur / factor,
+                //'numbase': finalDur / factor,
                 //'dur.quality': 'imperfecta'
                 'comment':'partial or non-standard imperfection'
             });
+            if(finalDur / factor === 2 && defaultDur / factor === 3)
+            {
+                ioHandler.setProperty(el,  
+                    {'dur.quality': 'imperfecta'
+                });
+            }
+            else if(finalDur / factor === 3 && defaultDur / factor === 2)
+            {
+                ioHandler.setProperty(el,  
+                    {'dur.quality': 'perfecta'
+                });
+            }
+            else
+            {
+                ioHandler.setProperty(el,  
+                    {'num': defaultDur / factor,
+                    'numbase': finalDur / factor
+                });
+            }
             if (defaultMinims === true)
             {
                 ioHandler.setProperty(el, {'defaultminims': rm.simpleMinims(el, mens)});
