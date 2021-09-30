@@ -120,8 +120,8 @@ function makeXmlCode(htmlString) {
             if(formAttrs.indexOf(attr)!=-1)
             {
                 //let attrMod = attr.replace(".","");
-                let formID = "#" + attr.replace(".","") + "Output";
-                let formInputID = "#" + attr.replace(".","") + "Input";
+                let formID = "#" + attr.replace(".","") + "Interpreter";
+                let formInputID = "#" + attr.replace(".","") + "User";
                 if(typeof attributes[attr]==="string")
                 {
                     $(formID).attr("placeholder",attributes[attr]);
@@ -394,11 +394,11 @@ $(document).ready(function(){
 
     $("#submitFeedback").click(function() {
         let usrInput = {
-            "dur.quality" : $("#durqualityInput").val(),
-            "rule" : $("#ruleInput").val(),
-            "num" : $("#numInput").val(),
-            "numbase": $("#numbaseInput").val(),
-            "dur.metrical" : $("#durmetricalInput").val(),
+            "dur.quality" : $("#durqualityUser").val(),
+            "rule" : $("#ruleUser").val(),
+            "num" : $("#numUser").val(),
+            "numbase": $("#numbaseUser").val(),
+            "dur.metrical" : $("#durmetricalUser").val(),
             "resp.name" : $("#userName").val(),
             "resp.initials" : $("#userInitials").val()
         };
