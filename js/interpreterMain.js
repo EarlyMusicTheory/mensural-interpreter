@@ -291,12 +291,16 @@ function evaluateResults(){
             // collect all choices
             let choiceAnnots = meiFile.doXPathOnDoc("./mei:annot[mei:choice]/@type", value, 6);
             let choices = [];
-            //let userValues = ["dur.quality", "num", "numbase", "rule", "dur.metrical"];
+            let userValues = ["dur.quality", "num", "numbase", "rule", "dur.metrical"];
         
             // build an array with annot types that contain choices
             for(let i=0; i < choiceAnnots.snapshotLength; i++)
             {
-                choices.push(choiceAnnots.snapshotItem(i).value);
+                let propWithChoice = choiceAnnots.snapshotItem(i).value;
+                if(userValues.indexOf(propWithChoice)>=0)
+                {
+                    choices.push(propWithChoice);
+                }
             }
             // don't evaluate elements without any choices
             if(choices.length>0)
