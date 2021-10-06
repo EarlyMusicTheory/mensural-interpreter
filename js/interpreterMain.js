@@ -115,9 +115,10 @@ function makeXmlCode(htmlString) {
     $(eventEl).addClass("selected");
 
     let thisID = $(eventEl).attr("id");
-    let attributes = ioHandler.getPropertyByID(thisID, null, true);
+    let attributes = ioHandler.getPropertyByID(thisID, null, 0);
     if (attributes)
     {
+        $("#additional").prop("hidden", true);
         for (let attr in attributes)
         {
             // retrieve Values for interpreter modification form
@@ -126,17 +127,17 @@ function makeXmlCode(htmlString) {
                 //let attrMod = attr.replace(".","");
                 let formID = "#" + attr.replace(".","") + "Interpreter";
                 let formInputID = "#" + attr.replace(".","") + "User";
-                if(typeof attributes[attr]==="string")
+                /*if(typeof attributes[attr]==="string")
                 {
                     $(formID).attr("placeholder",attributes[attr]);
                     $(formID).attr("title",attributes[attr]);
                 }
                 else
-                {
-                    $(formInputID).val(attributes[attr].corr);
-                    $(formID).attr("placeholder",attributes[attr].sic);
-                    $(formID).attr("title",attributes[attr].sic);
-                }                
+                {*/
+                    $(formInputID).val(attributes[attr].user);
+                    $(formID).attr("placeholder",attributes[attr].interpreter);
+                    $(formID).attr("title",attributes[attr].inter);
+                //}                
             }
             // beatPos is a readonly Extrawurst
             else if (attr==="beatPos")
@@ -144,9 +145,9 @@ function makeXmlCode(htmlString) {
                 var beatPosArray;
                 var beatPosCorrArray;
 
-                if(typeof attributes[attr] === "string")
+                if(attributes[attr].sic === null)
                 {
-                    beatPosArray = attributes[attr].split(", ");
+                    beatPosArray = attributes[attr].corr.split(", ");
                 }
                 else
                 {
@@ -176,9 +177,13 @@ function makeXmlCode(htmlString) {
                 $(dt).attr("title",attr);
                 let dd = $(ddTag);
 
-                if(typeof attributes[attr] === "string")
+                if (typeof attributes[attr] === "string")
                 {
                     dd.text(attributes[attr]);
+                }
+                else if(attributes[attr].sic === null)
+                {
+                    dd.text(attributes[attr].corr);
                 }
                 else
                 {
@@ -194,7 +199,7 @@ function makeXmlCode(htmlString) {
                     $("#posAttList").append(dt);
                     $("#posAttList").append(dd);
                 }
-                else if(attr!=="xml:id" && additionalAttrs.indexOf(attr)==-1)
+                else if(attr!=="xml:id" && attr!=="type" && additionalAttrs.indexOf(attr)==-1)
                 {
                     $("#attList").append(dt);
                     $("#attList").append(dd);
