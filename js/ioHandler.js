@@ -29,7 +29,14 @@ var ioHandler = (function() {
     function setAttr(element, propObject) {
         for(let attr in propObject)
         {
-            element.setAttributeNS(null, attr, propObject[attr]);
+            if(propObject[attr]==="none")
+            {
+                element.removeAttributeNS(null, attr);
+            }
+            else
+            {
+                element.setAttributeNS(null, attr, propObject[attr]);
+            }
         }
     }
 
