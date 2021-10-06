@@ -29,7 +29,14 @@ var ioHandler = (function() {
     function setAttr(element, propObject) {
         for(let attr in propObject)
         {
-            element.setAttributeNS(null, attr, propObject[attr]);
+            if(propObject[attr]==="none")
+            {
+                element.removeAttributeNS(null, attr);
+            }
+            else
+            {
+                element.setAttributeNS(null, attr, propObject[attr]);
+            }
         }
     }
 
@@ -62,7 +69,7 @@ var ioHandler = (function() {
     /**
      * Retrieves either a dictionary of annotation values for an element or the value of one property.
      * @param {string} elementID xml:id of element
-     * @param {string} propName 
+     * @param {string} propName name of property
      * @returns {string|Object<string,string>} annotation value(s)
      */
     function getAnnot(elementID, propName) {
@@ -78,15 +85,20 @@ var ioHandler = (function() {
             {
                 let annotType = annot.getAttribute("type");
                 let annotValue = getCorrValue(annot);
+                let interpreterValue = getAnnotValueByResp(annot, true);
+                let userValue = getAnnotValueByResp(annot, false);
                 let annotSic = getSicValue(annot);
-                if (annotSic)
-                {
-                    annots[annotType] = {sic: annotSic, corr: annotValue};
-                }
-                else
-                {
-                    annots[annotType] = annotValue;
-                }
+
+                // two of those values should always be identical; this isn't beautiful
+                // but we need to distinguish old/new values and by resp
+                // sic is either the old value or null
+                // corr is the currently "valid" value
+                annots[annotType] = 
+                    {sic: annotSic, 
+                    corr: annotValue, 
+                    interpreter : interpreterValue, 
+                    user : userValue};
+                
             }
         }
 
@@ -105,7 +117,7 @@ var ioHandler = (function() {
      * @param {Object<string,string>} propObject 
      * @param {string} resp URI to responsible agent in header, default is interpreter
      */
-    function setAnnot(elementID, propObject, resp = "#mensural-interpreter") {
+    function setAnnot(elementID, propObject, resp = intResp) {
         var annot;
 
         // pulling the gobal document like a bunny out of the hat is bad, 
@@ -133,8 +145,9 @@ var ioHandler = (function() {
             /** 
              * Choose whether value is just added, or correction should be added:
              * * If there is no value, just add value
-             * * In interpreter mode: After interpreter has finished, add corr
-             * * In instructor mode: If resp is not identical, add corr
+             * * In interpreter mode: After interpreter has finished, add corr (we can assume resp is different)
+             * * In instructor mode: If value and resp is not identical, add corr
+             * (addCorr() checks for identical values)
              */
             if (
                 attrAnnot.textContent==="" ||
@@ -214,18 +227,17 @@ var ioHandler = (function() {
      * @param {string} resp responsible agent for the new value
      */
     function addCorr(elementID, propName, corrValue, resp) 
-    {
+    {    
         var oldValue = getAnnot(elementID, propName);
-
+        
         // add apparatus only if values differ
-        if (corrValue!=oldValue)
+        // corr is standard if there is no sic yet
+        if (oldValue.sic === null && corrValue.toString()!=oldValue.corr)
         {
-            var attrEl = addApp(elementID, propName);
-
+            let attrEl = addApp(elementID, propName);
             if(attrEl!==null)
             {
                 let oldResp = attrEl.getAttribute("resp");
-            
                 let corrEl = meiFile.doXPathOnDoc("descendant::mei:corr", attrEl, 9).singleNodeValue;
                 corrEl.textContent = corrValue;
                 if(resp && resp !== oldResp)
@@ -235,6 +247,17 @@ var ioHandler = (function() {
                     sicEl.setAttribute("resp", oldResp);
                     attrEl.removeAttribute("resp");
                 }
+            }
+        }
+        else
+        {
+            // if resp is not already included, add it
+            let attrEl = getAnnotElement(elementID, propName);
+            let oldResp = attrEl.getAttribute("resp");
+            
+            if(resp && !oldResp.includes(resp))
+            {
+                attrEl.setAttribute("resp", oldResp + " " + resp);
             }
         }
     }
@@ -277,6 +300,29 @@ var ioHandler = (function() {
         }
 
         return sicValue;
+    }
+
+    /**
+     * Retrieves a value by responsibility (either interpreter or user)
+     * Resp can contain tokens of anyURI, so check whether intResp is contained or not contained at all...
+     * @param {Element} propAnnot 
+     * @param {boolean} returnInterpreter Which resp to return: true = interpreter; false = user
+     * @returns {string} annotation value
+     */
+    function getAnnotValueByResp(propAnnot, returnInterpreter = true)
+    {
+        var annotValue = null;
+
+        if(returnInterpreter)
+        {
+            annotValue = meiFile.doXPathOnDoc("./descendant-or-self::*[contains(@resp,'" + intResp + "')]/text()", propAnnot, 2).stringValue;
+        }
+        else
+        {
+            annotValue = meiFile.doXPathOnDoc("./descendant-or-self::*[@resp!='" + intResp + "']/text()", propAnnot, 2).stringValue;
+        }
+
+        return annotValue;
     }
 
     /*function getSic(elementID, propName) 
@@ -334,10 +380,10 @@ var ioHandler = (function() {
          * this is intended!
          * @param {Element} element 
          * @param {string} propName 
-         * @param {boolean} app True if sic and corr should be returned
+         * @param {Integer} resp Toggles return values by resp: 0 = all values; 1 = interpreter; 2 = user
          * @returns {string|Object}
          */
-        getProperty : function (element, propName, app = false) {
+        getProperty : function (element, propName, resp = 1) {
             // 
             
             var property = {};
@@ -345,14 +391,25 @@ var ioHandler = (function() {
             let attrs = getAttr(element);
             let annots = getAnnot(element.getAttribute("xml:id"));
 
-            // if we don't need apparati (most cases), just return corrected values
-            if(app===false)
+            // gather only interpreter values
+            if(resp===1)
             {
                 for (let attr in annots)
                 {
                     if(typeof annots[attr] !== "string")
                     {
-                        annots[attr] = annots[attr].corr;
+                        annots[attr] = annots[attr].interpreter;
+                    }
+                }
+            }
+            // gather user values
+            else if(resp===2)
+            {
+                for (let attr in annots)
+                {
+                    if(typeof annots[attr] !== "string")
+                    {
+                        annots[attr] = annots[attr].user;
                     }
                 }
             }
@@ -373,13 +430,13 @@ var ioHandler = (function() {
          * this is intended!
          * @param {string} elementID 
          * @param {string} propName 
-         * @param {boolean} app True if sic and corr should be returned
+         * @param {Integer} resp Toggles return values by resp: 0 = all values; 1 = interpreter; 2 = user
          * @returns {string|Object}
          */
-        getPropertyByID : function (elementID, propName, app = false) {
+        getPropertyByID : function (elementID, propName, resp = 1) {
             let element = meiFile.eventDict[elementID];
 
-            return this.getProperty(element, propName, app);
+            return this.getProperty(element, propName, resp);
         },
 
         /**
@@ -388,7 +445,7 @@ var ioHandler = (function() {
          * @param {Object} propObject 
          * @param {string} resp URI to responsible agent in header, default is interpreter
          */
-        setProperty : function (element, propObject, resp = "#mensural-interpreter") {
+        setProperty : function (element, propObject, resp = intResp) {
             var annots = {};
             var attrs = {};
 
@@ -417,7 +474,7 @@ var ioHandler = (function() {
          * @param {Object} propObject 
          * @param {string} resp URI to responsible agent in header, default is interpreter
          */
-        setPropertyByID : function (elementID, propObject, resp = "#mensural-interpreter") {
+        setPropertyByID : function (elementID, propObject, resp = intResp) {
             let element = meiFile.eventDict[elementID];
 
             this.setProperty(element, propObject, resp);

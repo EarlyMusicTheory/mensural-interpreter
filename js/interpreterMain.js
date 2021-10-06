@@ -15,6 +15,10 @@ var basicAnalysisDone = false;
 var complexAnalysisDone = false;
 /** @var {Boolean} instructor instructor mode */
 var instructor = false;
+/** @const {String} interpreter interpreter resp value */
+const interpreter = "mensural-interpreter";
+/** @const {String} intResp interpreter resp value */
+const intResp = "#" + interpreter;
 
 /** event that is currently shown in detail */
 var shownEvent = null;
@@ -111,9 +115,10 @@ function makeXmlCode(htmlString) {
     $(eventEl).addClass("selected");
 
     let thisID = $(eventEl).attr("id");
-    let attributes = ioHandler.getPropertyByID(thisID, null, true);
+    let attributes = ioHandler.getPropertyByID(thisID, null, 0);
     if (attributes)
     {
+        $("#additional").prop("hidden", true);
         for (let attr in attributes)
         {
             // retrieve Values for interpreter modification form
@@ -122,17 +127,17 @@ function makeXmlCode(htmlString) {
                 //let attrMod = attr.replace(".","");
                 let formID = "#" + attr.replace(".","") + "Interpreter";
                 let formInputID = "#" + attr.replace(".","") + "User";
-                if(typeof attributes[attr]==="string")
+                /*if(typeof attributes[attr]==="string")
                 {
                     $(formID).attr("placeholder",attributes[attr]);
                     $(formID).attr("title",attributes[attr]);
                 }
                 else
-                {
-                    $(formInputID).val(attributes[attr].corr);
-                    $(formID).attr("placeholder",attributes[attr].sic);
-                    $(formID).attr("title",attributes[attr].sic);
-                }                
+                {*/
+                    $(formInputID).val(attributes[attr].user);
+                    $(formID).attr("placeholder",attributes[attr].interpreter);
+                    $(formID).attr("title",attributes[attr].inter);
+                //}                
             }
             // beatPos is a readonly Extrawurst
             else if (attr==="beatPos")
@@ -140,9 +145,9 @@ function makeXmlCode(htmlString) {
                 var beatPosArray;
                 var beatPosCorrArray;
 
-                if(typeof attributes[attr] === "string")
+                if(attributes[attr].sic === null)
                 {
-                    beatPosArray = attributes[attr].split(", ");
+                    beatPosArray = attributes[attr].corr.split(", ");
                 }
                 else
                 {
@@ -172,9 +177,13 @@ function makeXmlCode(htmlString) {
                 $(dt).attr("title",attr);
                 let dd = $(ddTag);
 
-                if(typeof attributes[attr] === "string")
+                if (typeof attributes[attr] === "string")
                 {
                     dd.text(attributes[attr]);
+                }
+                else if(attributes[attr].sic === null)
+                {
+                    dd.text(attributes[attr].corr);
                 }
                 else
                 {
@@ -190,7 +199,7 @@ function makeXmlCode(htmlString) {
                     $("#posAttList").append(dt);
                     $("#posAttList").append(dd);
                 }
-                else if(attr!=="xml:id" && additionalAttrs.indexOf(attr)==-1)
+                else if(attr!=="xml:id" && attr!=="type" && additionalAttrs.indexOf(attr)==-1)
                 {
                     $("#attList").append(dt);
                     $("#attList").append(dd);
@@ -210,6 +219,7 @@ function makeXmlCode(htmlString) {
 
         $("#basic").prop("hidden", false);
         if(basicAnalysisDone || instructor) $("#interpreterResult").prop("hidden", false);
+        if(basicAnalysisDone) $("#positions").prop("hidden", false);
         if(instructor && basicAnalysisDone) $("#submitFeedback").prop('disabled', true);
         $("#hideInfo").prop("disabled", false);
         $("#hideInfo").click(function() {
@@ -240,7 +250,7 @@ function hideDetails() {
  * Checks if the current file has already been modified by the interpreter
  */
 function checkIfAlreadyRun() {
-    var change = meiFile.doXPathOnDoc("//mei:change[@resp='#mensural-interpreter']", meiFile.doc, 3).booleanValue;
+    var change = meiFile.doXPathOnDoc("//mei:change[@resp='" + intResp + "']", meiFile.doc, 3).booleanValue;
     if(change)
     {
         basicAnalysisDone = true;
@@ -271,12 +281,12 @@ function evaluateResults(){
         // check if there are choices
         if(meiFile.doXPathOnDoc("./mei:annot[mei:choice]", value, 3).booleanValue === false)
         {
-            if(meiFile.doXPathOnDoc("count(./mei:annot/@resp[.!='#mensural-interpreter'])", value, 1).numberValue >= 1)
+            if(meiFile.doXPathOnDoc("count(./mei:annot/@resp[.!='" + intResp + "'])", value, 1).numberValue >= 1)
             {
                 // a non-interpreter-resp within annot must be correct
                 event.setAttribute("type", "correct");
             }
-            else if(meiFile.doXPathOnDoc("./mei:annot[(@type='dur.quality' or @type='num' or @type='numbase') and @resp='#mensural-interpreter']", value, 3).booleanValue)
+            else if(meiFile.doXPathOnDoc("./mei:annot[(@type='dur.quality' or @type='num' or @type='numbase') and @resp='" + intResp + "']", value, 3).booleanValue)
             {
                 // a quality that has not been entered by the user is wrong
                 event.setAttribute("type", "wrong");
@@ -287,12 +297,16 @@ function evaluateResults(){
             // collect all choices
             let choiceAnnots = meiFile.doXPathOnDoc("./mei:annot[mei:choice]/@type", value, 6);
             let choices = [];
-            //let userValues = ["dur.quality", "num", "numbase", "rule", "dur.metrical"];
+            let userValues = ["dur.quality", "num", "numbase", "rule", "dur.metrical"];
         
             // build an array with annot types that contain choices
             for(let i=0; i < choiceAnnots.snapshotLength; i++)
             {
-                choices.push(choiceAnnots.snapshotItem(i).value);
+                let propWithChoice = choiceAnnots.snapshotItem(i).value;
+                if(userValues.indexOf(propWithChoice)>=0)
+                {
+                    choices.push(propWithChoice);
+                }
             }
             // don't evaluate elements without any choices
             if(choices.length>0)
@@ -428,8 +442,11 @@ $(document).ready(function(){
 
         ioHandler.submitFeedback(usrInput, $(shownEvent).attr("id"));
         
-        // calculate corrected startTimes
-        startTimes.addStartTimes(meiFile);
+        // calculate corrected startTimes (not useful in instructor mode)
+        if(instructor===false)
+        {
+            startTimes.addStartTimes(meiFile);
+        }
 
         //updateBlob();
         loadData();

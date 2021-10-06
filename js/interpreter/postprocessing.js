@@ -97,7 +97,7 @@ var post = (function() {
         }
 
         // add application as last child of appInfo
-        var app = meiDoc.addMeiElement("application", "mensural-interpreter");
+        var app = meiDoc.addMeiElement("application", interpreter);
         appInfo.append(app);
         let name = meiDoc.addMeiElement("name");
         name.textContent = "Mensural interpreter";
@@ -115,7 +115,7 @@ var post = (function() {
             addBarLines(meiDoc);
             addAppInfo(meiDoc);
             //addRevisionDesc(meiDoc);
-            meiDoc.addRevision("#mensural-interpreter", "Resolved mensural durations.");
+            meiDoc.addRevision(intResp, "Resolved mensural durations.");
         }
     }
 })();
