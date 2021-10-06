@@ -219,6 +219,7 @@ function makeXmlCode(htmlString) {
 
         $("#basic").prop("hidden", false);
         if(basicAnalysisDone || instructor) $("#interpreterResult").prop("hidden", false);
+        if(basicAnalysisDone) $("#positions").prop("hidden", false);
         if(instructor && basicAnalysisDone) $("#submitFeedback").prop('disabled', true);
         $("#hideInfo").prop("disabled", false);
         $("#hideInfo").click(function() {
@@ -441,8 +442,11 @@ $(document).ready(function(){
 
         ioHandler.submitFeedback(usrInput, $(shownEvent).attr("id"));
         
-        // calculate corrected startTimes
-        startTimes.addStartTimes(meiFile);
+        // calculate corrected startTimes (not useful in instructor mode)
+        if(instructor===false)
+        {
+            startTimes.addStartTimes(meiFile);
+        }
 
         //updateBlob();
         loadData();

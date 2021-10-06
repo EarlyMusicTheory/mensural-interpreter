@@ -85,42 +85,44 @@
                     <!-- insert pname, oct, dur for notes/rests, everything except xml:id for dots, mensur & proport -->
                 </dl>
             </div>
-            <div class="dropdown-divider"></div>
-            <button id='pos' class='btn btn-outline-info btn-sm float-right mt-1' data-toggle="modal" data-target="#positioning">?</button>
-            <h4>Position within blocks</h4>
-            <dl id='posAttList' class='row'>
-                <dt id="beatPosDt" class='col-4 text-truncate'>beatPos</dt>
-                <dd id="beatPosDd" class='col-8'>
-                    <table>
-                        <thead>
+            <div id="positions" hidden>
+                <div class="dropdown-divider"></div>
+                <button id='pos' class='btn btn-outline-info btn-sm float-right mt-1' data-toggle="modal" data-target="#positioning">?</button>
+                <h4>Position within blocks</h4>
+                <dl id='posAttList' class='row'>
+                    <dt id="beatPosDt" class='col-4 text-truncate'>beatPos</dt>
+                    <dd id="beatPosDd" class='col-8'>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <td>&#x1D1BC;</td>
+                                    <td>&#x1D1BB;</td>
+                                    <td>&#x1D1B9;</td>
+                                    <td>&#x1D1B8;</td>
+                                    <td>&#x1D1B7;</td>
+                                    <td>&#x1D1B6;</td>
+                                </tr>
+                            </thead>
                             <tr>
-                                <td>&#x1D1BC;</td>
-                                <td>&#x1D1BB;</td>
-                                <td>&#x1D1B9;</td>
-                                <td>&#x1D1B8;</td>
-                                <td>&#x1D1B7;</td>
-                                <td>&#x1D1B6;</td>
+                                <td class="dyValueContainer" id="beatPos0"></td>
+                                <td class="dyValueContainer" id="beatPos1"></td>
+                                <td class="dyValueContainer" id="beatPos2"></td>
+                                <td class="dyValueContainer" id="beatPos3"></td>
+                                <td class="dyValueContainer" id="beatPos4"></td>
+                                <td class="dyValueContainer" id="beatPos5"></td>
                             </tr>
-                        </thead>
-                        <tr>
-                            <td class="dyValueContainer" id="beatPos0"></td>
-                            <td class="dyValueContainer" id="beatPos1"></td>
-                            <td class="dyValueContainer" id="beatPos2"></td>
-                            <td class="dyValueContainer" id="beatPos3"></td>
-                            <td class="dyValueContainer" id="beatPos4"></td>
-                            <td class="dyValueContainer" id="beatPos5"></td>
-                        </tr>
-                        <tr>
-                            <td class="dyValueContainer" id="beatPosCorr0"></td>
-                            <td class="dyValueContainer" id="beatPosCorr1"></td>
-                            <td class="dyValueContainer" id="beatPosCorr2"></td>
-                            <td class="dyValueContainer" id="beatPosCorr3"></td>
-                            <td class="dyValueContainer" id="beatPosCorr4"></td>
-                            <td class="dyValueContainer" id="beatPosCorr5"></td>
-                        </tr>
-                    </table>
-                </dd>
-            </dl>
+                            <tr>
+                                <td class="dyValueContainer" id="beatPosCorr0"></td>
+                                <td class="dyValueContainer" id="beatPosCorr1"></td>
+                                <td class="dyValueContainer" id="beatPosCorr2"></td>
+                                <td class="dyValueContainer" id="beatPosCorr3"></td>
+                                <td class="dyValueContainer" id="beatPosCorr4"></td>
+                                <td class="dyValueContainer" id="beatPosCorr5"></td>
+                            </tr>
+                        </table>
+                    </dd>
+                </dl>
+            </div>
         </div>
     </div>
 </div>
