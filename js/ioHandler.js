@@ -229,17 +229,15 @@ var ioHandler = (function() {
     function addCorr(elementID, propName, corrValue, resp) 
     {    
         var oldValue = getAnnot(elementID, propName);
-
+        
         // add apparatus only if values differ
         // corr is standard if there is no sic yet
         if (oldValue.sic === null && corrValue.toString()!=oldValue.corr)
         {
-            var attrEl = addApp(elementID, propName);
-
+            let attrEl = addApp(elementID, propName);
             if(attrEl!==null)
             {
                 let oldResp = attrEl.getAttribute("resp");
-            
                 let corrEl = meiFile.doXPathOnDoc("descendant::mei:corr", attrEl, 9).singleNodeValue;
                 corrEl.textContent = corrValue;
                 if(resp && resp !== oldResp)
@@ -249,6 +247,17 @@ var ioHandler = (function() {
                     sicEl.setAttribute("resp", oldResp);
                     attrEl.removeAttribute("resp");
                 }
+            }
+        }
+        else
+        {
+            // if resp is not already included, add it
+            let attrEl = getAnnotElement(elementID, propName);
+            let oldResp = attrEl.getAttribute("resp");
+            
+            if(resp && !oldResp.includes(resp))
+            {
+                attrEl.setAttribute("resp", oldResp + " " + resp);
             }
         }
     }
@@ -295,6 +304,7 @@ var ioHandler = (function() {
 
     /**
      * Retrieves a value by responsibility (either interpreter or user)
+     * Resp can contain tokens of anyURI, so check whether intResp is contained or not contained at all...
      * @param {Element} propAnnot 
      * @param {boolean} returnInterpreter Which resp to return: true = interpreter; false = user
      * @returns {string} annotation value
@@ -305,7 +315,7 @@ var ioHandler = (function() {
 
         if(returnInterpreter)
         {
-            annotValue = meiFile.doXPathOnDoc("./descendant-or-self::*[@resp='" + intResp + "']/text()", propAnnot, 2).stringValue;
+            annotValue = meiFile.doXPathOnDoc("./descendant-or-self::*[contains(@resp,'" + intResp + "')]/text()", propAnnot, 2).stringValue;
         }
         else
         {
