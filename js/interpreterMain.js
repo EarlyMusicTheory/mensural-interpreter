@@ -114,8 +114,9 @@ function makeXmlCode(htmlString) {
     hideDetails();
     $(eventEl).addClass("selected");
 
-    let thisID = $(eventEl).attr("id");
-    let attributes = ioHandler.getPropertyByID(thisID, null, 0);
+    var thisID = $(eventEl).attr("id");
+    var attributes;
+    if(thisID) attributes = ioHandler.getPropertyByID(thisID, null, 0);
     if (attributes)
     {
         $("#additional").prop("hidden", true);
