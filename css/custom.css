@@ -17,3 +17,7 @@
 .wrongRule{
     fill: #ffc107 !important
 }
+
+.horizontal-overflow{
+    overflow-x: auto;
+}

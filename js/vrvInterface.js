@@ -15,7 +15,7 @@ var vrvInterface = (function () {
     /** current page height */
     var pageHeight = 2970;
     /** current page width */
-    var pageWidth = 2100;
+    var pageWidth = 21000;
     /** current page numbrt */
     var page = 1;
     /** current svg to display */
@@ -36,13 +36,15 @@ var vrvInterface = (function () {
      */
     function setOptions() {
         pageHeight = $(document).height() * 100 / zoom ;
-        pageWidth = ($(window).width() - ($("#side").width() * 1.2) ) * 100 / zoom ;
+        //pageWidth = ($(window).width() - ($("#side").width() * 1.2) ) * 100 / zoom ;
         var options = {
-                    pageHeight: pageHeight,
-                    pageWidth: pageWidth,
+                    //pageHeight: pageHeight,
+                    //pageWidth: pageWidth,
                     scale: zoom,
                     // header: "none" (would turn off header)
-                    adjustPageHeight: true
+                    adjustPageHeight: true,
+                    adjustPageWidth: true,
+                    breaks: "none" //"auto" or "smart" would be other options
                 };
         vrv.setOptions(options);
     }
