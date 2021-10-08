@@ -18,6 +18,27 @@
     fill: #ffc107 !important
 }
 
+.perfecta{
+    fill: #ffc15e !important;
+    color: #ffc15e !important;
+}
+.imperfecta{
+    fill: #ff9f1c !important;
+    color: #ff9f1c !important;
+}
+.altera{
+    fill: #aed492 !important;
+    color: #aed492 !important;
+}
+.simpleDot{
+    fill: #ced677!important;
+    color: #ced677!important;
+}
+.non-standard{
+    fill: #4ea5d9 !important;
+    color: #4ea5d9 !important;
+}
+
 .horizontal-overflow{
     overflow-x: auto;
 }
