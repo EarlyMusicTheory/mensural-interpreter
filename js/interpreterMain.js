@@ -328,6 +328,47 @@ function evaluateResults(){
     }
 }
 
+/**
+ * Adds types to modified notes to allow color coding.
+ * Only used in instructor mode.
+ */
+function highlightQualities(){
+    for (let [key, value] of Object.entries(meiFile.annotations))
+    {
+        let event = meiFile.eventDict[key];
+        let quality;
+        let eventType = event.getAttribute("type");
+
+        if(event.getAttribute("dur.quality") != null)
+        {
+            quality = event.getAttribute("dur.quality");
+        }
+        else if(event.getAttribute("num") != null && event.getAttribute("numbase") != null)
+        {
+            if(meiFile.doXPathOnDoc("./mei:annot[@type='rule']/text()='simpleDot'", value, 3).booleanValue)
+            {
+                quality = "simpleDot";
+            }
+            else
+            {
+                quality = "non-standard";
+            }
+        }
+
+        if(quality)
+        {
+            if(eventType != '')
+            {
+                event.setAttribute("type", eventType + " " + quality);
+            }
+            else
+            {
+                event.setAttribute("type", quality);
+            }
+        }
+    }
+}
+
 $(document).ready(function(){
 
     var meiUrl = currentParams.get("url");
@@ -402,6 +443,10 @@ $(document).ready(function(){
             if(instructor===true)
             {
                 evaluateResults();
+            }
+            else
+            {
+                highlightQualities();
             }
             loadData();
             complexAnalysisDone = true;
