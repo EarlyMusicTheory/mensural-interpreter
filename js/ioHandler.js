@@ -18,7 +18,8 @@ var ioHandler = (function() {
     /**
      * determine data storage in MEIdoc
      */
-    const attributes = ["num", "numbase", "dur.quality", "dur.metrical"];
+    const attributes = ["num", "numbase", "dur.quality", "dur.metrical", 
+                        "dur", "tempus", "prolatio", "modusminor", "modusmaior", "form", "colored"];
 
     /**
      * Writes attributes from a dictonary object to the element.

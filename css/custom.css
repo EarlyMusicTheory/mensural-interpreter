@@ -18,25 +18,25 @@
     fill: #ffc107 !important
 }
 
-.perfecta{
-    fill: #ffc15e !important;
-    color: #ffc15e !important;
+.altera{
+    fill: #E39959 !important;
+    color: #E39959 !important;
 }
 .imperfecta{
-    fill: #ff9f1c !important;
-    color: #ff9f1c !important;
+    fill: #A5A650 !important;
+    color: #A5A650 !important;
 }
-.altera{
-    fill: #aed492 !important;
-    color: #aed492 !important;
+.perfecta{
+    fill: #BA4758 !important;
+    color: #BA4758 !important;
 }
 .simpleDot{
-    fill: #ced677!important;
-    color: #ced677!important;
+    fill: #7834BA!important;
+    color: #7834BA!important;
 }
 .non-standard{
-    fill: #4ea5d9 !important;
-    color: #4ea5d9 !important;
+    fill: #3da4ba !important;
+    color: #3da4ba !important;
 }
 
 .horizontal-overflow{

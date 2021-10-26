@@ -36,10 +36,10 @@
          * @memberof rm
          */ 
         mensurSummary : function (mensur){
-            return [mensur.getAttributeNS(null, 'prolatio'), 
-                    mensur.getAttributeNS(null, 'tempus'), 
-                    mensur.getAttributeNS(null, 'modusminor'), 
-                    mensur.getAttributeNS(null, 'modusmaior')].map(x=>x?parseInt(x, 10) : false);
+            return [ioHandler.getProperty(mensur, 'prolatio'), 
+                    ioHandler.getProperty(mensur, 'tempus'), 
+                    ioHandler.getProperty(mensur, 'modusminor'), 
+                    ioHandler.getProperty(mensur, 'modusmaior')].map(x=>x?parseInt(x, 10) : false);
         },
 
         /**
@@ -76,7 +76,7 @@
          * @memberof rm
          */
          noteInt : function (el){
-            return noteIntFromDur(el.getAttributeNS(null, 'dur'));
+            return noteIntFromDur(ioHandler.getProperty(el, 'dur'));
         },
 
         /**
@@ -104,7 +104,7 @@
          * @memberof rm
          */
         augDot : function (event){
-            return event.tagName==='dot' && event.getAttributeNS(null, 'form')==='aug';
+            return event.tagName==='dot' && ioHandler.getProperty(event, 'form')==='aug';
         },
 
         /**
@@ -117,7 +117,7 @@
          * @memberof rm
          */
         divisionDot : function (event) {
-            return event.tagName==='dot' && event.getAttributeNS(null, 'form')!=='aug';
+            return event.tagName==='dot' && ioHandler.getProperty(event, 'form')!=='aug';
         },
 
         /**
@@ -167,20 +167,20 @@
             var val = this.noteInt(element);
             if(val>3)
             {
-                if(mensur.getAttributeNS(null, 'prolatio')==="2"){
+                if(ioHandler.getProperty(mensur, 'prolatio')==="2"){
                     if(val>4)
                     {
-                        if(mensur.getAttributeNS(null, 'tempus')==="2")
+                        if(ioHandler.getProperty(mensur, 'tempus')==="2")
                         {
                             if(val>5)
                             {
-                                if(!mensur.getAttributeNS(null, 'modusminor')
-                                    || mensur.getAttributeNS(null, 'modusminor')==="2")
+                                if(!ioHandler.getProperty(mensur, 'modusminor')
+                                    || ioHandler.getProperty(mensur, 'modusminor')==="2")
                                 {
                                     if(val>6)
                                     {
-                                        if(!mensur.getAttributeNS(null, 'modusmaior')
-                                            || mensur.getAttributeNS(null, 'modusmaior')==="2")
+                                        if(!ioHandler.getProperty(mensur, 'modusmaior')
+                                            || ioHandler.getProperty(mensur, 'modusmaior')==="2")
                                         {
                                             return false;
                                         } else return true;
@@ -267,7 +267,7 @@
          * @memberof rm
          */
         isColored : function (event) {
-            return event.getAttributeNS(null, 'colored')==="true";
+            return ioHandler.getProperty(event, 'colored')==="true";
         },
            
         /**
@@ -279,7 +279,7 @@
          * @memberof rm
          */
          leveleq : function (e1, e2) {
-            return e1.getAttributeNS(null, 'dur')===e2.getAttributeNS(null, 'dur');
+            return ioHandler.getProperty(e1, 'dur')===ioHandler.getProperty(e2, 'dur');
         },
 
         /**
