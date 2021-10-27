@@ -150,7 +150,12 @@ var ioHandler = (function() {
              * * In instructor mode: If value and resp is not identical, add corr
              * (addCorr() checks for identical values)
              */
-            if (
+            // remove annot if value is "none" (like attributes)
+            if(propObject[attr]==="none")
+            {
+                attrAnnot.remove();
+            }
+            else if (
                 attrAnnot.textContent==="" ||
                 (instructor===false && complexAnalysisDone===false) ||
                 (instructor===true && attrAnnot.getAttribute("resp")===resp)
@@ -158,6 +163,7 @@ var ioHandler = (function() {
             {
                 attrAnnot.textContent = propObject[attr];
             }
+            
             else
             {
                 addCorr(elementID, attr, propObject[attr], resp);
