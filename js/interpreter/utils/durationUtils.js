@@ -363,7 +363,7 @@ var durIO = (function() {
             if(beatStructure[0]===0 && beatStructure[1]===0 && beatStructure[2]===0)
             {
                 ioHandler.setProperty(el, {'onTheBreveBeat': beatStructure[3],
-                                           'crossedABreveBeat': "none"}
+                                           'crossedABreveBeat': null}
             );
             } 
             else if(!(beatStructure[5]===prevBeatStructure[5]
@@ -372,15 +372,15 @@ var durIO = (function() {
             {
                 ioHandler.setProperty(el,  
                     {'crossedABreveBeat': breveDifference(beatStructure, prevBeatStructure, minimStruct),
-                    'onTheBreveBeat': "none"
+                    'onTheBreveBeat': null
                     }
                 );
             }
             else
             {
                 // make sure to delete breve boundaries if they don't fit anymore
-                ioHandler.setProperty(el, {'onTheBreveBeat': "none",
-                                           'crossedABreveBeat': "none"});
+                ioHandler.setProperty(el, {'onTheBreveBeat': null,
+                                           'crossedABreveBeat': null});
             }
         },
 
