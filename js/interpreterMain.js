@@ -421,6 +421,7 @@ $(document).ready(function(){
         {
             basic.beatIndependentDurations(meiFile);
             startTimes.addStartTimes(meiFile);
+            post.run(meiFile);
             basicAnalysisDone = true;
             $("#beatIndependent").prop('disabled', true);
             loadData();
