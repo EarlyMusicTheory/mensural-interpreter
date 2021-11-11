@@ -30,7 +30,7 @@ var ioHandler = (function() {
     function setAttr(element, propObject) {
         for(let attr in propObject)
         {
-            if(propObject[attr]==="none")
+            if(propObject[attr]==="none" || propObject[attr]===null)
             {
                 element.removeAttributeNS(null, attr);
             }
@@ -150,8 +150,8 @@ var ioHandler = (function() {
              * * In instructor mode: If value and resp is not identical, add corr
              * (addCorr() checks for identical values)
              */
-            // remove annot if value is "none" (like attributes)
-            if(propObject[attr]==="none")
+            // remove annot if value is null (unlike attributes)
+            if(propObject[attr]===null)
             {
                 attrAnnot.remove();
             }

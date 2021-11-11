@@ -32,6 +32,8 @@ var post = (function() {
                 if (ioHandler.getProperty(event,"onTheBreveBeat") && previousSibling) 
                 {
                     let line = meiDoc.addMeiElement("barLine");
+
+                    line.setAttributeNS(null, "resp", intResp);
                     
                         
                     if (previousSibling.tagName==="note"||previousSibling.tagName==="rest"||previousSibling.tagName==="dot")
@@ -45,6 +47,13 @@ var post = (function() {
                         line.setAttributeNS(null, "form", "single");
                         previousSibling.parentElement.insertBefore(line, previousSibling);
                     }
+                }
+                // remove previously drawn barLines if they're not valid anymore
+                else if(!ioHandler.getProperty(event,"onTheBreveBeat") 
+                        && previousSibling.tagName==="barLine" 
+                        && previousSibling.getAttribute("resp")===intResp)
+                {
+                    previousSibling.remove();
                 }
             }
         }
@@ -115,7 +124,10 @@ var post = (function() {
             addBarLines(meiDoc);
             addAppInfo(meiDoc);
             //addRevisionDesc(meiDoc);
-            meiDoc.addRevision(intResp, "Resolved mensural durations.");
+            if(complexAnalysisDone===true)
+            {
+                meiDoc.addRevision(intResp, "Resolved mensural durations.");
+            }
         }
     }
 })();
