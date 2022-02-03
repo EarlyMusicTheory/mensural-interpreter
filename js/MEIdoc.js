@@ -514,14 +514,14 @@ var MEIdoc = (() => {
 		let staffNum = staffElement.getAttribute("n");
 		let staffDef = doc.evaluate("//mei:staffDef[@n='"+staffNum+"']", doc.childNodes[0], nsResolver).iterateNext();
 		if(doc.evaluate('./mei:layer/mei:clef', staffElement, nsResolver, 3).booleanValue &&
-			doc.evaluate('count(./mei:layer/mei:clef/preceding-sibling::mei:note)', staffElement, nsResolver).numberValue === 0)
+			doc.evaluate('count(./mei:layer/mei:clef[1]/preceding-sibling::mei:note)', staffElement, nsResolver).numberValue === 0)
 		{
 			let firstClef = staffElement.getElementsByTagName("clef")[0];
 			staffDef.appendChild(firstClef);
 		}
 		
 		if(doc.evaluate('./mei:layer/mei:keySig', staffElement, nsResolver, 3).booleanValue &&
-			doc.evaluate('count(./mei:layer/mei:keySig/preceding-sibling::mei:note)', staffElement, nsResolver).numberValue === 0)
+			doc.evaluate('count(./mei:layer/mei:keySig[1]/preceding-sibling::mei:note)', staffElement, nsResolver).numberValue === 0)
 		{
 			let firstKeySig = staffElement.getElementsByTagName("keySig")[0];
 			staffDef.appendChild(firstKeySig);
@@ -541,7 +541,7 @@ var MEIdoc = (() => {
 		let mensAttrStartList = ["mensur.", "poport.", "tempus", "prolatio", "modusminor", "modusmaior"];
 
 		if(doc.evaluate('./mei:layer/mei:mensur', staffElement, nsResolver, 3).booleanValue &&
-			doc.evaluate('count(./mei:layer/mei:mensur/preceding-sibling::mei:note)', staffElement, nsResolver).numberValue === 0)
+			doc.evaluate('count(./mei:layer/mei:mensur[1]/preceding-sibling::mei:note)', staffElement, nsResolver).numberValue === 0)
 		{
 			let firstMensur = staffElement.getElementsByTagName("mensur")[0];
 			staffDef.appendChild(firstMensur);
