@@ -477,15 +477,30 @@ var MEIdoc = (() => {
 				meiHead.append(revisionDesc);
 			}
 
+			// clean up for every staff
 			for(let staff of this.doc.getElementsByTagName("staff") )
 			{
-				tidyClefKeySig(staff, this.doc);
+				//tidyClefKeySig(staff, this.doc);
 				mergeAdjacentMensProp(staff);
-				putStartingMensToStaffDef(staff, this.doc)
+				//putStartingMensToStaffDef(staff, this.doc)
 				removeLig(staff);
-				
 			}
 
+			// clean up only for first staffs per staffDef
+			let staffNumIterator = this.doXPathOnDoc("//mei:staffDef/@n", this.doc, 5);
+			let currentStaffNum = staffNumIterator.iterateNext();
+			let staffNums = [];
+			while(currentStaffNum)
+			{
+				staffNums.push(currentStaffNum.value);
+				currentStaffNum = staffNumIterator.iterateNext();
+			}
+			for(let staffNum of staffNums)
+			{
+				let firstStaff = this.doXPathOnDoc("//mei:staff[@n='"+staffNum+"'][1]", this.doc, 5).iterateNext();
+				tidyClefKeySig(firstStaff, this.doc);
+				putStartingMensToStaffDef(firstStaff, this.doc);
+			}
 		}
 
 		/**
