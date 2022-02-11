@@ -237,8 +237,8 @@ var durIO = (function() {
          * @return {Integer}
          * @memberof durIO
          */
-        readDur : function (el) {
-            var str = ioHandler.getProperty(el, 'dur.metrical');
+        readDur : function (el, getMode = 1) {
+            var str = ioHandler.getProperty(el, 'dur.metrical', getMode);
             return str ? Number(str) : false;
         },
 
@@ -249,8 +249,8 @@ var durIO = (function() {
          * @returns {Number}
          * @memberof durIO
          */
-        readDurGes : function (el) {
-            var str = ioHandler.getProperty(el, 'dur.ges');
+        readDurGes : function (el, getMode = 1) {
+            var str = ioHandler.getProperty(el, 'dur.ges', getMode);
             return str ? Number(str) : false;
         },
 
@@ -264,14 +264,14 @@ var durIO = (function() {
          * @returns {Object}
          * @memberof durIO
          */
-         windowDuration : function (events, mens) {
+         windowDuration : function (events, mens, getMode = 1) {
             var duration = {definite: 0, bareMinimum: 0, approximateMinimum: 0, approximation: 0};
             var definite = true;
             for(var i=0; i<events.length; i++){
                 var event = events[i];
                 if(rm.noteOrRest(event)){
-                    if(this.readDur(event)) {
-                        var dur = this.readDur(event);
+                    if(this.readDur(event, getMode)) {
+                        var dur = this.readDur(event, getMode);
                         if(definite) duration.definite += dur;
                         duration.bareMinimum += dur;
                         duration.approximateMinimum += dur;
@@ -319,8 +319,8 @@ var durIO = (function() {
          * @returns {Number}
          * @memberof durIO
          */
-        readStartsAt : function (el) {
-            var startsAt = ioHandler.getProperty(el, "startsAt");
+        readStartsAt : function (el, getMode = 1) {
+            var startsAt = ioHandler.getProperty(el, "startsAt", getMode);
             return startsAt ? Number(startsAt) : false;
         },
 
@@ -330,8 +330,8 @@ var durIO = (function() {
          * @returns {Number}
          * @memberof durIO
          */
-        readBlockFrom : function (el) {
-            var blockFrom = ioHandler.getProperty(el, "mensurBlockStartsAt");
+        readBlockFrom : function (el, getMode = 1) {
+            var blockFrom = ioHandler.getProperty(el, "mensurBlockStartsAt", getMode);
             return blockFrom ? Number(blockFrom) : false;
         },
         

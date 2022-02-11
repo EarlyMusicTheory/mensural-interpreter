@@ -50,6 +50,7 @@ var post = (function() {
                 }
                 // remove previously drawn barLines if they're not valid anymore
                 else if(!ioHandler.getProperty(event,"onTheBreveBeat") 
+                        && previousSibling
                         && previousSibling.tagName==="barLine" 
                         && previousSibling.getAttribute("resp")===intResp)
                 {

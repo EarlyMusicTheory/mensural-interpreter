@@ -262,7 +262,7 @@ var ioHandler = (function() {
             let attrEl = getAnnotElement(elementID, propName);
             let oldResp = attrEl.getAttribute("resp");
             
-            if(resp && !oldResp.includes(resp))
+            if(resp && oldResp && !oldResp.includes(resp))
             {
                 attrEl.setAttribute("resp", oldResp + " " + resp);
             }
@@ -387,7 +387,7 @@ var ioHandler = (function() {
          * this is intended!
          * @param {Element} element 
          * @param {string} propName 
-         * @param {Integer} resp Toggles return values by resp: 0 = all values; 1 = interpreter; 2 = user
+         * @param {Integer} resp Toggles return values by resp: 0 = all values; 1 = interpreter; 2 = user, 3 = corr
          * @returns {string|Object}
          */
         getProperty : function (element, propName, resp = 1) {
@@ -420,6 +420,17 @@ var ioHandler = (function() {
                     }
                 }
             }
+            // gather corr values
+            else if(resp===3)
+            {
+                for (let attr in annots)
+                {
+                    if(typeof annots[attr] !== "string")
+                    {
+                        annots[attr] = annots[attr].corr;
+                    }
+                }
+            }
 
             property = {...attrs, ...annots};
 
@@ -437,7 +448,7 @@ var ioHandler = (function() {
          * this is intended!
          * @param {string} elementID 
          * @param {string} propName 
-         * @param {Integer} resp Toggles return values by resp: 0 = all values; 1 = interpreter; 2 = user
+         * @param {Integer} resp Toggles return values by resp: 0 = all values; 1 = interpreter; 2 = user, 3 = corr
          * @returns {string|Object}
          */
         getPropertyByID : function (elementID, propName, resp = 1) {

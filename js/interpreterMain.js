@@ -495,7 +495,9 @@ $(document).ready(function(){
         // calculate corrected startTimes (not useful in instructor mode)
         if(instructor===false)
         {
-            startTimes.addStartTimes(meiFile);
+            highlightQualities();
+            startTimes.addStartTimes(meiFile, 3);
+            post.run(meiFile);
         }
 
         //updateBlob();
