@@ -357,14 +357,17 @@ function highlightQualities(){
 
         if(quality)
         {
-            if(eventType != '')
+            // type is used for coloring, therefore only one type is relevant, replace type
+            event.setAttribute("type", quality);
+
+            /*if(eventType != null)
             {
                 event.setAttribute("type", eventType + " " + quality);
             }
             else
             {
                 event.setAttribute("type", quality);
-            }
+            }*/
         }
     }
 }
