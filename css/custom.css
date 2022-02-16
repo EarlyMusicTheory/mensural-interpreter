@@ -37,9 +37,11 @@
 }
 
 .selected{
-    fill: #007bff !important
+    fill: #007bff !important;
+    color: #007bff !important;
 }
 
 .highlighted{
-    fill: #17a2b8 !important
+    fill: #17a2b8 !important;
+    color: #17a2b8 !important;
 }

@@ -105,7 +105,7 @@ function makeXmlCode(htmlString) {
  */
     function showDetails(eventEl) {
     const formAttrs = ["dur.quality", "rule", "dur.metrical", "num", "numbase"];
-    const additionalAttrs = ["defaultminims", "comment"];
+    const additionalAttrs = ["defaultminims", "comment", "resp"];
     const positionAttrs = ["startsAt", "mensurBlockStartsAt", "beatPos", "onTheBreveBeat", "crossedABreveBeat"];
 
     const dtTag = "<dt class='col-4 text-truncate dyAttTerm' data-toggle='tooltip'></dt>";
@@ -215,8 +215,8 @@ function makeXmlCode(htmlString) {
         }
         
         shownEvent = eventEl;
-        nextEvent = $(eventEl).next();
-        prevEvent = $(eventEl).prev();
+        nextEvent = selectAdjacentElByID(thisID,"next"); //$(eventEl).next();
+        prevEvent = selectAdjacentElByID(thisID,"prev"); //$(eventEl).prev();
 
         $("#basic").prop("hidden", false);
         if(basicAnalysisDone || instructor) $("#interpreterResult").prop("hidden", false);
@@ -227,6 +227,44 @@ function makeXmlCode(htmlString) {
             hideDetails();
         });
     }
+}
+
+/**
+ * Retrieving rendered elements adjacent in the MEI file.
+ * Since Verovio puts Mensural music into measures behind the scenes, it's
+ * complicated to navigate to adjacent elements when there are bar lines.
+ * @param {string} currentElId id of current element
+ * @param {string} direction "prev" oder "next"
+ * @returns Verovio SVG el, thats adjacent in the MEI file
+ */
+function selectAdjacentElByID(currentElId, direction)
+{
+    var adjacentEl = null;
+
+    // retrieve MEI el from doc
+    var currentMEIEl = meiFile.eventDict[currentElId];
+    var adjacentElId;
+    var adjacentMEIEl;
+
+    switch (direction)
+    {
+        case "prev":
+            adjacentMEIEl = currentMEIEl.previousElementSibling;
+            break;
+        case "next":
+            adjacentMEIEl = currentMEIEl.nextElementSibling;
+            break;
+        default:
+            throw new Error("Impossible direction to find adjacent elements for "+ currentElId +"!");
+    }
+
+    if(adjacentMEIEl)
+    {
+        adjacentElId = adjacentMEIEl.getAttribute("xml:id");
+        adjacentEl = $("#"+adjacentElId)[0];
+    }
+
+    return adjacentEl;
 }
 
 /**
