@@ -215,7 +215,7 @@ var basic = (function() {
 				{
 					//durIO.writeDur(rm.simpleMinims(event, mens), event, false);
 					//event.setAttributeNS(null, 'rule', 'I.2.b.antesim');
-					durIO.writeDurWithRule(event, mens, 'I.2.b.antesim');
+					durIO.writePerfection(event, mens, 'I.2.b.antesim');
 				}
 			}
 		}
