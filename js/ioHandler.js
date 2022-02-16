@@ -256,6 +256,23 @@ var ioHandler = (function() {
                 }
             }
         }
+        // if there is a sic and corr values differ, update corr value if resp is identical
+        // if resp is not identical, what should be done then???
+        // to avoid any further complexity, only one sic and one corr is possible
+        // and one of them should always reflect the interpreter
+        else if(oldValue.sic != null && corrValue.toString()!=oldValue.corr)
+        {
+            let attrEl = addApp(elementID, propName);
+            if(attrEl!==null)
+            {
+                let corrEl = meiFile.doXPathOnDoc("descendant::mei:corr", attrEl, 9).singleNodeValue;
+                let oldResp = corrEl.getAttribute("resp");
+                if(resp && resp === oldResp)
+                {
+                    corrEl.textContent = corrValue;
+                }
+            }
+        }
         else
         {
             // if resp is not already included, add it
@@ -540,6 +557,36 @@ var ioHandler = (function() {
             }
 
             this.setPropertyByID(elementID, feedbackObj, userIni);
+        },
+
+        /**
+         * Writes a comment during interpretation to an element
+         * @param {DOMElement} el 
+         * @param {String} comment 
+         * @param {String} resp responsible agent (default: interpreter)
+         * @param {String} respName Name of responsible agent
+         * @memberof durIO
+         */
+        writeComment : function (el, comment, resp = intResp, respName) {
+            if(resp !== intResp)
+            {
+                addRespStmt("commented by",respName,resp);
+                meiFile.addRevision(resp, "Commented resolutions.");
+            }
+            this.setProperty(el, {'comment': comment}, resp);
+        },
+
+        /**
+         * Writes a comment during interpretation to an element
+         * @param {String} elementID element id 
+         * @param {String} comment 
+         * @param {String} resp responsible agent (default: interpreter)
+         * @memberof durIO
+         */
+        writeCommentById : function (elementID, comment, resp = intResp, respName) {
+            let element = meiFile.eventDict[elementID];
+            this.writeComment(element, comment, resp, respName);
         }
+
     }
 })();

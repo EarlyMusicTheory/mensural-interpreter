@@ -78,13 +78,6 @@
                     <button id="submitFeedback" type="button" class="btn btn-info">Save</button>
                 </div>  
             </div>
-            <div id="additional">
-                <div class="dropdown-divider"></div>
-                <h4>Additional info</h4>
-                <dl id='addAttList' class='row'>
-                    <!-- insert pname, oct, dur for notes/rests, everything except xml:id for dots, mensur & proport -->
-                </dl>
-            </div>
             <div id="positions" hidden>
                 <div class="dropdown-divider"></div>
                 <button id='pos' class='btn btn-outline-info btn-sm float-right mt-1' data-toggle="modal" data-target="#positioning">?</button>
@@ -121,6 +114,16 @@
                             </tr>
                         </table>
                     </dd>
+                </dl>
+            </div>
+            <div id="additional">
+                <div class="dropdown-divider"></div>
+                <button id='comment' class='btn btn-info btn-sm float-right mt-1' data-toggle="modal" data-target="#addComment">
+                    <i class="bi bi-file-earmark-plus"></i>
+                </button>
+                <h4>Additional info</h4>
+                <dl id='addAttList' class='row'>
+                    <!-- insert additional info like comment or resp -->
                 </dl>
             </div>
         </div>
