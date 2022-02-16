@@ -26,7 +26,7 @@ var vrvInterface = (function () {
     /** are events currently bound? */
     var eventsBinded = false;
     /** elements for interaction */
-    const elsToSelect = ".note,.rest,.dot,.mensur";
+    const elsToSelect = ".note,.rest,.dot,.mensur,.barLine";
     
 
     /**
