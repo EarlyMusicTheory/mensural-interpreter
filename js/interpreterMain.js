@@ -369,6 +369,14 @@ function highlightQualities(){
                 event.setAttribute("type", quality);
             }*/
         }
+        else
+        {
+            // remove old types if there is no quality
+            if(event.hasAttribute("type"))
+            {
+                event.removeAttribute("type");
+            }
+        }
     }
 }
 
