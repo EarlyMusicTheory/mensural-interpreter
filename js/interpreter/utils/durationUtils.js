@@ -234,6 +234,8 @@ var durIO = (function() {
          * Given an event with dur.intermediate of the form [0-9]*b, return the integer
          * part
          * @param {DOMElement} mei:note or mei:rest
+         * @param {int} getMode Toggles which values will be retrieved by resp: 
+         *                      0 = all values; 1 = interpreter; 2 = user, 3 = corr
          * @return {Integer}
          * @memberof durIO
          */
@@ -246,6 +248,8 @@ var durIO = (function() {
          * Given an event with dur.ges of the form [0-9]*b, return the integer
          * part
          * @param {DOMElement} el 
+         * @param {int} getMode Toggles which values will be retrieved by resp: 
+         *                      0 = all values; 1 = interpreter; 2 = user, 3 = corr
          * @returns {Number}
          * @memberof durIO
          */
@@ -261,6 +265,8 @@ var durIO = (function() {
          * approximateMinimum (less extreme) and approximation ('most likely')
          * @param {Array<DOMElement>} events
          * @param {DOMElement} mens
+         * @param {int} getMode Toggles which values will be retrieved by resp: 
+         *                      0 = all values; 1 = interpreter; 2 = user, 3 = corr
          * @returns {Object}
          * @memberof durIO
          */
@@ -316,6 +322,8 @@ var durIO = (function() {
         /**
          * Reads startsAt attribute from element
          * @param {DOMElement} el 
+         * @param {int} getMode Toggles which values will be retrieved by resp: 
+         *                      0 = all values; 1 = interpreter; 2 = user, 3 = corr
          * @returns {Number}
          * @memberof durIO
          */
@@ -327,6 +335,8 @@ var durIO = (function() {
         /**
          * Reads mensurBlockStartsAt attribute from element
          * @param {DOMElement} el 
+         * @param {int} getMode Toggles which values will be retrieved by resp: 
+         *                      0 = all values; 1 = interpreter; 2 = user, 3 = corr
          * @returns {Number}
          * @memberof durIO
          */
