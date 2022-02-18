@@ -105,8 +105,8 @@ function makeXmlCode(htmlString) {
  */
     function showDetails(eventEl) {
     const formAttrs = ["dur.quality", "rule", "dur.metrical", "num", "numbase"];
-    const additionalAttrs = ["defaultminims", "comment", "resp"];
-    const positionAttrs = ["startsAt", "mensurBlockStartsAt", "beatPos", "onTheBreveBeat", "crossedABreveBeat"];
+    const additionalAttrs = ["comment", "resp"];
+    const positionAttrs = ["startsAt", "mensurBlockStartsAt", "beatPos", "onTheBreveBeat", "crossedABreveBeat", "defaultminims"];
 
     const dtTag = "<dt class='col-4 text-truncate dyAttTerm' data-toggle='tooltip'></dt>";
     const ddTag = "<dd class='col-8 dyAttValue'></dd>";
@@ -119,7 +119,7 @@ function makeXmlCode(htmlString) {
     if(thisID) attributes = ioHandler.getPropertyByID(thisID, null, 0);
     if (attributes)
     {
-        $("#additional").prop("hidden", true);
+        //$("#additional").prop("hidden", true);
         for (let attr in attributes)
         {
             // retrieve Values for interpreter modification form
@@ -209,7 +209,7 @@ function makeXmlCode(htmlString) {
                 {
                     $("#addAttList").append(dt);
                     $("#addAttList").append(dd);
-                    $("#additional").prop("hidden", false);
+                    //$("#additional").prop("hidden", false);
                 }
             }
         }
@@ -549,6 +549,20 @@ $(document).ready(function(){
         //updateBlob();
         loadData();
         
+    });
+
+    $("#saveComment").click(function() {
+        let comment = $("#commentTextInput").val();
+        let userName = $("#commentUserName").val();
+        let userInitials = $("#commentUserInitials").val();
+
+        if(comment && userName && userInitials)
+        {
+            ioHandler.writeCommentById($(shownEvent).attr("id"), comment, userInitials, userName);
+            loadData();
+            showDetails(shownEvent);
+            $("#addComment").modal('hide');
+        }
     });
 
     $(window).resize(function(){

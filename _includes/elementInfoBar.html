@@ -78,13 +78,6 @@
                     <button id="submitFeedback" type="button" class="btn btn-info">Save</button>
                 </div>  
             </div>
-            <div id="additional" hidden>
-                <div class="dropdown-divider"></div>
-                <h4>Additional info</h4>
-                <dl id='addAttList' class='row'>
-                    <!-- insert pname, oct, dur for notes/rests, everything except xml:id for dots, mensur & proport -->
-                </dl>
-            </div>
             <div id="positions" hidden>
                 <div class="dropdown-divider"></div>
                 <button id='pos' class='btn btn-outline-info btn-sm float-right mt-1' data-toggle="modal" data-target="#positioning">?</button>
@@ -123,91 +116,15 @@
                     </dd>
                 </dl>
             </div>
-        </div>
-    </div>
-</div>
-<div class="modal fade" id="interpreterHelp" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="modalLabel">Help</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
+            <div id="additional">
+                <div class="dropdown-divider"></div>
+                <button id='comment' class='btn btn-info btn-sm float-right mt-1' data-toggle="modal" data-target="#addComment">
+                    <i class="bi bi-file-earmark-plus"></i>
                 </button>
-            </div>
-            <div class="modal-body">
-                <p>To evaluate the interpreter results, please add quality or num/numbase, rule and duration in minims.</p>
-                <p>
-                    The <strong>quality</strong> of a note is added only in cases of ambiguity according (following the current mensuration). 
-                    Please do not use e.g. "perfecta" for already perfect notes. To remove an erroneously set quality choose "none".
-                </p>
-                <p>
-                    While quality is used for standard imperfection/alteration, <strong>num/numbase</strong> is used for cases of partial imperfection.<br />
-                    An example: Given the change in the longa's value <em>from 6 semibreves to 5 semibreves</em>, the correct values would be
-                     <em>num="6"</em> and <em>numbase="5"</em>.
-                </p>
-                <p>Make sure to have added your name and initials before saving (otherwise it breaks). Thanks!</p>
-            </div>  
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="modal fade" id="positioning" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="modalLabel">Help</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p>I explain the content!</p>
-            </div>  
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</butto>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="modal fade" id="help" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="modalLabel">Help</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p>To run the complete interpreter analysis, click on "Run"
-                    ("Basic") will only run the beat independent analysis.
-                </p>
-                <p>
-                    "Blocks" will show you the detected mensurally coherent blocks.
-                </p>
-                <p>
-                    To inspect the interpreter analysis, click on a note within the rendered music.<br />
-                    You may navigate (within bar lines) with <kbd>←</kbd> and <kbd>→</kbd>.
-                </p>
-                <p>
-                    Modified notes will be highlighted by a color code in interpreter mode:
-                    <ul>
-                        <li class="perfecta">perfecta</li>
-                        <li class="imperfecta">imperfecta</li>
-                        <li class="altera">altera</li>
-                        <li class="simpleDot">dot of augmentation</li>
-                        <li class="non-standard">partial or non-standard imperfection</li>
-                    </ul>
-                </p>
-                <p>
-                    In instructor mode, color codes give feedback on the results.
-                </p>
-            </div>  
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</butto>
+                <h4>Additional info</h4>
+                <dl id='addAttList' class='row'>
+                    <!-- insert additional info like comment or resp -->
+                </dl>
             </div>
         </div>
     </div>

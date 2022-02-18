@@ -293,16 +293,6 @@ var durIO = (function() {
             }
             return duration;
         },
-
-        /**
-         * Writes a @comment during interpretation to an element
-         * @param {DOMElement} el 
-         * @param {String} comment 
-         * @memberof durIO
-         */
-        writeComment : function (el, comment) {
-            ioHandler.setProperty(el, {'comment': comment});
-        },
         
         /**
          * Sets the starting position of an event for a block (mensurBlockStartsAt) 

@@ -40,10 +40,10 @@ var imperfect = (function() {
                         //event.setAttributeNS(null, 'quality', 'p');
                         //event.setAttributeNS(null, 'dur.ges', simpleMinims(event, mens)+'b');
                         //durIO.writeDur(rm.simpleMinims(event, mens), event, false);
-                        durIO.writeComment(event, 'trusting in alteration');
+                        ioHandler.writeComment(event, 'trusting in alteration');
                     } else {
                         durIO.writeImperfection(event, nextToTry, mens, 'I.5-add');
-                        durIO.writeComment(event, 'Alteration is impossible');
+                        ioHandler.writeComment(event, 'Alteration is impossible');
                     }
                     ///WTF!!!!!?!
                     return false;
@@ -76,7 +76,7 @@ var imperfect = (function() {
             //event.setAttributeNS(null, 'quality', 'p');
             //event.setAttributeNS(null, 'defaultminims', rm.simpleMinims(event, mens));
             //durIO.writeDur(rm.simpleMinims(event, mens), event);
-            durIO.writeComment(event, 'trusting in alteration');		
+            ioHandler.writeComment(event, 'trusting in alteration');		
         } else if(duration.bareMinimum > 3 * imperfectionPossibilities[imperfectionPossibilities.length-1]){
             var imperfector = imperfectionPossibilities[imperfectionPossibilities.length-1];
             durIO.writeImperfection(event, imperfector, mens, 'I.4bi', true);
