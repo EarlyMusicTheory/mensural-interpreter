@@ -242,22 +242,34 @@ var ioHandler = (function() {
         if (oldValue.sic === null && corrValue.toString()!=oldValue.corr)
         {
             let attrEl = addApp(elementID, propName);
-            if(attrEl!==null)
+            // updating user values should not create an apparatus
+            if(oldValue.corr !== oldValue.user)
             {
-                let oldResp = attrEl.getAttribute("resp");
-                let corrEl = meiFile.doXPathOnDoc("descendant::mei:corr", attrEl, 9).singleNodeValue;
-                corrEl.textContent = corrValue;
-                if(resp && resp !== oldResp)
+                
+                if(attrEl!==null)
                 {
-                    corrEl.setAttribute("resp", resp);
-                    let sicEl = meiFile.doXPathOnDoc("descendant::mei:sic", attrEl, 9).singleNodeValue;
-                    sicEl.setAttribute("resp", oldResp);
-                    attrEl.removeAttribute("resp");
+                    let oldResp = attrEl.getAttribute("resp");
+                    let corrEl = meiFile.doXPathOnDoc("descendant::mei:corr", attrEl, 9).singleNodeValue;
+                    corrEl.textContent = corrValue;
+                    if(resp && resp !== oldResp)
+                    {
+                        corrEl.setAttribute("resp", resp);
+                        let sicEl = meiFile.doXPathOnDoc("descendant::mei:sic", attrEl, 9).singleNodeValue;
+                        sicEl.setAttribute("resp", oldResp);
+                        attrEl.removeAttribute("resp");
+                    }
                 }
             }
+            else
+            {
+                attrEl.textContent = corrValue;
+                attrEl.setAttribute("resp",resp);
+            }
+            
         }
         // if there is a sic and corr values differ, update corr value if resp is identical
-        // if resp is not identical, what should be done then???
+        // if resp is not identical, what should be done then??? 
+        // --> last value of identical resp needs to be overwritten
         // to avoid any further complexity, only one sic and one corr is possible
         // and one of them should always reflect the interpreter
         else if(oldValue.sic != null && corrValue.toString()!=oldValue.corr)
@@ -266,10 +278,36 @@ var ioHandler = (function() {
             if(attrEl!==null)
             {
                 let corrEl = meiFile.doXPathOnDoc("descendant::mei:corr", attrEl, 9).singleNodeValue;
-                let oldResp = corrEl.getAttribute("resp");
-                if(resp && resp === oldResp)
+                let sicEl = meiFile.doXPathOnDoc("descendant::mei:sic", attrEl, 9).singleNodeValue;
+                
+                let attrResp = attrEl.getAttribute("resp");
+                let corrResp = corrEl.getAttribute("resp");
+                let sicResp = sicEl.getAttribute("resp");
+
+                if(resp)
                 {
-                    corrEl.textContent = corrValue;
+                    if(resp === attrResp)
+                    {
+                        //remove app if resp
+                        attrEl.removeChild(attrEl.getElementsByTagName("choice")[0]);
+                        attrEl.textContent = corrValue;
+                    }
+                    else if(resp === corrResp)
+                    {
+                        // if corrResp is identical with current resp, replace value
+                        corrEl.textContent = corrValue;
+                    }
+                    else
+                    {
+                        // check if corr is from user and update corr including resp?
+                        if(corrResp && resp && oldValue.corr === oldValue.user)
+                        {
+                            corrEl.textContent = corrValue;
+                            corrEl.setAttribute("resp",resp);
+                        }
+
+                        // else, do nothing?
+                    }
                 }
             }
         }
@@ -497,9 +535,11 @@ var ioHandler = (function() {
                     annots[key] = value;
                 //}
             }
-
-            if(Object.entries(attrs)) setAttr(element, attrs);
-            if(Object.entries(annots)) setAnnot(element.getAttribute("xml:id"), annots, resp);
+            if(element)
+            {
+                if(Object.entries(attrs)) setAttr(element, attrs);
+                if(Object.entries(annots)) setAnnot(element.getAttribute("xml:id"), annots, resp);
+            }
         },
 
         /**
@@ -571,9 +611,9 @@ var ioHandler = (function() {
             if(resp !== intResp)
             {
                 addRespStmt("commented by",respName,resp);
-                meiFile.addRevision(resp, "Commented resolutions.");
+                meiFile.addRevision("#"+resp, "Commented resolutions.");
             }
-            this.setProperty(el, {'comment': comment}, resp);
+            this.setProperty(el, {'comment': comment}, "#"+resp);
         },
 
         /**
