@@ -91,9 +91,13 @@ var vrvInterface = (function () {
 
         // Add arrow left and right bindings to switch events
         // but first, unbind key events to avoid double jumps
+        // and make sure, that no modal is open because it causes craziness with commentaries
+        // see: https://stackoverflow.com/questions/19506672/how-to-check-if-bootstrap-modal-is-open-so-i-can-use-jquery-validate
         $(window).off("keyup");
         $(window).keyup(function(event) {
-            if (keyUpInProgress===false && shownEvent) {
+            if (keyUpInProgress===false && shownEvent &&
+                ($(".modal").data("bs.modal") || {isShown: false})._isShown) 
+            {
                 keyUpInProgress = true;
                 // right arrow
                 if(event.keyCode===39) {
