@@ -8,6 +8,7 @@ title: Home
 
 # Hello World!
 
-I am a test!
+This is MeRIT, the Mensural Rhythm Interpretation Tool. 
+Please note, this tools is still a prototype.
 
-Go to the [interpreter](interpreter)!
+Go to the [interpreter](interpreter).
