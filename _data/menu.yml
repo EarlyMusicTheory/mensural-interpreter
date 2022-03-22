@@ -4,6 +4,9 @@ menu:
       label: 'About'
       url: '/about'
       submenu:
+        - id: aboutMeRIT
+          label: 'About MeRIT'
+          url: '/about'
         - id: project
           label: 'Project'
           url: '/project'
