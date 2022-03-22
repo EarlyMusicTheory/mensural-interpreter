@@ -9,9 +9,24 @@
     <div id="navToggler" class="collapse navbar-collapse">
         <ul class="navbar-nav mr-auto">
             {% for entry in site.data.menu.menu %}
+            {% unless entry.submenu %}
             <li class="nav-item">
-            <a class="nav-link" href="{{site.url}}{{entry.url}}">{{entry.label}}</a>
+                <a class="nav-link" href="{{site.url}}{{entry.url}}">{{entry.label}}</a>
             </li>
+            {% else %}
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" id="{{entry.id}}" role="button" href="{{site.url}}{{entry.url}}"  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    {{entry.label}}
+                </a>
+                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="{{entry.id}}">
+                    {% for item in entry.submenu %}
+                    <a class="dropdown-item" href="{{site.url}}{{item.url}}">
+                        {{item.label}}
+                    </a>
+                    {% endfor %}
+                </div>
+            </li>
+            {% endunless %}
             {% endfor %}
         </ul>
     </div>

@@ -3,6 +3,16 @@ menu:
     - id: about
       label: 'About'
       url: '/about'
+      submenu:
+        - id: project
+          label: 'Project'
+          url: '/project'
+        - id: team
+          label: 'Team'
+          url: '/team'
+        - id: funding
+          label: 'Funding'
+          url: '/funding'
 
     - id: interpreter
       label: 'Interpreter'
