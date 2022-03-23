@@ -27,3 +27,5 @@ The interpretation produced by MeRIT is written in standards-compliant MEI, incl
 For rendering, MeRIT is using [Verovio](https://www.verovio.org/), an open-source library developed by the [RISM Digital Center](https://rism.info/digital-center.html) with the support of the [Swiss National Science Foundation](https://www.snf.ch/en).
 
 MeRIT is an output of _Interpreting the Mensural Notation of Music_ (2017–2022), an AHRC-funded research project hosted at the Royal Birmingham Conservatoire. For more information about the project and its team, funding, and outputs, please see the ‘about’ menu at the top of this page.
+
+The source code of MeRIT is available on [GitHub](https://github.com/EarlyMusicTheory/mensural-interpreter).
