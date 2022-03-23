@@ -6,21 +6,16 @@ permalink: /funding/
 
 # Funding acknowledgements
 
-The project team acknowledges with gratitude funding from a Research Grant awarded in **????** by the Arts and Humanities Research Council (AHRC). This strand of this project runs until 31 March 2022.
+The project team gratefully acknowledges funding from a research grant awarded in 2017 by the Arts and Humanities Research Council (AHRC) [grant number AH/P013910/1].
 
 Statement from the AHRC website:
 
-‘The Arts and Humanities Research Council (AHRC) funds world-class, independent researchers in a wide range of subjects: ancient history, modern dance, archaeology, digital content, philosophy, English literature, design, the creative and performing arts, and much more. This financial year the AHRC will spend approximately £98m to fund research and postgraduate training in collaboration with a number of partners. The quality and range of research supported by this investment of public funds not only provides social and cultural benefits but also contributes to the economic success of the UK. For further information on the AHRC, please go to: <www.ahrc.ac.uk.>’
+The AHRC funds world-class, independent researchers in a wide range of subjects: history, archaeology, digital content, philosophy, languages, design, heritage, area studies, the creative and performing arts, and much more. The quality and range of research supported by the AHRC’s investment of public funds not only provides social and cultural benefits and contributes to the economic success of the UK but also to the culture and welfare of societies around the globe.
+
+Visit the AHRC website at [ahrc.ukri.org](https://ahrc.ukri.org/), on Twitter [@ahrcpress](https://twitter.com/ahrcpress), and on Facebook search for ‘the Arts and Humanities Research Council’, or Instagram [@ahrcpress](https://www.instagram.com/ahrcpress/).
 
 ![AHRC logo](../img/ahrc_logo.png)
 
-The project is hosted at Birmingham Conservatoire, Birmingham City University, to whom we are also grateful for infrastructural support and additional research funding.
-
-Birmingham Conservatoire  
-Birmingham City University  
-Paradise Place  
-Birmingham  
-B3 3HG  
-UK  
+The project team also wishes to express gratitude to the [Royal Birmingham Conservatoire](https://www.bcu.ac.uk/conservatoire), [Birmingham City University](https://www.bcu.ac.uk), for hosting and supporting our research.
 
 ![BC/BCU logo](../img/bcu_logo.jpg)
