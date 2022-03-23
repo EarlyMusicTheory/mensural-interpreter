@@ -6,9 +6,9 @@ layout: home
 title: Home
 ---
 
-# Hello World!
+# Hello World
 
-This is MeRIT, the Mensural Rhythm Interpretation Tool. 
-Please note, this tools is still a prototype.
+This is MeRIT, the Mensural Rhythm Interpretation Tool.  
+Please note, this tool is still a prototype.
 
-Go to the [interpreter](interpreter).
+Use it [here](interpreter).
