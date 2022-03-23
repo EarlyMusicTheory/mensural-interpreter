@@ -24,4 +24,6 @@ A line-by-line explanation of the logical procedures carried out by MeRIT is ava
 
 The interpretation produced by MeRIT is written in standards-compliant MEI, including details of the rules being applied at each point and a fine-grained metrical analysis. This interpreted MEI may be downloaded using the ‘MEI’ button in the top menu bar.
 
+For rendering, MeRIT is using [Verovio](https://www.verovio.org/), an open-source library developed by the [RISM Digital Center](https://rism.info/digital-center.html) with the support of the [Swiss National Science Foundation](https://www.snf.ch/en).
+
 MeRIT is an output of _Interpreting the Mensural Notation of Music_ (2017–2022), an AHRC-funded research project hosted at the Royal Birmingham Conservatoire. For more information about the project and its team, funding, and outputs, please see the ‘about’ menu at the top of this page.
