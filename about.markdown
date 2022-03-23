@@ -28,4 +28,4 @@ For rendering, MeRIT is using [Verovio](https://www.verovio.org/), an open-sourc
 
 MeRIT is an output of _Interpreting the Mensural Notation of Music_ (2017–2022), an AHRC-funded research project hosted at the Royal Birmingham Conservatoire. For more information about the project and its team, funding, and outputs, please see the ‘about’ menu at the top of this page.
 
-The source code of MeRIT is available on [GitHub](https://github.com/EarlyMusicTheory/mensural-interpreter).
+The source code of MeRIT is available on [GitHub](https://github.com/EarlyMusicTheory/mensural-interpreter) under the [LGPLv3 license](http://www.gnu.org/copyleft/lgpl.html).
