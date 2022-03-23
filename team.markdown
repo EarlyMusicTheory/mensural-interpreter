@@ -6,12 +6,34 @@ permalink: /team/
 
 # Team
 
-## The bike
+## Dr Jeffrey J. Dean (Principal Investigator, 2017–22)
 
-<img src="../img/test.jpg" alt="bike" class="float-left img-thumbnail mr-2">
-Did you hear that? They've shut down the main reactor. We'll be destroyed for sure. This is madness! We're doomed! There'll be no escape for the Princess this time. What's that? Artoo! Artoo-Detoo, where are you? At last! Where have you been? They're heading in this direction.
-Don't call me a mindless philosopher, you overweight glob of grease! Now come out before somebody sees you. Secret mission? What plans? What are you talking about? I'm not getting in there! I'm going to regret this. There goes another one. Hold your fire.\\
-It will be enough. If the ship's as fast as he's boasting, we ought to do well. What a piece of junk. She'll make point five beyond the speed of light.
+<img src="../img/JJD-head.png" alt="JJD" class="float-left img-thumbnail mr-2">
+Jeffrey Dean has an international reputation in Renaissance musicology and music theory, developed over more than thirty years, focused especially on manuscript and early printed sources of sacred polyphony in the late fifteenth and early sixteenth centuries, institutional archival sources of the period, especially in Italy, and the careers and musical production of some of the foremost composers of the early Renaissance. He was Senior Researcher on The Complete Theoretical Works of Johannes Tinctoris research project, a Distinguished Visiting Scholar at the University of Manchester, and was Executive Officer of the Royal Musical Association, 2001–22. He has worked since 1989 chiefly as a free-lance editor, book designer, and typesetter of academic books in the humanities; during the 1990s he was a Senior In-House Editor of the New Grove Dictionary of Music and Musicians.
 
-Since you are reluctant to provide us with the location of the Rebel base, I have chosen to test this station's destructive power. on your home planet of Alderaan. No! Alderaan is peaceful. We have no weapons. You can't possibly.
-Look, a few minutes ago you said you didn't want to just wait here to be captured. Now all you want to do is stay. Marching into the detention area is not what I had in mind. But they're going to kill her! Better her than me. She's rich.
+[More information](http://stingrayoffice.com/)
+
+## Dr Christian Goursaud (Researcher, 2017–22)
+
+<img src="../img/CG.jpg" alt="CG" class="float-left img-thumbnail mr-2">
+Christian Goursaud was a Research Fellow at the Royal Birmingham Conservatoire (RBC), 2015–22. He is lead editor of Johannes Tinctoris and Music Theory in the Late Fifteenth Century: Essays and Studies. Prior to joining the staff of RBC, he carried out his doctoral research there, making a study of the presentation manuscript sources of Johannes Tinctoris’s music theory, having won an AHRC-funded studentship attached to the research project The Complete Theoretical Works of Johannes Tinctoris. Christian is active as a professional singer, working with ensembles including London Voices, La Serenissima (‘the UK’s most dynamic voice of Italian baroque music’), and the vocal ensemble Il Suono, of which he is Artistic Director. He is Senior Gentleman of Her Majesty’s Chapel Royal, Hampton Court Palace.
+
+[More information](https://www.christiangoursaud.co.uk/)
+
+## Dr Anna Plaksin (Researcher, 2020–22)
+
+<img src="../img/AP.jpg" alt="AP" class="float-left img-thumbnail mr-2">
+Anna Plaksin is a digital musicologist specializing in music of the fifteenth and sixteenth centuries, and had primary responsibility for software development during the final two years of the _Interpreting Mensural Notation_ project. Following studies and academic work in Mainz, she completed her doctoral dissertation on computer-based stemmatic analysis of mensural music at the Institute of Linguistics and Literary Studies at the Technical University of Darmstadt in 2020. She was a Research Associate at the Max-Weber Foundation, 2015–17 and 2019–2021, bearing responsibility for the development of the technical infrastructure for the _Corpus Musicae Ottomanicae_ (_CMO_) project. Since April 2021, Anna has been employed by the Institute for Art History and Musicology at Johannes Gutenberg University Mainz.
+
+[More information](https://www.musikwissenschaft.uni-mainz.de/dr-anna-plaksin/)
+
+## David Lewis (Researcher, 2017–19)
+
+[...]
+
+## Emeritus Professor Ronald Woodley (Co-investigator, 2017–18)
+
+<img src="../img/RW2010.jpg" alt="RW" class="float-left img-thumbnail mr-2">
+Ronald Woodley is Emeritus Research Professor of Music at Royal Birmingham Conservatoire, Birmingham City University, having previously held posts at the Royal Northern College of Music, the universities of Lancaster, Newcastle, Liverpool, and at Christ Church, Oxford. His research specialises in late medieval music theory, as well as performance and analytical studies in the nineteenth and twentieth centuries, including work on Prokofiev, Ravel and Steve Reich. He is also active professionally as a clarinettist and pianist, with particular commitments to chamber, contemporary, and song repertories, often with the tenor James Geer. His recent CD recordings of British song and chamber music have been released on the SOMM, Métier, Meridian, and EM Records labels.
+
+[More information](http://www.bcu.ac.uk/pme/conservatoire/research/research-staff/ronald-woodley)
